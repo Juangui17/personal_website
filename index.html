@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CIAO, SONO JUANGUI! - My Personal Website</title>
     <!-- Include Tailwind CSS for rapid modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,38 +12,35 @@
             theme: {
                 extend: {
                     colors: {
-                        'light-bg-start': '#e0f2f7', /* Light blue start for background */
-                        'light-bg-end': '#f0faff',   /* Lighter blue end for background */
-                        'text-primary-dark': '#1a202c', /* Dark text for readability on light background */
-                        'text-secondary-dark': '#4a5568', /* Slightly lighter dark text */
+                        'pastel-blue-start': '#b0d0e0', /* Even more intense pastel blue start for background */
+                        'pastel-blue-end': '#c0e0f0',   /* Even more intense lighter pastel blue end for background */
+                        'pastel-peach': '#fbe7e0',      /* Pastel peach color inspired by Bauhaus */
+                        'pastel-yellow': '#fdf4e4',    /* Pastel yellow for the second blob */
+                        'text-primary-dark': '#374151', /* Dark text for readability on light background */
+                        'text-secondary-dark': '#6b7280', /* Slightly lighter dark text */
                         // Refined button colors for better liquid glass effect
-                        'button-transparent-base': 'rgba(255, 255, 255, 0.35)', /* More white-ish translucent base for button */
-                        'button-hover-base': 'rgba(255, 255, 255, 0.45)', /* Slightly more opaque on hover */
+                        'button-transparent-base': 'rgba(255, 255, 255, 0.4)', /* More translucent pastel button */
+                        'button-hover-base': 'rgba(255, 255, 255, 0.7)', /* Slightly more opaque on hover */
                         'button-text-dark': '#3b82f6', /* Blue text for button */
                     },
                     boxShadow: {
-                        'glass-light': '0 10px 30px rgba(0, 0, 0, 0.08)', /* Slightly less pronounced outer shadow for depth */
-                        // Refined button bubble shadow for Apple-like appearance (internal highlights, subtle outer glow)
-                        'button-bubble': 'inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 0 10px rgba(59, 130, 246, 0.05)', 
-                        'button-bubble-active': 'inset 0 0 0 2px rgba(59, 130, 246, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 0 20px rgba(59, 130, 246, 0.4)', 
-                        'button-pulse-glow': '0 0 15px rgba(59, 130, 246, 0.4)', /* Initial pulse glow */
+                        'glass-light': '0 8px 20px rgba(0, 0, 0, 0.08)', /* Slightly stronger shadow for pastel look */
+                        'button-bubble': 'inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(59, 130, 246, 0.1)', /* Crisper highlights/shadows */
+                        'button-bubble-active': 'inset 0 0 0 2px rgba(59, 130, 246, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 40px rgba(59, 130, 246, 0.5)', /* Even stronger active state */
+                        'button-pulse-glow': '0 0 25px rgba(59, 130, 246, 0.6)', /* Even more noticeable pulse glow */
                     },
                     backdropFilter: {
                         'none': 'none',
-                        'blur-lg': 'blur(20px) saturate(180%)', 
-                        'blur-md': 'blur(25px) saturate(200%)', /* Increased blur and saturate for stronger liquid glass effect on button */
+                        'blur-md': 'blur(50px) saturate(300%)', /* SIGNIFICANTLY Increased blur and saturate for stronger liquid glass effect */
                     },
                     borderRadius: {
-                        '4xl': '2rem', 
+                        '3xl': '1.5rem', /* Slightly less rounded for a modern feel */
                     }
                 }
             },
             plugins: [
                 function ({ addUtilities, theme }) {
                     const newUtilities = {
-                        '.backdrop-blur-lg': {
-                            backdropFilter: theme('backdropFilter.blur-lg'),
-                        },
                         '.backdrop-blur-md': {
                             backdropFilter: theme('backdropFilter.blur-md'),
                         },
@@ -58,55 +55,90 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: radial-gradient(circle at center, var(--light-bg-start) 0%, var(--light-bg-end) 100%);
-            overflow: hidden; 
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--pastel-blue-start), var(--pastel-blue-end)); /* Adjusted to our pastel colors */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Essential for the rotating background */
         }
 
-        /* Moving background shadow/blob - common styles */
-        .moving-blob {
-            position: absolute; 
-            /* Adjusted size for better visibility on larger screens, relative to viewport for responsiveness */
-            width: 60vw; /* Using viewport width for responsiveness */
-            height: 60vw; /* Keep it circular */
-            min-width: 500px; /* Minimum size to ensure visibility on smaller desktop screens */
-            min-height: 500px;
-            max-width: 900px; /* Max size on very large screens */
-            max-height: 900px;
-            /* More vibrant blue core, slightly less blur */
-            background: radial-gradient(circle, rgba(80, 150, 255, 1) 0%, rgba(59, 130, 246, 0) 65%); 
-            filter: blur(100px); /* Slightly less blur for more noticeable core */
-            border-radius: 50%;
-            z-index: -1;
-            opacity: 0.95; 
-            transform: translate(-50%, -50%); /* Crucial for centering the blob div on its left/top coordinates */
+        /* NEW BACKGROUND STYLES FROM USER'S EXAMPLE */
+        .background-container {
+            position: absolute;
+            width: 100%; /* Fill the entire screen */
+            height: 100%;
+            overflow: hidden;
+            /* Radial gradient within container - kept subtle to not conflict with conic */
+            background: radial-gradient(
+                circle,
+                rgba(255, 255, 255, 0.05), /* Very subtle white inner glow */
+                rgba(0, 0, 0, 0.05) /* Very subtle dark outer fade */
+            );
+            z-index: -2; /* Ensures it's behind the content */
         }
 
-        /* Mobile specific triangular animation */
-        @keyframes triangular-move {
-            0% { transform: translate(10vw, 80vh) scale(0.9); opacity: 0.8; }
-            33% { transform: translate(80vw, 20vh) scale(1.05); opacity: 0.9; }
-            66% { transform: translate(50vw, 50vh) scale(1.1); opacity: 0.98; } /* Pass through center with higher opacity and larger scale */
-            100% { transform: translate(10vw, 80vh) scale(0.9); opacity: 0.8; }
-        }
-        #mobileBlob {
-            animation: triangular-move 25s infinite alternate ease-in-out;
-            width: 80vw; /* More prominent on mobile */
-            height: 80vw;
-            min-width: 300px; /* Min size for mobile */
-            min-height: 300px;
-            filter: blur(80px); /* Adjust blur for mobile visibility */
+        .background-container::before,
+        .background-container::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            /* Adjusted conic-gradient colors for masculine pastel shades */
+            background: conic-gradient(
+                from 0deg,
+                hsl(200, 70%, 80%), /* Soft blue */
+                hsl(50, 70%, 85%),  /* Soft yellow */
+                hsl(210, 65%, 82%), /* New light blue, replacing green */
+                hsl(220, 60%, 75%), /* Muted blue */
+                hsl(200, 70%, 80%)  /* Back to soft blue */
+            );
+            transform: translate(-50%, -50%);
+            filter: blur(50px); /* Create a soft glowing effect */
             opacity: 0.8;
-            /* The animation handles positioning, so left/top aren't needed here */
+            transform-origin: center center; /* Ensure correct rotation origin */
         }
 
-
-        /* Simple title entry animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Secondary rotating layer for depth */
+        .background-container::after {
+            width: 180%;
+            height: 180%;
+            animation: rotate-reverse 10s linear infinite;
+            opacity: 0.6;
         }
-        .animate-fade-in {
-            animation: fadeIn 1s ease-out forwards;
+
+        /* Rotating animations */
+        @keyframes rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes rotate-reverse {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(-360deg); }
+        }
+
+        /* Entry animation for title and subtitle */
+        @keyframes slide-down-settle {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px); /* Start higher up */
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(10px); /* Overshoot slightly */
+            }
+            100% {
+                transform: translateY(0); /* Settle at final position */
+                opacity: 1;
+            }
+        }
+        .animate-entry-text {
+            animation: slide-down-settle 1.2s ease-out forwards; /* Apply to text container */
         }
 
         /* Button pulse animation */
@@ -127,38 +159,60 @@
 
         /* Button active state for press effect (bubbly version) */
         .button-active-shadow:active {
-            box-shadow: theme('boxShadow.button-bubble-active'); 
-            transform: scale(0.98); 
+            box-shadow: theme('boxShadow.button-bubble-active');
+            transform: scale(0.98);
         }
 
         /* Paper Confetti styles */
         .confetti {
             position: absolute;
-            background-color: currentColor; 
-            opacity: 0; 
+            background-color: currentColor;
+            opacity: 0;
             border-radius: 0; /* Square/rectangular shape */
-            pointer-events: none; 
-            transform-origin: center; 
+            pointer-events: none;
+            transform-origin: center;
+        }
+
+        /* LOADER STYLES - Internal glow for button */
+        @keyframes internal-liquid-glow {
+            0% {
+                box-shadow: inset 0 0 0px 0px rgba(59, 130, 246, 0.4), theme('boxShadow.button-bubble');
+                background-color: rgba(255, 255, 255, 0.45); /* Base background of button */
+            }
+            50% {
+                box-shadow: inset 0 0 25px 10px rgba(59, 130, 246, 0.9), theme('boxShadow.button-bubble'); /* More intense glow */
+                background-color: rgba(255, 255, 255, 0.8); /* Slightly more opaque during glow */
+            }
+            100% {
+                box-shadow: inset 0 0 0px 0px rgba(59, 130, 246, 0.4), theme('boxShadow.button-bubble');
+                background-color: rgba(255, 255, 255, 0.45);
+            }
+        }
+
+        .button-loading-state {
+            animation: internal-liquid-glow 1.5s infinite ease-in-out; /* Apply internal glow */
+            pointer-events: none; /* Disable clicks during loading */
         }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen relative">
-    <!-- Moving background shadow/blob for Desktop (hidden on smaller screens) -->
-    <div id="desktopBlob" class="moving-blob hidden md:block"></div>
-    <!-- Moving background shadow/blob for Mobile (hidden on larger screens) -->
-    <div id="mobileBlob" class="moving-blob md:hidden"></div>
+    <!-- NEW: Rotating Gradient Background Container -->
+    <div class="background-container"></div>
 
-    <!-- Content directly on the body background, centered -->
     <div class="text-center px-4 py-16 sm:px-8 sm:py-20 md:py-24 w-full max-w-xl mx-auto flex flex-col items-center justify-center relative z-10">
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 animate-fade-in uppercase">
-            CIAO, SONO JUANGUI!
-        </h1>
-        <p class="text-base sm:text-lg text-text-secondary-dark mb-8">
-            Welcome to my digital home
-        </p>
-        <div> 
-            <button id="battiCinqueButton" class="inline-block bg-button-transparent-base border-none backdrop-blur-md text-button-text-dark font-bold py-3 px-6 rounded-full transition duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow button-pulse-animation">
-                Batti Cinque! 🖐🏼
+        <!-- Apply entry animation to this container -->
+        <div class="animate-entry-text"> 
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 uppercase">
+                CIAO, SONO JUANGUI!
+            </h1>
+            <p class="text-base sm:text-lg text-text-secondary-dark mb-8">
+                Welcome to my digital home
+            </p>
+        </div>
+        <div class="flex flex-col items-center space-y-4">
+            <button id="battiCinqueButton" class="relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-md text-button-text-dark font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow button-pulse-animation overflow-hidden">
+                <span id="buttonText" class="relative z-10 opacity-100 whitespace-nowrap">Batti Cinque! 🖐🏼</span>
+                <!-- No separate loader elements, animation will be internal -->
             </button>
         </div>
     </div>
@@ -166,46 +220,45 @@
     <script>
         let confettiParticles = [];
         const gravity = 0.5;
-        const maxInitialSpeed = 20; 
-        const minInitialSpeed = 5; 
-        const initialUpwardForce = 25; 
+        const maxInitialSpeed = 20;
+        const minInitialSpeed = 5;
+        const initialUpwardForce = 25;
 
         function throwConfetti(event) {
             const button = event.target;
-            const colors = ['#87CEEB', '#90EE90', '#FFD700', '#FF6347', '#BA55D3', '#FFA07A', '#ADD8E6', '#00BFFF', '#6495ED', '#DDA0DD']; 
+            const colors = ['#87CEEB', '#90EE90', '#FFD700', '#FF6347', '#BA55D3', '#FFA07A', '#ADD8E6', '#00BFFF', '#6495ED', '#DDA0DD'];
             const numConfetti = 100;
 
             const rect = button.getBoundingClientRect();
-            // Start confetti from below the viewport, evenly distributed horizontally
-            const startY = window.innerHeight; 
+            const startY = window.innerHeight;
 
             for (let i = 0; i < numConfetti; i++) {
                 const confettiElement = document.createElement('div');
                 confettiElement.classList.add('confetti');
-                confettiElement.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confettiElement.style.backgroundColor = colors [Math.floor(Math.random() * colors.length)];
                 confettiElement.style.opacity = 1;
 
-                confettiElement.style.left = `${Math.random() * window.innerWidth}px`; // Random X across screen width
-                confettiElement.style.top = `${startY}px`; // Start from bottom of the screen
+                confettiElement.style.left = `${Math.random() * window.innerWidth}px`;
+                confettiElement.style.top = `${startY}px`;
 
-                confettiElement.style.width = `${6 + Math.random() * 8}px`; 
-                confettiElement.style.height = `${6 + Math.random() * 8}px`; 
+                confettiElement.style.width = `${6 + Math.random() * 8}px`;
+                confettiElement.style.height = `${6 + Math.random() * 8}px`;
 
                 document.body.appendChild(confettiElement);
 
-                const angle = Math.random() * Math.PI - (Math.PI / 2); // Angles from -90 to 90 degrees (upwards spread)
+                const angle = Math.random() * Math.PI - (Math.PI / 2);
                 const speed = minInitialSpeed + Math.random() * (maxInitialSpeed - minInitialSpeed);
 
                 confettiParticles.push({
                     element: confettiElement,
-                    x: 0, 
-                    y: 0, 
-                    vx: Math.cos(angle) * speed, 
-                    vy: Math.sin(angle) * speed - initialUpwardForce, 
+                    x: 0,
+                    y: 0,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed - initialUpwardForce,
                     rotation: Math.random() * 360,
                     rotationSpeed: (Math.random() - 0.5) * 20,
                     opacity: 1,
-                    decay: 0.01 
+                    decay: 0.01
                 });
             }
 
@@ -218,7 +271,7 @@
 
         function animateConfetti() {
             for (let i = confettiParticles.length - 1; i >= 0; i--) {
-                const p = confettiParticles[i];
+                const p = confettiParticles [i];
 
                 p.vy += gravity;
 
@@ -245,47 +298,25 @@
             }
         }
 
-        document.getElementById('battiCinqueButton').addEventListener('click', throwConfetti);
+        const battiCinqueButton = document.getElementById('battiCinqueButton');
+        const buttonText = document.getElementById('buttonText');
 
-        // --- Desktop Mouse Follower Blob Logic ---
-        const desktopBlob = document.getElementById('desktopBlob');
-        let targetDesktopBlobX = window.innerWidth / 2;
-        let targetDesktopBlobY = window.innerHeight / 2;
-        let currentDesktopBlobX = window.innerWidth / 2;
-        let currentDesktopBlobY = window.innerHeight / 2;
-        const desktopEasingFactor = 0.3; // Significantly increased for more immediate following
+        battiCinqueButton.addEventListener('click', async (event) => { 
+            throwConfetti(event); 
 
-        // Update target coordinates on mouse move for desktop blob
-        document.body.addEventListener('mousemove', (e) => {
-            targetDesktopBlobX = e.clientX;
-            targetDesktopBlobY = e.clientY;
+            // Add loading state class to button
+            battiCinqueButton.classList.add('button-loading-state');
+            battiCinqueButton.disabled = true; // Disable button during loading
+
+            // Simulate LLM call for 5 seconds
+            await new Promise(resolve => setTimeout(resolve, 5000)); 
+
+            console.log("Simulated LLM call success. Confetti displayed.");
+
+            // Remove loading state class from button
+            battiCinqueButton.classList.remove('button-loading-state');
+            battiCinqueButton.disabled = false; // Re-enable button
         });
-
-        function animateDesktopBlobFollow() {
-            // Only update desktopBlob's position if it's visible (i.e., on desktop)
-            if (window.innerWidth >= 768) { 
-                currentDesktopBlobX += (targetDesktopBlobX - currentDesktopBlobX) * desktopEasingFactor;
-                currentDesktopBlobY += (targetDesktopBlobY - currentDesktopBlobY) * desktopEasingFactor;
-                
-                // Set position using transform directly, which handles centering due to translate(-50%,-50%)
-                desktopBlob.style.transform = `translate(${currentDesktopBlobX}px, ${currentDesktopBlobY}px) translate(-50%, -50%)`;
-            }
-            requestAnimationFrame(animateDesktopBlobFollow);
-        }
-
-        // Initial setup for blob positions
-        window.addEventListener('load', () => {
-            targetDesktopBlobX = window.innerWidth / 2;
-            targetDesktopBlobY = window.innerHeight / 2;
-            currentDesktopBlobX = window.innerWidth / 2;
-            currentDesktopBlobY = window.innerHeight / 2;
-            animateDesktopBlobFollow(); // Start the desktop blob animation loop
-        });
-
-        window.addEventListener('resize', () => {
-            targetDesktopBlobX = window.innerWidth / 2;
-            targetDesktopBlobY = window.innerHeight / 2;
-        });
-    </script>
-</body>
-</html>
+     </script>
+ </body>
+ </html>
