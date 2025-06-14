@@ -315,6 +315,33 @@
 
         // La lógica del blob seguidor del ratón (mouseBlob) se ha eliminado,
         // ya que los blobs ahora se mueven solos.
+
+
+        // --- New JavaScript to attempt to prevent iOS zoom ---
+        // This is a common workaround, but not 100% foolproof against all Safari behaviors.
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault(); // Prevent pinch zoom
+        });
+        document.addEventListener('touchstart', function (e) {
+            // Prevent default touch behavior for multi-touch (potential zoom)
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false }); // Use passive: false for preventDefault
+        document.addEventListener('touchmove', function (e) {
+            // Prevent default touch behavior for multi-touch (potential zoom)
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false }); // Use passive: false for preventDefault
+
+        // Attempt to reset viewport scale if it changes unexpectedly
+        window.addEventListener('resize', function () {
+            // This is a fallback. If the zoom changes, try to reset it.
+            if (document.documentElement.clientWidth !== window.innerWidth) {
+                document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no');
+            }
+        });
     </script>
 </body>
 </html>
