@@ -122,11 +122,11 @@
     <div id="movingBlob" class="moving-blob"></div>
 
     <!-- Content directly on the body background, centered -->
-    <div class="text-center p-8 max-w-sm sm:max-w-md md:max-w-lg mx-auto relative z-10">
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 animate-fade-in uppercase whitespace-nowrap">
+    <div class="text-center px-4 py-8 sm:p-8 max-w-xl mx-auto relative z-10">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 animate-fade-in uppercase">
             CIAO, SONO JUANGUI!
         </h1>
-        <p class="text-base sm:text-lg text-text-secondary-dark mb-4 px-2">
+        <p class="text-base sm:text-lg text-text-secondary-dark mb-4">
             Welcome to my digital home
         </p>
         <div class="mt-8">
@@ -166,7 +166,6 @@
 
                 document.body.appendChild(confettiElement);
 
-                // Angle is now primarily upwards (between -PI and 0 for top half of circle, or 270 degrees on a 0-360 scale)
                 const angle = Math.random() * Math.PI - (Math.PI / 2); // Angles from -90 to 90 degrees (upwards spread)
                 const speed = minInitialSpeed + Math.random() * (maxInitialSpeed - minInitialSpeed);
 
@@ -227,12 +226,30 @@
         let targetBlobY = window.innerHeight / 2;
         let currentBlobX = window.innerWidth / 2;
         let currentBlobY = window.innerHeight / 2;
-        const easingFactor = 0.12; // Increased easing factor for more responsiveness
+        const easingFactor = 0.18; 
 
         document.body.addEventListener('mousemove', (e) => {
             targetBlobX = e.clientX;
             targetBlobY = e.clientY;
         });
+
+        // Add touch event listeners for blob tracking
+        document.body.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                targetBlobX = e.touches[0].clientX;
+                targetBlobY = e.touches[0].clientY;
+            }
+        });
+
+        // Prevent scrolling when touching the blob (if the user tries to drag it)
+        // This is important for mobile UX to ensure the blob interaction doesn't interfere with general scrolling
+        movingBlob.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+        });
+        movingBlob.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        });
+
 
         function animateBlobFollow() {
             currentBlobX += (targetBlobX - currentBlobX) * easingFactor;
