@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- MODIFICACIÓN CLAVE AQUÍ: Añadido shrink-to-fit=no para deshabilitar el zoom en iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>CIAO, SONO JUANGUI! - My Personal Website</title>
     <!-- Include Tailwind CSS for rapid modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -111,17 +112,17 @@
 
         /* Blob Amarillo (Todos los dispositivos) - Patrón J */
         #bauhausBlob {
-            width: 100vw; /* Más grande */
-            height: 100vw; /* Más grande */
-            min-width: 800px; /* Asegura un tamaño mínimo */
-            min-height: 800px; /* Asegura un tamaño mínimo */
-            background: radial-gradient(circle, rgba(255, 220, 100, 1) 0%, rgba(255, 220, 100, 0) 80%); /* Más CLARO y denso, ajustado */
-            filter: blur(180px); /* Desenfoque ajustado */
+            width: 90vw; /* Ligeramente más pequeño para ser secundario */
+            height: 90vw; /* Ligeramente más pequeño para ser secundario */
+            min-width: 700px; /* Asegura un tamaño mínimo */
+            min-height: 700px; /* Asegura un tamaño mínimo */
+            background: radial-gradient(circle, rgba(255, 240, 150, 1) 0%, rgba(255, 240, 150, 0) 80%); /* Más CLARO y denso, ajustado */
+            filter: blur(200px); /* Desenfoque ligeramente aumentado */
             animation: j-move 45s infinite alternate ease-in-out;
         }
 
         @keyframes j-move {
-            0% { transform: translate(20vw, 20vh) scale(0.85); } /* Inicia más cerca del centro */
+            0% { transform: translate(5vw, 5vh) scale(0.85); } /* Inicia desde una posición más sutil */
             25% { transform: translate(20vw, 70vh) scale(1.0); } /* Baja */
             50% { transform: translate(70vw, 70vh) scale(0.9); } /* Se mueve al lado */
             75% { transform: translate(70vw, 20vh) scale(1.1); } /* Sube */
