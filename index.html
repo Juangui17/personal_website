@@ -122,11 +122,11 @@
     <div id="movingBlob" class="moving-blob"></div>
 
     <!-- Content directly on the body background, centered -->
-    <div class="text-center p-8 max-w-xl mx-auto relative z-10">
-        <h1 class="text-5xl font-extrabold text-text-primary-dark mb-4 animate-fade-in uppercase whitespace-nowrap">
+    <div class="text-center p-8 max-w-sm sm:max-w-md md:max-w-lg mx-auto relative z-10">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 animate-fade-in uppercase whitespace-nowrap">
             CIAO, SONO JUANGUI!
         </h1>
-        <p class="text-lg text-text-secondary-dark mb-4">
+        <p class="text-base sm:text-lg text-text-secondary-dark mb-4 px-2">
             Welcome to my digital home
         </p>
         <div class="mt-8">
@@ -139,20 +139,18 @@
     <script>
         let confettiParticles = [];
         const gravity = 0.5;
-        // Adjusted speeds for confetti to shoot upwards and spread
         const maxInitialSpeed = 20; 
         const minInitialSpeed = 5; 
-        const initialUpwardForce = 25; // Increased significantly for strong upward shoot
+        const initialUpwardForce = 25; 
 
         function throwConfetti(event) {
             const button = event.target;
             const colors = ['#87CEEB', '#90EE90', '#FFD700', '#FF6347', '#BA55D3', '#FFA07A', '#ADD8E6', '#00BFFF', '#6495ED', '#DDA0DD']; 
             const numConfetti = 100;
 
-            // Get the button's position (or click position if preferred)
             const rect = button.getBoundingClientRect();
-            const startX = rect.left + rect.width / 2; // Start from button's center X
-            const startY = rect.bottom; // Start from the bottom of the button
+            // Start confetti from below the viewport, evenly distributed horizontally
+            const startY = window.innerHeight; 
 
             for (let i = 0; i < numConfetti; i++) {
                 const confettiElement = document.createElement('div');
@@ -160,28 +158,24 @@
                 confettiElement.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 confettiElement.style.opacity = 1;
 
-                // Position confetti at the bottom of the screen, horizontally spread
                 confettiElement.style.left = `${Math.random() * window.innerWidth}px`; // Random X across screen width
-                confettiElement.style.top = `${window.innerHeight}px`; // Start from bottom of the screen
+                confettiElement.style.top = `${startY}px`; // Start from bottom of the screen
 
                 confettiElement.style.width = `${6 + Math.random() * 8}px`; 
                 confettiElement.style.height = `${6 + Math.random() * 8}px`; 
 
                 document.body.appendChild(confettiElement);
 
-                // Angle is now primarily upwards (between -PI and -2PI, or 0 and -PI for top half)
-                // We want to shoot *upwards* and spread, so Y velocity will be negative.
-                // Random angle in radians (0 to 2*PI, but we bias it upwards)
+                // Angle is now primarily upwards (between -PI and 0 for top half of circle, or 270 degrees on a 0-360 scale)
                 const angle = Math.random() * Math.PI - (Math.PI / 2); // Angles from -90 to 90 degrees (upwards spread)
                 const speed = minInitialSpeed + Math.random() * (maxInitialSpeed - minInitialSpeed);
 
                 confettiParticles.push({
                     element: confettiElement,
-                    // These are now offsets from their initial confettiElement.style.left/top
                     x: 0, 
                     y: 0, 
                     vx: Math.cos(angle) * speed, 
-                    vy: Math.sin(angle) * speed - initialUpwardForce, // Bias strongly upwards (negative Y velocity)
+                    vy: Math.sin(angle) * speed - initialUpwardForce, 
                     rotation: Math.random() * 360,
                     rotationSpeed: (Math.random() - 0.5) * 20,
                     opacity: 1,
@@ -212,7 +206,6 @@
                 p.element.style.transform = `translate(${p.x}px, ${p.y}px) rotate(${p.rotation}deg)`;
                 p.element.style.opacity = p.opacity;
 
-                // Remove confetti when it falls off screen or fades out
                 if (p.opacity <= 0 || p.y > window.innerHeight + 100 || p.x < -100 || p.x > window.innerWidth + 100) {
                     p.element.remove();
                     confettiParticles.splice(i, 1);
@@ -234,7 +227,7 @@
         let targetBlobY = window.innerHeight / 2;
         let currentBlobX = window.innerWidth / 2;
         let currentBlobY = window.innerHeight / 2;
-        const easingFactor = 0.08; 
+        const easingFactor = 0.12; // Increased easing factor for more responsiveness
 
         document.body.addEventListener('mousemove', (e) => {
             targetBlobX = e.clientX;
