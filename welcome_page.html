@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIAO, SONO JUANGUI! - My Personal Website</title>
+    <!-- Include Tailwind CSS for rapid modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Tailwind Configuration for colors and filters -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'light-bg-start': '#e0f2f7', /* Light blue start for background */
+                        'light-bg-end': '#f0faff',   /* Lighter blue end for background */
+                        'text-primary-dark': '#1a202c', /* Dark text for readability on light background */
+                        'text-secondary-dark': '#4a5568', /* Slightly lighter dark text */
+                        // Refined button colors for better liquid glass effect
+                        'button-transparent-base': 'rgba(255, 255, 255, 0.35)', /* More white-ish translucent base for button */
+                        'button-hover-base': 'rgba(255, 255, 255, 0.45)', /* Slightly more opaque on hover */
+                        'button-text-dark': '#3b82f6', /* Blue text for button */
+                    },
+                    boxShadow: {
+                        'glass-light': '0 10px 30px rgba(0, 0, 0, 0.08)', /* Slightly less pronounced outer shadow for depth */
+                        // Refined button bubble shadow for Apple-like appearance (internal highlights, subtle outer glow)
+                        'button-bubble': 'inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 0 10px rgba(59, 130, 246, 0.05)', 
+                        'button-bubble-active': 'inset 0 0 0 2px rgba(59, 130, 246, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 0 20px rgba(59, 130, 246, 0.4)', 
+                        'button-pulse-glow': '0 0 15px rgba(59, 130, 246, 0.4)', /* Initial pulse glow */
+                    },
+                    backdropFilter: {
+                        'none': 'none',
+                        'blur-lg': 'blur(20px) saturate(180%)', 
+                        'blur-md': 'blur(25px) saturate(200%)', /* Increased blur and saturate for stronger liquid glass effect on button */
+                    },
+                    borderRadius: {
+                        '4xl': '2rem', 
+                    }
+                }
+            },
+            plugins: [
+                function ({ addUtilities, theme }) {
+                    const newUtilities = {
+                        '.backdrop-blur-lg': {
+                            backdropFilter: theme('backdropFilter.blur-lg'),
+                        },
+                        '.backdrop-blur-md': {
+                            backdropFilter: theme('backdropFilter.blur-md'),
+                        },
+                    };
+                    addUtilities(newUtilities, ['responsive']);
+                }
+            ]
+        }
+    </script>
+    <!-- Google Fonts: Inter for main text -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at center, var(--light-bg-start) 0%, var(--light-bg-end) 100%);
+            overflow: hidden; 
+        }
+
+        /* Moving background shadow/blob - follows pointer */
+        .moving-blob {
+            position: absolute;
+            width: 750px; 
+            height: 750px; 
+            background: radial-gradient(circle, rgba(147, 197, 253, 1) 0%, rgba(59, 130, 246, 0) 70%); 
+            filter: blur(150px); 
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.95; 
+            transform: translate(-50%, -50%); 
+        }
+
+        /* Simple title entry animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        /* Button pulse animation */
+        @keyframes pulse {
+            0% {
+                box-shadow: theme('boxShadow.button-bubble');
+            }
+            50% {
+                box-shadow: theme('boxShadow.button-bubble'), theme('boxShadow.button-pulse-glow');
+            }
+            100% {
+                box-shadow: theme('boxShadow.button-bubble');
+            }
+        }
+        .button-pulse-animation {
+            animation: pulse 2.5s infinite ease-in-out;
+        }
+
+        /* Button active state for press effect (bubbly version) */
+        .button-active-shadow:active {
+            box-shadow: theme('boxShadow.button-bubble-active'); 
+            transform: scale(0.98); 
+        }
+
+        /* Paper Confetti styles */
+        .confetti {
+            position: absolute;
+            background-color: currentColor; 
+            opacity: 0; 
+            border-radius: 0; /* Square/rectangular shape */
+            pointer-events: none; 
+            transform-origin: center; 
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen relative">
+    <!-- Moving background shadow/blob -->
+    <div id="movingBlob" class="moving-blob"></div>
+
+    <!-- Content directly on the body background, centered -->
+    <div class="text-center p-8 max-w-xl mx-auto relative z-10">
+        <h1 class="text-5xl font-extrabold text-text-primary-dark mb-4 animate-fade-in uppercase whitespace-nowrap">
+            CIAO, SONO JUANGUI!
+        </h1>
+        <p class="text-lg text-text-secondary-dark mb-4">
+            Welcome to my digital home
+        </p>
+        <div class="mt-8">
+            <button id="battiCinqueButton" class="inline-block bg-button-transparent-base border-none backdrop-blur-md text-button-text-dark font-bold py-3 px-6 rounded-full transition duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow button-pulse-animation">
+                Batti Cinque! 🖐🏼
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let confettiParticles = [];
+        const gravity = 0.5;
+        // Adjusted speeds for confetti to shoot upwards and spread
+        const maxInitialSpeed = 20; 
+        const minInitialSpeed = 5; 
+        const initialUpwardForce = 25; // Increased significantly for strong upward shoot
+
+        function throwConfetti(event) {
+            const button = event.target;
+            const colors = ['#87CEEB', '#90EE90', '#FFD700', '#FF6347', '#BA55D3', '#FFA07A', '#ADD8E6', '#00BFFF', '#6495ED', '#DDA0DD']; 
+            const numConfetti = 100;
+
+            // Get the button's position (or click position if preferred)
+            const rect = button.getBoundingClientRect();
+            const startX = rect.left + rect.width / 2; // Start from button's center X
+            const startY = rect.bottom; // Start from the bottom of the button
+
+            for (let i = 0; i < numConfetti; i++) {
+                const confettiElement = document.createElement('div');
+                confettiElement.classList.add('confetti');
+                confettiElement.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confettiElement.style.opacity = 1;
+
+                // Position confetti at the bottom of the screen, horizontally spread
+                confettiElement.style.left = `${Math.random() * window.innerWidth}px`; // Random X across screen width
+                confettiElement.style.top = `${window.innerHeight}px`; // Start from bottom of the screen
+
+                confettiElement.style.width = `${6 + Math.random() * 8}px`; 
+                confettiElement.style.height = `${6 + Math.random() * 8}px`; 
+
+                document.body.appendChild(confettiElement);
+
+                // Angle is now primarily upwards (between -PI and -2PI, or 0 and -PI for top half)
+                // We want to shoot *upwards* and spread, so Y velocity will be negative.
+                // Random angle in radians (0 to 2*PI, but we bias it upwards)
+                const angle = Math.random() * Math.PI - (Math.PI / 2); // Angles from -90 to 90 degrees (upwards spread)
+                const speed = minInitialSpeed + Math.random() * (maxInitialSpeed - minInitialSpeed);
+
+                confettiParticles.push({
+                    element: confettiElement,
+                    // These are now offsets from their initial confettiElement.style.left/top
+                    x: 0, 
+                    y: 0, 
+                    vx: Math.cos(angle) * speed, 
+                    vy: Math.sin(angle) * speed - initialUpwardForce, // Bias strongly upwards (negative Y velocity)
+                    rotation: Math.random() * 360,
+                    rotationSpeed: (Math.random() - 0.5) * 20,
+                    opacity: 1,
+                    decay: 0.01 
+                });
+            }
+
+            if (!animationFrameId) {
+                animationFrameId = requestAnimationFrame(animateConfetti);
+            }
+        }
+
+        let animationFrameId = null;
+
+        function animateConfetti() {
+            for (let i = confettiParticles.length - 1; i >= 0; i--) {
+                const p = confettiParticles[i];
+
+                p.vy += gravity;
+
+                p.x += p.vx;
+                p.y += p.vy;
+
+                p.rotation += p.rotationSpeed;
+
+                p.opacity -= p.decay;
+
+                p.element.style.transform = `translate(${p.x}px, ${p.y}px) rotate(${p.rotation}deg)`;
+                p.element.style.opacity = p.opacity;
+
+                // Remove confetti when it falls off screen or fades out
+                if (p.opacity <= 0 || p.y > window.innerHeight + 100 || p.x < -100 || p.x > window.innerWidth + 100) {
+                    p.element.remove();
+                    confettiParticles.splice(i, 1);
+                }
+            }
+
+            if (confettiParticles.length > 0) {
+                animationFrameId = requestAnimationFrame(animateConfetti);
+            } else {
+                animationFrameId = null;
+            }
+        }
+
+        document.getElementById('battiCinqueButton').addEventListener('click', throwConfetti);
+
+        // --- Mouse Follower Blob Logic ---
+        const movingBlob = document.getElementById('movingBlob');
+        let targetBlobX = window.innerWidth / 2;
+        let targetBlobY = window.innerHeight / 2;
+        let currentBlobX = window.innerWidth / 2;
+        let currentBlobY = window.innerHeight / 2;
+        const easingFactor = 0.08; 
+
+        document.body.addEventListener('mousemove', (e) => {
+            targetBlobX = e.clientX;
+            targetBlobY = e.clientY;
+        });
+
+        function animateBlobFollow() {
+            currentBlobX += (targetBlobX - currentBlobX) * easingFactor;
+            currentBlobY += (targetBlobY - currentBlobY) * easingFactor;
+            
+            movingBlob.style.transform = `translate(calc(${Math.round(currentBlobX)}px - 50%), calc(${Math.round(currentBlobY)}px - 50%))`;
+
+            requestAnimationFrame(animateBlobFollow);
+        }
+
+        // Initialize blob position to the center of the screen on load
+        window.addEventListener('load', () => {
+            targetBlobX = window.innerWidth / 2;
+            targetBlobY = window.innerHeight / 2;
+            currentBlobX = window.innerWidth / 2;
+            currentBlobY = window.innerHeight / 2;
+            animateBlobFollow(); // Start the blob animation loop
+        });
+
+        // Re-calculate target position if window is resized to prevent large jumps
+        window.addEventListener('resize', () => {
+            targetBlobX = window.innerWidth / 2;
+            targetBlobY = window.innerHeight / 2;
+        });
+    </script>
+</body>
+</html>
