@@ -12,37 +12,35 @@
             theme: {
                 extend: {
                     colors: {
-                        'pastel-blue-start': '#b0d0e0', /* Even more intense pastel blue start for background */
-                        'pastel-blue-end': '#c0e0f0',   /* Even more intense lighter pastel blue end for background */
-                        'pastel-peach': '#fbe7e0',      /* Pastel peach color inspired by Bauhaus */
-                        'pastel-yellow': '#fdf4e4',    /* Pastel yellow for the second blob */
-                        'text-primary-dark': '#374151', /* Dark text for readability on light background */
-                        'text-secondary-dark': '#6b7280', /* Slightly lighter dark text */
-                        // Refined button colors for better liquid glass effect
-                        'button-transparent-base': 'rgba(255, 255, 255, 0.4)', /* More translucent pastel button */
-                        'button-hover-base': 'rgba(255, 255, 255, 0.7)', /* Slightly more opaque on hover */
-                        'button-text-dark': '#3b82f6', /* Blue text for button */
+                        'light-bg-start': '#e0f2f7', /* Fondo azul claro */
+                        'light-bg-end': '#f0faff',   /* Fondo azul más claro */
+                        'text-primary-dark': '#1a202c', /* Texto oscuro principal */
+                        'text-secondary-dark': '#4a5568', /* Texto oscuro secundario */
+                        // Elementos Interactivos (Botones, etc.) - Ajustados para más "Liquid Glass"
+                        'button-transparent-base': 'rgba(255, 255, 255, 0.4)', /* Más translúcida */
+                        'button-hover-base': 'rgba(255, 255, 255, 0.7)', /* Ligeramente más opaco al pasar el ratón */
+                        'button-text-dark': '#3b82f6', /* Texto azul */
                     },
                     boxShadow: {
-                        'glass-light': '0 8px 20px rgba(0, 0, 0, 0.08)', /* Slightly stronger shadow for pastel look */
-                        'button-bubble': 'inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(59, 130, 246, 0.1)', /* Crisper highlights/shadows */
-                        'button-bubble-active': 'inset 0 0 0 2px rgba(59, 130, 246, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 40px rgba(59, 130, 246, 0.5)', /* Even stronger active state */
-                        'button-pulse-glow': '0 0 25px rgba(59, 130, 246, 0.6)', /* Even more noticeable pulse glow */
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.1)', /* Sombra sutil para el efecto de profundidad */
+                        'button-bubble': 'inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(59, 130, 246, 0.1)', /* Sombras internas más nítidas */
+                        'button-bubble-active': 'inset 0 0 0 2px rgba(59, 130, 246, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 40px rgba(59, 130, 246, 0.5)', /* Estado activo más fuerte */
+                        'button-pulse-glow': '0 0 25px rgba(59, 130, 246, 0.6)', /* Brillo pulsante más notorio */
                     },
                     backdropFilter: {
                         'none': 'none',
-                        'blur-md': 'blur(50px) saturate(300%)', /* SIGNIFICANTLY Increased blur and saturate for stronger liquid glass effect */
+                        'blur-glass': 'blur(50px) saturate(300%)', /* Más intenso blur y saturate para "Liquid Glass" */
                     },
                     borderRadius: {
-                        '3xl': '1.5rem', /* Slightly less rounded for a modern feel */
+                        '4xl': '2rem', /* Predominantemente formas redondeadas y "tipo píldora" */
                     }
                 }
             },
             plugins: [
                 function ({ addUtilities, theme }) {
                     const newUtilities = {
-                        '.backdrop-blur-md': {
-                            backdropFilter: theme('backdropFilter.blur-md'),
+                        '.backdrop-blur-glass': {
+                            backdropFilter: theme('backdropFilter.blur-glass'),
                         },
                     };
                     addUtilities(newUtilities, ['responsive']);
@@ -50,7 +48,7 @@
             ]
         }
     </script>
-    <!-- Google Fonts: Inter for main text -->
+    <!-- Google Fonts: Inter para texto principal -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
@@ -58,90 +56,108 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            background: linear-gradient(135deg, var(--pastel-blue-start), var(--pastel-blue-end)); /* Adjusted to our pastel colors */
+            background: radial-gradient(circle at center, var(--light-bg-start) 0%, var(--light-bg-end) 100%); /* Degradado radial sutil */
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Essential for the rotating background */
+            overflow: hidden; /* Evita barras de desplazamiento */
         }
 
-        /* NEW BACKGROUND STYLES FROM USER'S EXAMPLE */
-        .background-container {
+        /* Blobs de Fondo Dinámicos */
+        .moving-blob {
             position: absolute;
-            width: 100%; /* Fill the entire screen */
-            height: 100%;
-            overflow: hidden;
-            /* Radial gradient within container - kept subtle to not conflict with conic */
-            background: radial-gradient(
-                circle,
-                rgba(255, 255, 255, 0.05), /* Very subtle white inner glow */
-                rgba(0, 0, 0, 0.05) /* Very subtle dark outer fade */
-            );
-            z-index: -2; /* Ensures it's behind the content */
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none; /* No interfiere con el ratón */
+            opacity: 0.99; /* Alta opacidad para que sean muy notorios */
         }
 
-        .background-container::before,
-        .background-container::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 200%;
-            height: 200%;
-            /* Adjusted conic-gradient colors for masculine pastel shades */
-            background: conic-gradient(
-                from 0deg,
-                hsl(200, 70%, 80%), /* Soft blue */
-                hsl(50, 70%, 85%),  /* Soft yellow */
-                hsl(210, 65%, 82%), /* New light blue, replacing green */
-                hsl(220, 60%, 75%), /* Muted blue */
-                hsl(200, 70%, 80%)  /* Back to soft blue */
-            );
-            transform: translate(-50%, -50%);
-            filter: blur(50px); /* Create a soft glowing effect */
-            opacity: 0.8;
-            transform-origin: center center; /* Ensure correct rotation origin */
+        /* Blob Azul (Desktop) - Patrón W */
+        #desktopBlob {
+            width: 120vw; /* Más grande */
+            height: 120vw; /* Más grande */
+            min-width: 900px; /* Asegura un tamaño mínimo */
+            min-height: 900px; /* Asegura un tamaño mínimo */
+            background: radial-gradient(circle, rgba(50, 120, 200, 1) 0%, rgba(50, 120, 200, 0) 80%); /* Más oscuro y denso */
+            filter: blur(200px); /* Desenfoque ajustado */
+            animation: w-move 40s infinite alternate ease-in-out;
         }
 
-        /* Secondary rotating layer for depth */
-        .background-container::after {
-            width: 180%;
-            height: 180%;
-            animation: rotate-reverse 10s linear infinite;
-            opacity: 0.6;
+        @keyframes w-move {
+            0% { transform: translate(10%, 20%) scale(0.9); } /* Inicia más cerca del centro */
+            25% { transform: translate(50%, 60%) scale(1.0); } /* Cruza el centro */
+            50% { transform: translate(80%, 20%) scale(1.1); } /* Va hacia el otro lado */
+            75% { transform: translate(50%, 60%) scale(1.05); } /* Vuelve a cruzar el centro */
+            100% { transform: translate(10%, 20%) scale(0.95); } /* Regresa al inicio del ciclo */
         }
 
-        /* Rotating animations */
-        @keyframes rotate {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        /* Blob Azul (Mobile) - Patrón Triangular */
+        #mobileBlob {
+            width: 150vw; /* Aún más grande para móvil */
+            height: 150vw; /* Aún más grande para móvil */
+            min-width: 600px; /* Asegura un tamaño mínimo */
+            min-height: 600px; /* Asegura un tamaño mínimo */
+            background: radial-gradient(circle, rgba(50, 120, 200, 1) 0%, rgba(50, 120, 200, 0) 80%); /* Más oscuro y denso */
+            filter: blur(150px); /* Desenfoque ajustado */
+            animation: triangular-move 30s infinite alternate ease-in-out;
         }
 
-        @keyframes rotate-reverse {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(-360deg); }
+        @keyframes triangular-move {
+            0% { transform: translate(20vw, 70vh) scale(0.9); } /* Inicia más cerca del centro */
+            33% { transform: translate(70vw, 30vh) scale(1.0); } /* Cruza el centro */
+            66% { transform: translate(45vw, 50vh) scale(1.1); opacity: 0.98; } /* Pasa por el centro con máxima opacidad */
+            100% { transform: translate(20vw, 70vh) scale(0.9); } /* Regresa al inicio del ciclo */
         }
 
-        /* Entry animation for title and subtitle */
+        /* Blob Amarillo (Todos los dispositivos) - Patrón J */
+        #bauhausBlob {
+            width: 100vw; /* Más grande */
+            height: 100vw; /* Más grande */
+            min-width: 800px; /* Asegura un tamaño mínimo */
+            min-height: 800px; /* Asegura un tamaño mínimo */
+            background: radial-gradient(circle, rgba(255, 220, 100, 1) 0%, rgba(255, 220, 100, 0) 80%); /* Más CLARO y denso, ajustado */
+            filter: blur(180px); /* Desenfoque ajustado */
+            animation: j-move 45s infinite alternate ease-in-out;
+        }
+
+        @keyframes j-move {
+            0% { transform: translate(20vw, 20vh) scale(0.85); } /* Inicia más cerca del centro */
+            25% { transform: translate(20vw, 70vh) scale(1.0); } /* Baja */
+            50% { transform: translate(70vw, 70vh) scale(0.9); } /* Se mueve al lado */
+            75% { transform: translate(70vw, 20vh) scale(1.1); } /* Sube */
+            100% { transform: translate(45vw, 45vh) scale(0.95); } /* Termina cerca del centro */
+        }
+
+        /* Animación de entrada para título y subtítulo */
         @keyframes slide-down-settle {
             0% {
                 opacity: 0;
-                transform: translateY(-50px); /* Start higher up */
+                transform: translateY(-50px);
             }
             60% {
                 opacity: 1;
-                transform: translateY(10px); /* Overshoot slightly */
+                transform: translateY(10px);
             }
             100% {
-                transform: translateY(0); /* Settle at final position */
+                transform: translateY(0);
                 opacity: 1;
             }
         }
         .animate-entry-text {
-            animation: slide-down-settle 1.2s ease-out forwards; /* Apply to text container */
+            animation: slide-down-settle 1.2s ease-out forwards;
         }
 
-        /* Button pulse animation */
+        /* Confeti - estilo "papel" */
+        .confetti {
+            position: absolute;
+            background-color: currentColor;
+            opacity: 0;
+            border-radius: 0; /* Formas rectangulares/cuadradas */
+            pointer-events: none;
+            transform-origin: center;
+        }
+
+        /* Button pulse animation (general aesthetic pulse, not loading indicator) */
         @keyframes pulse {
             0% {
                 box-shadow: theme('boxShadow.button-bubble');
@@ -157,50 +173,23 @@
             animation: pulse 2.5s infinite ease-in-out;
         }
 
-        /* Button active state for press effect (bubbly version) */
+        /* Button active state for press effect (burbujeante) */
         .button-active-shadow:active {
             box-shadow: theme('boxShadow.button-bubble-active');
             transform: scale(0.98);
         }
 
-        /* Paper Confetti styles */
-        .confetti {
-            position: absolute;
-            background-color: currentColor;
-            opacity: 0;
-            border-radius: 0; /* Square/rectangular shape */
-            pointer-events: none;
-            transform-origin: center;
-        }
-
-        /* LOADER STYLES - Internal glow for button */
-        @keyframes internal-liquid-glow {
-            0% {
-                box-shadow: inset 0 0 0px 0px rgba(59, 130, 246, 0.4), theme('boxShadow.button-bubble');
-                background-color: rgba(255, 255, 255, 0.45); /* Base background of button */
-            }
-            50% {
-                box-shadow: inset 0 0 25px 10px rgba(59, 130, 246, 0.9), theme('boxShadow.button-bubble'); /* More intense glow */
-                background-color: rgba(255, 255, 255, 0.8); /* Slightly more opaque during glow */
-            }
-            100% {
-                box-shadow: inset 0 0 0px 0px rgba(59, 130, 246, 0.4), theme('boxShadow.button-bubble');
-                background-color: rgba(255, 255, 255, 0.45);
-            }
-        }
-
-        .button-loading-state {
-            animation: internal-liquid-glow 1.5s infinite ease-in-out; /* Apply internal glow */
-            pointer-events: none; /* Disable clicks during loading */
-        }
+        /* Removed LOADER STYLES (internal-liquid-glow keyframe) as per request */
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen relative">
-    <!-- NEW: Rotating Gradient Background Container -->
-    <div class="background-container"></div>
+    <!-- Blobs de Fondo Dinámicos y Auto-animados -->
+    <div id="desktopBlob" class="moving-blob hidden md:block"></div>
+    <div id="mobileBlob" class="moving-blob md:hidden"></div>
+    <div id="bauhausBlob" class="moving-blob"></div>
 
     <div class="text-center px-4 py-16 sm:px-8 sm:py-20 md:py-24 w-full max-w-xl mx-auto flex flex-col items-center justify-center relative z-10">
-        <!-- Apply entry animation to this container -->
+        <!-- Aplica animación de entrada a este contenedor -->
         <div class="animate-entry-text"> 
             <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 uppercase">
                 CIAO, SONO JUANGUI!
@@ -210,9 +199,8 @@
             </p>
         </div>
         <div class="flex flex-col items-center space-y-4">
-            <button id="battiCinqueButton" class="relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-md text-button-text-dark font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow button-pulse-animation overflow-hidden">
+            <button id="battiCinqueButton" class="relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-glass text-button-text-dark font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow button-pulse-animation overflow-hidden">
                 <span id="buttonText" class="relative z-10 opacity-100 whitespace-nowrap">Batti Cinque! 🖐🏼</span>
-                <!-- No separate loader elements, animation will be internal -->
             </button>
         </div>
     </div>
@@ -220,17 +208,28 @@
     <script>
         let confettiParticles = [];
         const gravity = 0.5;
-        const maxInitialSpeed = 20;
-        const minInitialSpeed = 5;
-        const initialUpwardForce = 25;
+        
+        // Define settings based on screen width
+        let numConfetti = 100;
+        let maxInitialSpeed = 20;
+        let minInitialSpeed = 5;
+        let initialUpwardForce = 25;
+
+        // Optimize for mobile (adjust for screens less than 768px wide)
+        if (window.innerWidth < 768) {
+            numConfetti = 40; // Reduced particles for mobile
+            maxInitialSpeed = 15;
+            minInitialSpeed = 8;
+            initialUpwardForce = 20;
+        }
 
         function throwConfetti(event) {
             const button = event.target;
-            const colors = ['#87CEEB', '#90EE90', '#FFD700', '#FF6347', '#BA55D3', '#FFA07A', '#ADD8E6', '#00BFFF', '#6495ED', '#DDA0DD'];
-            const numConfetti = 100;
-
+            // Colores de confeti: solo azules, amarillos y rojos/naranjas (eliminando verdes)
+            const colors = ['#87CEEB', '#FFD700', '#FF6347', '#ADD8E6', '#6495ED', '#FFA07A']; 
+            
             const rect = button.getBoundingClientRect();
-            const startY = window.innerHeight;
+            const startY = window.innerHeight; 
 
             for (let i = 0; i < numConfetti; i++) {
                 const confettiElement = document.createElement('div');
@@ -238,15 +237,15 @@
                 confettiElement.style.backgroundColor = colors [Math.floor(Math.random() * colors.length)];
                 confettiElement.style.opacity = 1;
 
-                confettiElement.style.left = `${Math.random() * window.innerWidth}px`;
-                confettiElement.style.top = `${startY}px`;
+                confettiElement.style.left = `${Math.random() * window.innerWidth}px`; 
+                confettiElement.style.top = `${startY}px`; 
 
-                confettiElement.style.width = `${6 + Math.random() * 8}px`;
+                confettiElement.style.width = `${6 + Math.random() * 8}px`; 
                 confettiElement.style.height = `${6 + Math.random() * 8}px`;
 
                 document.body.appendChild(confettiElement);
 
-                const angle = Math.random() * Math.PI - (Math.PI / 2);
+                const angle = Math.random() * Math.PI - (Math.PI / 2); 
                 const speed = minInitialSpeed + Math.random() * (maxInitialSpeed - minInitialSpeed);
 
                 confettiParticles.push({
@@ -285,6 +284,7 @@
                 p.element.style.transform = `translate(${p.x}px, ${p.y}px) rotate(${p.rotation}deg)`;
                 p.element.style.opacity = p.opacity;
 
+                // Remove particle if it's too far off screen or fully transparent
                 if (p.opacity <= 0 || p.y > window.innerHeight + 100 || p.x < -100 || p.x > window.innerWidth + 100) {
                     p.element.remove();
                     confettiParticles.splice(i, 1);
@@ -299,24 +299,21 @@
         }
 
         const battiCinqueButton = document.getElementById('battiCinqueButton');
-        const buttonText = document.getElementById('buttonText');
-
+        
         battiCinqueButton.addEventListener('click', async (event) => { 
             throwConfetti(event); 
 
-            // Add loading state class to button
-            battiCinqueButton.classList.add('button-loading-state');
-            battiCinqueButton.disabled = true; // Disable button during loading
+            battiCinqueButton.disabled = true; 
 
-            // Simulate LLM call for 5 seconds
             await new Promise(resolve => setTimeout(resolve, 5000)); 
 
-            console.log("Simulated LLM call success. Confetti displayed.");
+            console.log("Simulated action complete. Confetti displayed.");
 
-            // Remove loading state class from button
-            battiCinqueButton.classList.remove('button-loading-state');
-            battiCinqueButton.disabled = false; // Re-enable button
+            battiCinqueButton.disabled = false; 
         });
-     </script>
- </body>
- </html>
+
+        // La lógica del blob seguidor del ratón (mouseBlob) se ha eliminado,
+        // ya que los blobs ahora se mueven solos.
+    </script>
+</body>
+</html>
