@@ -65,26 +65,38 @@
         /* Moving background shadow/blob - common styles */
         .moving-blob {
             position: absolute; 
-            width: 750px; 
-            height: 750px; 
-            background: radial-gradient(circle, rgba(80, 150, 255, 1) 0%, rgba(59, 130, 246, 0) 60%); 
-            filter: blur(120px); 
+            /* Adjusted size for better visibility on larger screens, relative to viewport for responsiveness */
+            width: 60vw; /* Using viewport width for responsiveness */
+            height: 60vw; /* Keep it circular */
+            min-width: 500px; /* Minimum size to ensure visibility on smaller desktop screens */
+            min-height: 500px;
+            max-width: 900px; /* Max size on very large screens */
+            max-height: 900px;
+            /* More vibrant blue core, slightly less blur */
+            background: radial-gradient(circle, rgba(80, 150, 255, 1) 0%, rgba(59, 130, 246, 0) 65%); 
+            filter: blur(100px); /* Slightly less blur for more noticeable core */
             border-radius: 50%;
             z-index: -1;
             opacity: 0.95; 
-            /* transform will be set by JS based on currentBlobX, currentBlobY */
+            transform: translate(-50%, -50%); /* Crucial for centering the blob div on its left/top coordinates */
         }
 
         /* Mobile specific triangular animation */
         @keyframes triangular-move {
             0% { transform: translate(10vw, 80vh) scale(0.9); opacity: 0.8; }
             33% { transform: translate(80vw, 20vh) scale(1.05); opacity: 0.9; }
-            66% { transform: translate(40vw, 50vh) scale(0.95); opacity: 0.85; }
+            66% { transform: translate(50vw, 50vh) scale(1.1); opacity: 0.98; } /* Pass through center with higher opacity and larger scale */
             100% { transform: translate(10vw, 80vh) scale(0.9); opacity: 0.8; }
         }
-        /* Applied to #mobileBlob via JS when screen is small, or directly in HTML with hidden/block classes */
         #mobileBlob {
             animation: triangular-move 25s infinite alternate ease-in-out;
+            width: 80vw; /* More prominent on mobile */
+            height: 80vw;
+            min-width: 300px; /* Min size for mobile */
+            min-height: 300px;
+            filter: blur(80px); /* Adjust blur for mobile visibility */
+            opacity: 0.8;
+            /* The animation handles positioning, so left/top aren't needed here */
         }
 
 
@@ -241,7 +253,7 @@
         let targetDesktopBlobY = window.innerHeight / 2;
         let currentDesktopBlobX = window.innerWidth / 2;
         let currentDesktopBlobY = window.innerHeight / 2;
-        const desktopEasingFactor = 0.18; 
+        const desktopEasingFactor = 0.3; // Significantly increased for more immediate following
 
         // Update target coordinates on mouse move for desktop blob
         document.body.addEventListener('mousemove', (e) => {
@@ -250,17 +262,16 @@
         });
 
         function animateDesktopBlobFollow() {
-            if (window.innerWidth >= 768) { // Only animate if desktop blob is visible
+            // Only update desktopBlob's position if it's visible (i.e., on desktop)
+            if (window.innerWidth >= 768) { 
                 currentDesktopBlobX += (targetDesktopBlobX - currentDesktopBlobX) * desktopEasingFactor;
                 currentDesktopBlobY += (targetDesktopBlobY - currentDesktopBlobY) * desktopEasingFactor;
-                desktopBlob.style.transform = `translate(calc(${currentDesktopBlobX}px - 50%), calc(${currentDesktopBlobY}px - 50%))`;
+                
+                // Set position using transform directly, which handles centering due to translate(-50%,-50%)
+                desktopBlob.style.transform = `translate(${currentDesktopBlobX}px, ${currentDesktopBlobY}px) translate(-50%, -50%)`;
             }
             requestAnimationFrame(animateDesktopBlobFollow);
         }
-
-        // --- Mobile Blob Animation Logic ---
-        // This blob uses CSS keyframe animation and doesn't follow pointer.
-        // Its animation is defined directly in CSS.
 
         // Initial setup for blob positions
         window.addEventListener('load', () => {
@@ -278,4 +289,3 @@
     </script>
 </body>
 </html>
-<!-- End of index.html -->
