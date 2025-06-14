@@ -62,20 +62,31 @@
             overflow: hidden; 
         }
 
-        /* Moving background shadow/blob - follows pointer */
+        /* Moving background shadow/blob - common styles */
         .moving-blob {
-            position: absolute; /* Essential for positioning with transform */
+            position: absolute; 
             width: 750px; 
             height: 750px; 
-            /* Stronger blue core for more vibrancy */
             background: radial-gradient(circle, rgba(80, 150, 255, 1) 0%, rgba(59, 130, 246, 0) 60%); 
-            filter: blur(120px); /* Slightly less blur for more defined core */
+            filter: blur(120px); 
             border-radius: 50%;
             z-index: -1;
             opacity: 0.95; 
-            /* Initial transform will be overridden by JS */
-            transform: translate(-50%, -50%); 
+            /* transform will be set by JS based on currentBlobX, currentBlobY */
         }
+
+        /* Mobile specific triangular animation */
+        @keyframes triangular-move {
+            0% { transform: translate(10vw, 80vh) scale(0.9); opacity: 0.8; }
+            33% { transform: translate(80vw, 20vh) scale(1.05); opacity: 0.9; }
+            66% { transform: translate(40vw, 50vh) scale(0.95); opacity: 0.85; }
+            100% { transform: translate(10vw, 80vh) scale(0.9); opacity: 0.8; }
+        }
+        /* Applied to #mobileBlob via JS when screen is small, or directly in HTML with hidden/block classes */
+        #mobileBlob {
+            animation: triangular-move 25s infinite alternate ease-in-out;
+        }
+
 
         /* Simple title entry animation */
         @keyframes fadeIn {
@@ -120,18 +131,20 @@
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen relative">
-    <!-- Moving background shadow/blob -->
-    <div id="movingBlob" class="moving-blob"></div>
+    <!-- Moving background shadow/blob for Desktop (hidden on smaller screens) -->
+    <div id="desktopBlob" class="moving-blob hidden md:block"></div>
+    <!-- Moving background shadow/blob for Mobile (hidden on larger screens) -->
+    <div id="mobileBlob" class="moving-blob md:hidden"></div>
 
     <!-- Content directly on the body background, centered -->
-    <div class="text-center px-4 py-8 sm:p-8 w-full mx-auto relative z-10">
+    <div class="text-center px-4 py-16 sm:px-8 sm:py-20 md:py-24 w-full max-w-xl mx-auto flex flex-col items-center justify-center relative z-10">
         <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 animate-fade-in uppercase">
             CIAO, SONO JUANGUI!
         </h1>
-        <p class="text-base sm:text-lg text-text-secondary-dark mb-4">
+        <p class="text-base sm:text-lg text-text-secondary-dark mb-8">
             Welcome to my digital home
         </p>
-        <div class="mt-8">
+        <div> 
             <button id="battiCinqueButton" class="inline-block bg-button-transparent-base border-none backdrop-blur-md text-button-text-dark font-bold py-3 px-6 rounded-full transition duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow button-pulse-animation">
                 Batti Cinque! 🖐🏼
             </button>
@@ -222,64 +235,47 @@
 
         document.getElementById('battiCinqueButton').addEventListener('click', throwConfetti);
 
-        // --- Mouse Follower Blob Logic ---
-        const movingBlob = document.getElementById('movingBlob');
-        let targetBlobX = window.innerWidth / 2;
-        let targetBlobY = window.innerHeight / 2;
-        let currentBlobX = window.innerWidth / 2;
-        let currentBlobY = window.innerHeight / 2;
-        const easingFactor = 0.18; 
+        // --- Desktop Mouse Follower Blob Logic ---
+        const desktopBlob = document.getElementById('desktopBlob');
+        let targetDesktopBlobX = window.innerWidth / 2;
+        let targetDesktopBlobY = window.innerHeight / 2;
+        let currentDesktopBlobX = window.innerWidth / 2;
+        let currentDesktopBlobY = window.innerHeight / 2;
+        const desktopEasingFactor = 0.18; 
 
+        // Update target coordinates on mouse move for desktop blob
         document.body.addEventListener('mousemove', (e) => {
-            targetBlobX = e.clientX;
-            targetBlobY = e.clientY;
+            targetDesktopBlobX = e.clientX;
+            targetDesktopBlobY = e.clientY;
         });
 
-        // Add touch event listeners for blob tracking
-        document.body.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) {
-                targetBlobX = e.touches[0].clientX;
-                targetBlobY = e.touches[0].clientY;
+        function animateDesktopBlobFollow() {
+            if (window.innerWidth >= 768) { // Only animate if desktop blob is visible
+                currentDesktopBlobX += (targetDesktopBlobX - currentDesktopBlobX) * desktopEasingFactor;
+                currentDesktopBlobY += (targetDesktopBlobY - currentDesktopBlobY) * desktopEasingFactor;
+                desktopBlob.style.transform = `translate(calc(${currentDesktopBlobX}px - 50%), calc(${currentDesktopBlobY}px - 50%))`;
             }
-        });
-
-        // Prevent scrolling when touching the blob (if the user tries to drag it)
-        // This is important for mobile UX to ensure the blob interaction doesn't interfere with general scrolling
-        movingBlob.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-        });
-        movingBlob.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-        });
-
-
-        function animateBlobFollow() {
-            currentBlobX += (targetBlobX - currentBlobX) * easingFactor;
-            currentBlobY += (targetBlobY - currentBlobY) * easingFactor;
-            
-            // Set position using transform directly, which handles centering due to translate(-50%,-50%)
-            // We're passing a precise pixel value to the transform
-            movingBlob.style.transform = `translate(calc(${currentBlobX}px - 50%), calc(${currentBlobY}px - 50%))`;
-
-            requestAnimationFrame(animateBlobFollow);
+            requestAnimationFrame(animateDesktopBlobFollow);
         }
 
-        // Initialize blob position to the center of the screen on load
+        // --- Mobile Blob Animation Logic ---
+        // This blob uses CSS keyframe animation and doesn't follow pointer.
+        // Its animation is defined directly in CSS.
+
+        // Initial setup for blob positions
         window.addEventListener('load', () => {
-            targetBlobX = window.innerWidth / 2;
-            targetBlobY = window.innerHeight / 2;
-            currentBlobX = window.innerWidth / 2;
-            currentBlobY = window.innerHeight / 2;
-            animateBlobFollow(); // Start the blob animation loop
+            targetDesktopBlobX = window.innerWidth / 2;
+            targetDesktopBlobY = window.innerHeight / 2;
+            currentDesktopBlobX = window.innerWidth / 2;
+            currentDesktopBlobY = window.innerHeight / 2;
+            animateDesktopBlobFollow(); // Start the desktop blob animation loop
         });
 
-        // Re-calculate target position if window is resized to prevent large jumps
         window.addEventListener('resize', () => {
-            targetBlobX = window.innerWidth / 2;
-            targetBlobY = window.innerHeight / 2;
+            targetDesktopBlobX = window.innerWidth / 2;
+            targetDesktopBlobY = window.innerHeight / 2;
         });
     </script>
 </body>
 </html>
 <!-- End of index.html -->
-<!-- This is the end of the index.html file. -->
