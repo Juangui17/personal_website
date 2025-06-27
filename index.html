@@ -8,7 +8,7 @@
   // Default all consent types to 'denied' BEFORE your config command.
   // This is crucial for GDPR compliance if no consent banner is present
   // or if consent is not yet given.
-  // We'll update this based on user choice later in the script.
+  // I'll update this based on user choice later in the script.
   gtag('consent', 'default', {
     'ad_storage': 'denied',
     'analytics_storage': 'denied',
@@ -250,7 +250,7 @@
             left: 50%;
             transform: translateX(-50%); /* Centered horizontally */
             z-index: 1000; /* High z-index to ensure it's on top */
-            padding: 1rem 1.5rem; /* px-6 py-4 to make it a bit more compact like a chat input */
+            padding: 0.75rem 1.5rem; /* Reduced vertical padding */
             max-width: 28rem; /* Adjusted max-width for a more compact appearance */
             width: 100%; /* Take full width of its max-width container */
             box-sizing: border-box; /* Include padding in width calculation */
@@ -266,7 +266,7 @@
             display: flex; /* Flexbox for content alignment */
             flex-direction: column;
             align-items: center; /* Center content horizontally */
-            gap: 0.75rem; /* Space between text and buttons */
+            gap: 0.5rem; /* Reduced space between text and buttons */
             text-align: center;
             opacity: 0; /* Start hidden for fade-in */
             animation: slide-in-from-bottom 0.5s ease-out forwards; /* Slide up from bottom on load */
@@ -309,42 +309,44 @@
             transition: all 0.3s ease; /* Smooth transition for hover/active effects */
         }
 
-        /* Specific styling for the primary "Accept All" button with green theme */
+        /* Specific styling for the primary "Accept All" button with liquid glass theme */
         .cookie-banner-buttons .button-accept {
-            background-color: #b3ffa9; /* Green color as requested */
-            color: #4fd113; /* Green text color as requested */
-            border: 1px solid rgba(179, 255, 169, 0.6); /* Subtle green border */
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(179, 255, 169, 0.3); /* Green glow */
+            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white for liquid glass */
+            color: #1a202c; /* Dark text for contrast */
+            border: 1px solid rgba(255, 255, 255, 0.8); /* Lighter border for definition */
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3); /* Subtle glass shadow */
         }
         .cookie-banner-buttons .button-accept:hover {
-            background-color: #9ee696; /* Slightly darker green on hover */
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 0 25px rgba(179, 255, 169, 0.5);
+            background-color: rgba(255, 255, 255, 0.6); /* Slightly more opaque on hover */
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 0 15px rgba(255, 255, 255, 0.5); /* Enhanced glow on hover */
         }
         .cookie-banner-buttons .button-accept:active {
-            box-shadow: inset 0 0 0 2px rgba(179, 255, 169, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 40px rgba(179, 255, 169, 0.5);
+            background-color: rgba(255, 255, 255, 0.7); /* Even more opaque on active */
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.7);
             transform: scale(0.98);
         }
 
-        /* Specific styling for the "Reject" button with red theme */
+        /* Specific styling for the "Reject" button with liquid glass theme */
         .cookie-banner-buttons .button-reject {
-            background-color: #ffb8a9; /* Red color as requested */
-            color: #d11313; /* Red text color as requested */
-            border: 1px solid rgba(255, 184, 169, 0.6); /* Subtle red border */
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(255, 184, 169, 0.3); /* Red glow */
+            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white for liquid glass */
+            color: #d11313; /* Red text for distinction */
+            border: 1px solid rgba(255, 255, 255, 0.8); /* Lighter border for definition */
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3); /* Subtle glass shadow */
         }
          .cookie-banner-buttons .button-reject:hover {
-            background-color: #e6a496; /* Slightly darker red on hover */
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 0 25px rgba(255, 184, 169, 0.5);
+            background-color: rgba(255, 255, 255, 0.6); /* Slightly more opaque on hover */
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 0 15px rgba(255, 255, 255, 0.5); /* Enhanced glow on hover */
         }
         .cookie-banner-buttons .button-reject:active {
-            box-shadow: inset 0 0 0 2px rgba(255, 184, 169, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 40px rgba(255, 184, 169, 0.5);
+            background-color: rgba(255, 255, 255, 0.7); /* Even more opaque on active */
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.7);
             transform: scale(0.98);
         }
 
         /* Adjust for smaller screens (phones) */
         @media (max-width: 768px) {
             .cookie-banner {
-                padding: 0.75rem 1rem; /* Slightly less padding */
+                padding: 0.5rem 1rem; /* Further reduced vertical padding for mobile */
                 max-width: 100%; /* Take full width on small screens */
                 border-radius: 0.75rem; /* Apply default radius to all corners on mobile */
             }
@@ -391,7 +393,7 @@
 
     <div id="cookieConsentBanner" class="cookie-banner hidden">
         <p class="text-base text-text-primary-dark mb-4 md:mb-0">
-            We use cookies to enhance your experience. <br>Click "Accept All" to agree to their use.
+            We use cookies to enhance your experience. Click "Accept All" to agree.
         </p>
         <div class="cookie-banner-buttons">
             <button id="acceptCookies" class="button button-accept relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="grantConsent()">
