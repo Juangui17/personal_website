@@ -375,8 +375,8 @@
             }
             .cookie-banner-buttons .button {
                 flex-grow: 1; /* Allow buttons to grow */
-                flex-basis: 0; /* Ensures even distribution */
-                width: 49%; /* Slightly less than 50% to account for gap */
+                flex-basis: auto; /* Allow flex-basis to be determined by content, then grow */
+                width: calc(50% - 0.25rem); /* Make each button approximately 50% width minus half the gap */
                 max-width: unset; /* Remove max-width constraint to allow full growth */
                 padding: 0.6rem 0.8rem; /* Adjusted padding for smaller buttons */
                 font-size: 0.9rem; /* Slightly smaller font size */
@@ -411,7 +411,7 @@
             .cookie-banner-buttons .button-reject {
                 /* Using rgba for the pastel red with reduced opacity for liquid glass effect */
                 background-color: rgba(249, 151, 151, 0.6); /* Pastel red with ~60% opacity */
-                color: #000000; /* Black text for mobile */
+                color: #ffffff; /* White text for mobile */
                 border: 1px solid rgba(249, 151, 151, 0.9); /* Slightly more opaque border for definition */
                 /* Keeping a subtle glass shadow effect, perhaps enhancing with the color */
                 box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(249, 151, 151, 0.4);
