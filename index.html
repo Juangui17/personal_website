@@ -269,7 +269,7 @@
             gap: 0.5rem; /* Reduced space between text and buttons */
             text-align: center;
             opacity: 0; /* Start hidden for fade-in */
-            animation: slide-in-from-bottom 0.5s ease-out forwards; /* Slide up from bottom on load */
+            animation: slide-in-from-bottom 0.8s ease-out forwards; /* Changed animation duration to 0.8s */
         }
 
         /* Keyframes for the bottom-to-up slide transition */
@@ -306,42 +306,45 @@
             font-weight: 600; /* Make it bolder for readability */
             padding: 0.5rem 1rem; /* Adjust padding for visual balance */
             border-radius: 9999px; /* Fully rounded for pill shape */
-            transition: all 0.3s ease; /* Smooth transition for hover/active effects */
+            transition: all 0.4s ease; /* Smooth transition for hover/active effects - Adjusted from 0.3s to 0.4s */
         }
 
-        /* Specific styling for the primary "Accept All" button with liquid glass theme */
+        /* Base styling for the primary "Accept All" button with liquid glass theme */
         .cookie-banner-buttons .button-accept {
-            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white for liquid glass */
-            color: #1a202c; /* Dark text for contrast */
+            background-color: rgba(255, 255, 255, 0.7); /* Increased opacity for more contrast */
+            color: #049c1e; /* Updated text color for better contrast */
             border: 1px solid rgba(255, 255, 255, 0.8); /* Lighter border for definition */
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3); /* Subtle glass shadow */
         }
-        .cookie-banner-buttons .button-accept:hover {
-            background-color: rgba(255, 255, 255, 0.6); /* Slightly more opaque on hover */
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 0 15px rgba(255, 255, 255, 0.5); /* Enhanced glow on hover */
-        }
-        .cookie-banner-buttons .button-accept:active {
-            background-color: rgba(255, 255, 255, 0.7); /* Even more opaque on active */
-            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.7);
-            transform: scale(0.98);
-        }
-
-        /* Specific styling for the "Reject" button with liquid glass theme */
+        /* Base styling for the "Reject" button with liquid glass theme */
         .cookie-banner-buttons .button-reject {
-            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white for liquid glass */
+            background-color: rgba(255, 255, 255, 0.7); /* Increased opacity for more contrast */
             color: #d11313; /* Red text for distinction */
             border: 1px solid rgba(255, 255, 255, 0.8); /* Lighter border for definition */
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3); /* Subtle glass shadow */
         }
-         .cookie-banner-buttons .button-reject:hover {
-            background-color: rgba(255, 255, 255, 0.6); /* Slightly more opaque on hover */
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 0 15px rgba(255, 255, 255, 0.5); /* Enhanced glow on hover */
+        
+        /* Desktop Hover Effects (min-width: 769px) */
+        @media (min-width: 769px) {
+            .cookie-banner-buttons .button-accept:hover {
+                background-color: #75e889; /* Solid green on hover */
+                color: #ffffff; /* White text on hover for better contrast */
+                box-shadow: 0 0 15px rgba(117, 232, 137, 0.8); /* Green glow on hover */
+            }
+            .cookie-banner-buttons .button-reject:hover {
+                background-color: #f99797; /* Solid red on hover */
+                color: #ffffff; /* White text on hover for better contrast */
+                box-shadow: 0 0 15px rgba(249, 151, 151, 0.8); /* Red glow on hover */
+            }
         }
+
+        /* Active state for both buttons */
+        .cookie-banner-buttons .button-accept:active,
         .cookie-banner-buttons .button-reject:active {
-            background-color: rgba(255, 255, 255, 0.7); /* Even more opaque on active */
             box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.7);
             transform: scale(0.98);
         }
+
 
         /* Adjust for smaller screens (phones) */
         @media (max-width: 768px) {
@@ -368,6 +371,18 @@
                     opacity: 1;
                 }
             }
+
+            /* On mobile, ensure no background color change on hover */
+            .cookie-banner-buttons .button-accept:hover {
+                background-color: rgba(255, 255, 255, 0.7); /* Keep increased base color */
+                color: #049c1e; /* Keep original text color */
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3); /* Keep original shadow */
+            }
+            .cookie-banner-buttons .button-reject:hover {
+                background-color: rgba(255, 255, 255, 0.7); /* Keep increased base color */
+                color: #d11313; /* Keep original text color */
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3); /* Keep original shadow */
+            }
         }
     </style>
 </head>
@@ -392,8 +407,8 @@
     </div>
 
     <div id="cookieConsentBanner" class="cookie-banner hidden">
-        <p class="text-base text-text-primary-dark mb-4 md:mb-0">
-            We use cookies to enhance your experience. Click "Accept All" to agree.
+        <p class="text-base text-text-primary-dark mb-4 md:mb-0 pt-4">
+            We use cookies to enhance your experience.<br>Click "Accept All" to agree.
         </p>
         <div class="cookie-banner-buttons">
             <button id="acceptCookies" class="button button-accept relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="grantConsent()">
