@@ -1,13 +1,19 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D81V23HR8G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-D81V23HR8G');
+</script>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- MODIFICACIÓN CLAVE AQUÍ: Añadido shrink-to-fit=no para deshabilitar el zoom en iOS -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>CIAO, SONO JUANGUI! - My Personal Website</title>
-    <!-- Include Tailwind CSS for rapid modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Custom Tailwind Configuration for colors and filters -->
     <script>
         tailwind.config = {
             theme: {
@@ -49,7 +55,6 @@
             ]
         }
     </script>
-    <!-- Google Fonts: Inter para texto principal -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
@@ -75,58 +80,39 @@
 
         /* Blob Azul (Desktop) - Patrón W */
         #desktopBlob {
-            width: 120vw; /* Más grande */
-            height: 120vw; /* Más grande */
-            min-width: 900px; /* Asegura un tamaño mínimo */
-            min-height: 900px; /* Asegura un tamaño mínimo */
-            background: radial-gradient(circle, rgba(50, 120, 200, 1) 0%, rgba(50, 120, 200, 0) 80%); /* Más oscuro y denso */
-            filter: blur(200px); /* Desenfoque ajustado */
+            width: 100vw; /* Adjusted size */
+            height: 100vw; /* Adjusted size */
+            min-width: 800px; /* Adjusted minimum size */
+            min-height: 800px; /* Adjusted minimum size */
+            background: radial-gradient(circle, rgba(50, 120, 200, 1) 0%, rgba(50, 120, 200, 0) 80%);
+            filter: blur(180px); /* Slightly adjusted blur */
             animation: w-move 40s infinite alternate ease-in-out;
         }
 
         @keyframes w-move {
-            0% { transform: translate(10%, 20%) scale(0.9); } /* Inicia más cerca del centro */
-            25% { transform: translate(50%, 60%) scale(1.0); } /* Cruza el centro */
-            50% { transform: translate(80%, 20%) scale(1.1); } /* Va hacia el otro lado */
-            75% { transform: translate(50%, 60%) scale(1.05); } /* Vuelve a cruzar el centro */
-            100% { transform: translate(10%, 20%) scale(0.95); } /* Regresa al inicio del ciclo */
+            0% { transform: translate(5%, 15%) scale(0.85); }
+            25% { transform: translate(45%, 55%) scale(0.95); }
+            50% { transform: translate(75%, 15%) scale(1.05); }
+            75% { transform: translate(45%, 55%) scale(1.0); }
+            100% { transform: translate(5%, 15%) scale(0.85); }
         }
 
         /* Blob Azul (Mobile) - Patrón Triangular */
         #mobileBlob {
-            width: 150vw; /* Aún más grande para móvil */
-            height: 150vw; /* Aún más grande para móvil */
-            min-width: 600px; /* Asegura un tamaño mínimo */
-            min-height: 600px; /* Asegura un tamaño mínimo */
-            background: radial-gradient(circle, rgba(50, 120, 200, 1) 0%, rgba(50, 120, 200, 0) 80%); /* Más oscuro y denso */
-            filter: blur(150px); /* Desenfoque ajustado */
+            width: 120vw; /* Adjusted size for mobile */
+            height: 120vw; /* Adjusted size for mobile */
+            min-width: 500px; /* Adjusted minimum size */
+            min-height: 500px; /* Adjusted minimum size */
+            background: radial-gradient(circle, rgba(50, 120, 200, 1) 0%, rgba(50, 120, 200, 0) 80%);
+            filter: blur(120px); /* Slightly adjusted blur */
             animation: triangular-move 30s infinite alternate ease-in-out;
         }
 
         @keyframes triangular-move {
-            0% { transform: translate(20vw, 70vh) scale(0.9); } /* Inicia más cerca del centro */
-            33% { transform: translate(70vw, 30vh) scale(1.0); } /* Cruza el centro */
-            66% { transform: translate(45vw, 50vh) scale(1.1); opacity: 0.98; } /* Pasa por el centro con máxima opacidad */
-            100% { transform: translate(20vw, 70vh) scale(0.9); } /* Regresa al inicio del ciclo */
-        }
-
-        /* Blob Amarillo (Todos los dispositivos) - Patrón J */
-        #bauhausBlob {
-            width: 90vw; /* Ligeramente más pequeño para ser secundario */
-            height: 90vw; /* Ligeramente más pequeño para ser secundario */
-            min-width: 700px; /* Asegura un tamaño mínimo */
-            min-height: 700px; /* Asegura un tamaño mínimo */
-            background: radial-gradient(circle, rgba(255, 240, 150, 1) 0%, rgba(255, 240, 150, 0) 80%); /* Más CLARO y denso, ajustado */
-            filter: blur(200px); /* Desenfoque ligeramente aumentado */
-            animation: j-move 45s infinite alternate ease-in-out;
-        }
-
-        @keyframes j-move {
-            0% { transform: translate(5vw, 5vh) scale(0.85); } /* Inicia desde una posición más sutil */
-            25% { transform: translate(20vw, 70vh) scale(1.0); } /* Baja */
-            50% { transform: translate(70vw, 70vh) scale(0.9); } /* Se mueve al lado */
-            75% { transform: translate(70vw, 20vh) scale(1.1); } /* Sube */
-            100% { transform: translate(45vw, 45vh) scale(0.95); } /* Termina cerca del centro */
+            0% { transform: translate(15vw, 65vh) scale(0.85); }
+            33% { transform: translate(65vw, 25vh) scale(0.95); }
+            66% { transform: translate(40vw, 45vh) scale(1.05); opacity: 0.98; }
+            100% { transform: translate(15vw, 65vh) scale(0.85); }
         }
 
         /* Animación de entrada para título y subtítulo */
@@ -179,18 +165,13 @@
             box-shadow: theme('boxShadow.button-bubble-active');
             transform: scale(0.98);
         }
-
-        /* Removed LOADER STYLES (internal-liquid-glow keyframe) as per request */
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen relative">
-    <!-- Blobs de Fondo Dinámicos y Auto-animados -->
     <div id="desktopBlob" class="moving-blob hidden md:block"></div>
     <div id="mobileBlob" class="moving-blob md:hidden"></div>
-    <div id="bauhausBlob" class="moving-blob"></div>
-
+    
     <div class="text-center px-4 py-16 sm:px-8 sm:py-20 md:py-24 w-full max-w-xl mx-auto flex flex-col items-center justify-center relative z-10">
-        <!-- Aplica animación de entrada a este contenedor -->
         <div class="animate-entry-text"> 
             <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 uppercase">
                 CIAO, SONO JUANGUI!
@@ -312,10 +293,6 @@
 
             battiCinqueButton.disabled = false; 
         });
-
-        // La lógica del blob seguidor del ratón (mouseBlob) se ha eliminado,
-        // ya que los blobs ahora se mueven solos.
-
 
         // --- New JavaScript to attempt to prevent iOS zoom ---
         // This is a common workaround, but not 100% foolproof against all Safari behaviors.
