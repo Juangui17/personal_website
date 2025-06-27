@@ -254,8 +254,9 @@
             max-width: 28rem; /* Adjusted max-width for a more compact appearance */
             width: 100%; /* Take full width of its max-width container */
             box-sizing: border-box; /* Include padding in width calculation */
-            border-top-left-radius: 0.75rem; /* rounded-xl for top corners */
-            border-top-right-radius: 0.75rem; /* rounded-xl for top corners */
+            /* Increased rounding for top corners on desktop */
+            border-top-left-radius: 1.25rem; /* rounded-2xl */
+            border-top-right-radius: 1.25rem; /* rounded-2xl */
             border-bottom-left-radius: 0; /* No bottom radius */
             border-bottom-right-radius: 0; /* No bottom radius */
             /* Apply glass effects with increased contrast */
@@ -299,7 +300,7 @@
         .cookie-banner-buttons .button { /* Reusing existing button classes/styles */
             flex-grow: 1; /* Allow buttons to grow to fill space */
             min-width: 120px; /* Minimum width for buttons */
-            /* Apply common liquid glass styles */
+            /* Common liquid glass styles are applied here, including backdrop-filter */
             backdrop-filter: var(--backdropFilter-blur-glass);
             -webkit-backdrop-filter: var(--backdropFilter-blur-glass);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* General button shadow */
@@ -340,15 +341,15 @@
 
         /* Active state for both buttons (applies to both desktop click and mobile tap) */
         .cookie-banner-buttons .button-accept:active {
-            background-color: #75e889; /* Solid green on active */
-            color: #ffffff; /* White text on active */
+            background-color: #75e889; /* Keep solid green on active (for consistency) */
+            color: #ffffff; /* Keep white text on active (for consistency) */
             box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.7);
             transform: scale(0.98);
         }
 
         .cookie-banner-buttons .button-reject:active {
-            background-color: #f99797; /* Solid red on active */
-            color: #ffffff; /* White text on active */
+            background-color: #f99797; /* Keep solid red on active (for consistency) */
+            color: #ffffff; /* Keep white text on active (for consistency) */
             box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.7);
             transform: scale(0.98);
         }
@@ -359,7 +360,8 @@
             .cookie-banner {
                 padding: 0.5rem 1rem; /* Further reduced vertical padding for mobile */
                 max-width: 100%; /* Take full width on small screens */
-                border-radius: 0.75rem; /* Apply default radius to all corners on mobile */
+                /* Increased rounding for all corners on mobile */
+                border-radius: 1.25rem; /* rounded-2xl */
             }
             .cookie-banner-buttons {
                 flex-direction: column; /* Stack buttons vertically for better tap targets */
@@ -380,8 +382,29 @@
                 }
             }
 
-            /* On mobile, we removed the hover overrides. The base styles will apply,
-               and the :active state will handle the "selected color with white text" on tap. */
+            /* Mobile-specific permanent liquid glass buttons with pastel colors */
+            .cookie-banner-buttons .button-accept {
+                /* Using rgba for the pastel green with reduced opacity for liquid glass effect */
+                background-color: rgba(117, 232, 137, 0.6); /* Pastel green with ~60% opacity */
+                color: #ffffff; /* White text */
+                border: 1px solid rgba(117, 232, 137, 0.9); /* Slightly more opaque border for definition */
+                /* Keeping a subtle glass shadow effect, perhaps enhancing with the color */
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(117, 232, 137, 0.4);
+                /* Ensure backdrop-filter is applied - it's inherited from .button, but explicit is fine if needed */
+                backdrop-filter: var(--backdropFilter-blur-glass);
+                -webkit-backdrop-filter: var(--backdropFilter-blur-glass);
+            }
+            .cookie-banner-buttons .button-reject {
+                /* Using rgba for the pastel red with reduced opacity for liquid glass effect */
+                background-color: rgba(249, 151, 151, 0.6); /* Pastel red with ~60% opacity */
+                color: #ffffff; /* White text */
+                border: 1px solid rgba(249, 151, 151, 0.9); /* Slightly more opaque border for definition */
+                /* Keeping a subtle glass shadow effect, perhaps enhancing with the color */
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(249, 151, 151, 0.4);
+                /* Ensure backdrop-filter is applied */
+                backdrop-filter: var(--backdropFilter-blur-glass);
+                -webkit-backdrop-filter: var(--backdropFilter-blur-glass);
+            }
         }
     </style>
 </head>
@@ -413,7 +436,7 @@
             <button id="acceptCookies" class="button button-accept relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="grantConsent()">
                 Accept All
             </button>
-            <button id="rejectCookies" class="button button-reject relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="denyConsent()">
+            <button id="rejectCookies" class="button button-reject relative inline-flex items-center justify-content-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="denyConsent()">
                 Reject
             </button>
             </div>
