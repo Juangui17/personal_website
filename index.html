@@ -290,7 +290,7 @@
         /* Keyframes for the bottom-to-up slide transition */
         @keyframes slide-in-from-bottom {
             from {
-                bottom: -100%; /* Start completely off-screen at the bottom */
+                bottom: -100%;
                 opacity: 0;
             }
             to {
@@ -589,12 +589,8 @@
         
         battiCinqueButton.addEventListener('click', async (event) => { 
             throwConfetti(event); 
-
-            battiCinqueButton.disabled = true; 
-
-            // No need for a separate setTimeout here for button re-enable,
-            // as we are immediately transitioning to a new page.
-            // The new page will have its own initial state.
+            // Removed battiCinqueButton.disabled = true; to avoid potential interference with redirection
+            // The page will transition, so re-enabling is not necessary here.
         });
 
         // --- New JavaScript to attempt to prevent iOS zoom ---
