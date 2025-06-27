@@ -54,7 +54,7 @@
     });
     localStorage.setItem('user_consent', 'granted');
     document.getElementById('cookieConsentBanner').style.display = 'none'; // Hide the banner
-    document.body.style.paddingBottom = '0'; // Remove padding when banner is hidden
+    // No need to adjust padding-bottom on body as main content is absolutely positioned
     console.log('Consent granted!');
   }
 
@@ -68,7 +68,7 @@
     });
     localStorage.setItem('user_consent', 'denied');
     document.getElementById('cookieConsentBanner').style.display = 'none'; // Hide the banner
-    document.body.style.paddingBottom = '0'; // Remove padding when banner is hidden
+    // No need to adjust padding-bottom on body as main content is absolutely positioned
     console.log('Consent denied!');
   }
 
@@ -90,10 +90,6 @@
                         'light-bg-end': '#f0faff',   /* Fondo azul más claro */
                         'text-primary-dark': '#1a202c', /* Texto oscuro principal */
                         'text-secondary-dark': '#4a5568', /* Texto oscuro secundario */
-                        // Elementos Interactivos (Botones, etc.) - Ajustados para más "Liquid Glass"
-                        'button-transparent-base': 'rgba(255, 255, 255, 0.4)', /* Más translúcida */
-                        'button-hover-base': 'rgba(255, 255, 255, 0.7)', /* Ligeramente más opaco al pasar el ratón */
-                        'button-text-dark': '#3b82f6', /* Texto azul */
                     },
                     boxShadow: {
                         'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.25)', /* A bit stronger shadow for contrast */
@@ -130,11 +126,24 @@
             padding: 0;
             height: 100vh;
             background: radial-gradient(circle at center, var(--light-bg-start) 0%, var(--light-bg-end) 100%); /* Degradado radial sutil */
-            display: flex; /* Use flexbox to center content */
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
+            display: flex; /* Use flexbox to center content for initial layout */
+            justify-content: center; /* Center horizontally for initial layout */
+            align-items: center; /* Center vertically for initial layout */
             overflow: hidden; /* Evita barras de desplazamiento */
-            transition: padding-bottom 0.5s ease-out; /* Smooth transition for padding */
+            position: relative; /* Needed for absolutely positioned children */
+        }
+
+        /* Main content container - this is now absolutely positioned and centered */
+        .main-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Keeps content perfectly centered */
+            text-align: center;
+            padding: 0 1rem; /* Adjust padding as needed */
+            z-index: 10; /* Ensure it's above blobs, but below banner */
+            width: 100%; /* Take full width for text alignment */
+            max-width: 28rem; /* Match banner max-width for consistency if desired */
         }
 
         /* Blobs de Fondo Dinámicos */
@@ -215,13 +224,13 @@
         /* Button pulse animation (general aesthetic pulse, not loading indicator) */
         @keyframes pulse {
             0% {
-                box-shadow: theme('boxShadow.button-bubble');
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(59, 130, 246, 0.1);
             }
             50% {
-                box-shadow: theme('boxShadow.button-bubble'), theme('boxShadow.button-pulse-glow');
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 25px rgba(59, 130, 246, 0.6); /* Enhanced glow */
             }
             100% {
-                box-shadow: theme('boxShadow.button-bubble');
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(59, 130, 246, 0.1);
             }
         }
         .button-pulse-animation {
@@ -230,7 +239,7 @@
 
         /* Button active state for press effect (burbujeante) */
         .button-active-shadow:active {
-            box-shadow: theme('boxShadow.button-bubble-active');
+            box-shadow: inset 0 0 0 2px rgba(59, 130, 246, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 40px rgba(59, 130, 246, 0.5); /* Stronger active state */
             transform: scale(0.98);
         }
 
@@ -290,26 +299,45 @@
         .cookie-banner-buttons .button { /* Reusing existing button classes/styles */
             flex-grow: 1; /* Allow buttons to grow to fill space */
             min-width: 120px; /* Minimum width for buttons */
+            /* Apply common liquid glass styles */
+            backdrop-filter: var(--backdropFilter-blur-glass);
+            -webkit-backdrop-filter: var(--backdropFilter-blur-glass);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* General button shadow */
+            font-weight: 600; /* Make it bolder for readability */
+            padding: 0.5rem 1rem; /* Adjust padding for visual balance */
+            border-radius: 9999px; /* Fully rounded for pill shape */
         }
 
-        /* Specific styling for the primary "Accept All" button if desired */
+        /* Specific styling for the primary "Accept All" button with green theme */
         .cookie-banner-buttons .button-accept {
-            background-color: #3b82f6; /* Solid blue for primary action */
-            color: white; /* White text for contrast */
-            font-weight: 600; /* Make it bolder */
-            border: 1px solid #3b82f6; /* Add a subtle border matching the color */
+            background-color: rgba(76, 175, 80, 0.7); /* Green liquid glass */
+            color: #1a5d1a; /* Dark green text for contrast */
+            border: 1px solid rgba(76, 175, 80, 0.5); /* Subtle green border */
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(76, 175, 80, 0.3); /* Green glow */
         }
+        .cookie-banner-buttons .button-accept:hover {
+            background-color: rgba(76, 175, 80, 0.9); /* More opaque on hover */
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 0 25px rgba(76, 175, 80, 0.5);
+        }
+        .cookie-banner-buttons .button-accept:active {
+            box-shadow: inset 0 0 0 2px rgba(76, 175, 80, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 40px rgba(76, 175, 80, 0.5);
+            transform: scale(0.98);
+        }
+
+        /* Specific styling for the "Reject" button with red theme */
         .cookie-banner-buttons .button-reject {
-            background-color: rgba(255, 255, 255, 0.7); /* Slightly more opaque white for better liquid glass effect */
-            color: #3b82f6; /* Keep blue text */
-            font-weight: 600; /* Make it bolder */
-            border: 1px solid rgba(59, 130, 246, 0.3); /* Subtle blue border */
+            background-color: rgba(255, 0, 0, 0.7); /* Red liquid glass */
+            color: white; /* White text for contrast */
+            border: 1px solid rgba(255, 0, 0, 0.5); /* Subtle red border */
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(255, 0, 0, 0.3); /* Red glow */
         }
-        .cookie-banner-buttons .button-manage {
-             background-color: rgba(255, 255, 255, 0.7);
-             color: #3b82f6;
-             font-weight: 600;
-             border: 1px solid rgba(59, 130, 246, 0.3);
+         .cookie-banner-buttons .button-reject:hover {
+            background-color: rgba(255, 0, 0, 0.9); /* More opaque on hover */
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 0 25px rgba(255, 0, 0, 0.5);
+        }
+        .cookie-banner-buttons .button-reject:active {
+            box-shadow: inset 0 0 0 2px rgba(255, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 40px rgba(255, 0, 0, 0.5);
+            transform: scale(0.98);
         }
 
         /* Adjust for smaller screens (phones) */
@@ -340,11 +368,11 @@
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen relative">
+<body>
     <div id="desktopBlob" class="moving-blob hidden md:block"></div>
     <div id="mobileBlob" class="moving-blob md:hidden"></div>
     
-    <div class="text-center px-4 py-16 sm:px-8 sm:py-20 md:py-24 w-full max-w-xl mx-auto flex flex-col items-center justify-center relative z-10">
+    <div class="main-content">
         <div class="animate-entry-text"> 
             <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 uppercase">
                 CIAO, SONO JUANGUI!
@@ -365,10 +393,10 @@
             We use cookies to enhance your experience on our website. By clicking "Accept All", you agree to the use of all cookies.
         </p>
         <div class="cookie-banner-buttons">
-            <button id="acceptCookies" class="button button-accept relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-glass text-button-text-dark font-bold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow whitespace-nowrap" onclick="grantConsent()">
+            <button id="acceptCookies" class="button button-accept relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="grantConsent()">
                 Accept All
             </button>
-            <button id="rejectCookies" class="button button-reject relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-glass text-button-text-dark font-bold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow whitespace-nowrap" onclick="denyConsent()">
+            <button id="rejectCookies" class="button button-reject relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="denyConsent()">
                 Reject
             </button>
             </div>
@@ -518,15 +546,10 @@
                 // If no consent is stored, show the banner after 3 seconds
                 setTimeout(() => {
                     consentBanner.classList.remove('hidden');
-                    // Get the height of the banner after it's rendered (even if hidden by animation)
-                    // and apply padding to the body.
-                    const bannerHeight = consentBanner.offsetHeight;
-                    document.body.style.paddingBottom = `${bannerHeight}px`;
                 }, 3000); // 3000 milliseconds = 3 seconds
             } else {
                 // If consent is already given/denied, ensure banner is hidden
                 consentBanner.classList.add('hidden');
-                document.body.style.paddingBottom = '0'; // Ensure no padding if banner is not shown
             }
         });
     </script>
