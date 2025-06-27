@@ -109,6 +109,9 @@
                 font-size: 0.85rem; /* Adjusted font size for mobile paragraph */
                 line-height: 1.4; /* Adjusted line height for better wrapping */
             }
+            .card .big-emoji {
+                font-size: 4rem; /* Even larger emoji for mobile */
+            }
         }
 
 
@@ -127,8 +130,10 @@
             margin-bottom: 0.5rem; /* Space between paragraphs */
         }
 
-        .card p:last-child {
-            margin-bottom: 0; /* No margin after the last paragraph */
+        .card .big-emoji {
+            font-size: 5rem; /* Large emoji for desktop */
+            margin-top: 1rem; /* Space above the emoji */
+            line-height: 1; /* Ensure no extra space around emoji */
         }
 
         /* New contact section for text and buttons */
@@ -227,7 +232,8 @@
 <body>
     <div class="card">
         <h1>Working on the site</h1>
-        <p>Come back later to know more 🚧</p>
+        <p>Come back later to know more</p>
+        <div class="big-emoji">🚧</div>
     </div>
 
     <div class="contact-section">
