@@ -291,14 +291,15 @@
 
         .cookie-banner-buttons {
             display: flex;
-            flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+            flex-wrap: nowrap; /* Prevent buttons from wrapping */
             justify-content: center; /* Default to center for desktop */
-            gap: 0.75rem; /* Space between buttons */
+            gap: 0.5rem; /* Reduced space between buttons */
             width: 100%; /* Ensure buttons take full width of container */
         }
 
         .cookie-banner-buttons .button { /* Reusing existing button classes/styles */
             flex-grow: 1; /* Allow buttons to grow to fill space */
+            flex-basis: 0; /* Allow flex-grow to work evenly */
             min-width: 120px; /* Minimum width for buttons */
             /* Common liquid glass styles are applied here, including backdrop-filter */
             backdrop-filter: var(--backdropFilter-blur-glass);
@@ -309,6 +310,9 @@
             border-radius: 9999px; /* Fully rounded for pill shape */
             transition: all 0.4s ease; /* Smooth transition for hover/active effects */
             text-align: center; /* Ensure text is centered within buttons */
+            display: flex; /* Use flexbox to center text inside button */
+            align-items: center;
+            justify-content: center;
         }
 
         /* Base styling for the primary "Accept All" button with liquid glass theme */
@@ -367,13 +371,13 @@
             .cookie-banner-buttons {
                 flex-direction: row; /* Ensure buttons are in a row */
                 justify-content: space-between; /* Place buttons at opposite ends */
-                gap: 0.5rem; /* Reduced gap between buttons */
+                gap: 0.5rem; /* Keep a minimal gap between buttons */
             }
             .cookie-banner-buttons .button {
-                flex-grow: 0; /* Don't let buttons grow to fill remaining space */
-                min-width: unset; /* Remove min-width constraint */
-                width: 48%; /* Each button takes roughly half the width */
-                max-width: 150px; /* Max width to prevent them from becoming too large on slightly bigger mobile screens */
+                flex-grow: 1; /* Allow buttons to grow */
+                flex-basis: 0; /* Ensures even distribution */
+                width: 49%; /* Slightly less than 50% to account for gap */
+                max-width: unset; /* Remove max-width constraint to allow full growth */
                 padding: 0.6rem 0.8rem; /* Adjusted padding for smaller buttons */
                 font-size: 0.9rem; /* Slightly smaller font size */
             }
@@ -440,7 +444,7 @@
 
     <div id="cookieConsentBanner" class="cookie-banner hidden">
         <p class="text-base text-text-primary-dark mb-4 md:mb-0 pt-4">
-            We use cookies to enhance your experience.<br>Click "Accept All" to agree.
+            We use cookies to enhance your experience.<br>Click "<b>Accept All</b>" to agree.
         </p>
         <div class="cookie-banner-buttons">
             <button id="rejectCookies" class="button button-reject relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="denyConsent()">
