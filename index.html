@@ -306,7 +306,7 @@
             font-weight: 600; /* Make it bolder for readability */
             padding: 0.5rem 1rem; /* Adjust padding for visual balance */
             border-radius: 9999px; /* Fully rounded for pill shape */
-            transition: all 0.4s ease; /* Smooth transition for hover/active effects - Adjusted from 0.3s to 0.4s */
+            transition: all 0.4s ease; /* Smooth transition for hover/active effects */
         }
 
         /* Base styling for the primary "Accept All" button with liquid glass theme */
@@ -338,9 +338,17 @@
             }
         }
 
-        /* Active state for both buttons */
-        .cookie-banner-buttons .button-accept:active,
+        /* Active state for both buttons (applies to both desktop click and mobile tap) */
+        .cookie-banner-buttons .button-accept:active {
+            background-color: #75e889; /* Solid green on active */
+            color: #ffffff; /* White text on active */
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.7);
+            transform: scale(0.98);
+        }
+
         .cookie-banner-buttons .button-reject:active {
+            background-color: #f99797; /* Solid red on active */
+            color: #ffffff; /* White text on active */
             box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.7);
             transform: scale(0.98);
         }
@@ -372,17 +380,8 @@
                 }
             }
 
-            /* On mobile, ensure no background color change on hover */
-            .cookie-banner-buttons .button-accept:hover {
-                background-color: rgba(255, 255, 255, 0.7); /* Keep increased base color */
-                color: #049c1e; /* Keep original text color */
-                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3); /* Keep original shadow */
-            }
-            .cookie-banner-buttons .button-reject:hover {
-                background-color: rgba(255, 255, 255, 0.7); /* Keep increased base color */
-                color: #d11313; /* Keep original text color */
-                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3); /* Keep original shadow */
-            }
+            /* On mobile, we removed the hover overrides. The base styles will apply,
+               and the :active state will handle the "selected color with white text" on tap. */
         }
     </style>
 </head>
