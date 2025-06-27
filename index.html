@@ -249,7 +249,7 @@
 
         /* Page transition fade out */
         .page-fade-out {
-            animation: fadeOut 0.5s ease-out forwards;
+            animation: fadeOut 0.3s ease-out forwards; /* Transition speed changed to 0.3s */
         }
 
         @keyframes fadeOut {
@@ -418,7 +418,7 @@
                 color: #000000; /* Black text for mobile - CORRECTED */
                 border: 1px solid rgba(117, 232, 137, 0.9); /* Slightly more opaque border for definition */
                 /* Keeping a subtle glass shadow effect, perhaps enhancing with the color */
-                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(117, 232, 137, 0.4);
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3);
                 /* Ensure backdrop-filter is applied - it's inherited from .button, but explicit is fine if needed */
                 backdrop-filter: var(--backdropFilter-blur-glass);
                 -webkit-backdrop-filter: var(--backdropFilter-blur-glass);
@@ -429,7 +429,7 @@
                 color: #ffffff; /* White text for mobile */
                 border: 1px solid rgba(249, 151, 151, 0.9); /* Slightly more opaque border for definition */
                 /* Keeping a subtle glass shadow effect, perhaps enhancing with the color */
-                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(249, 151, 151, 0.4);
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3);
                 /* Ensure backdrop-filter is applied */
                 backdrop-filter: var(--backdropFilter-blur-glass);
                 -webkit-backdrop-filter: var(--backdropFilter-blur-glass);
@@ -549,8 +549,8 @@
         function initiatePageTransition() {
             document.body.classList.add('page-fade-out'); // Add fade-out class to body
             setTimeout(() => {
-                window.location.href = 'home.html'; // Navigate after fade-out animation
-            }, 500); // Match this duration to the CSS fadeOut animation duration
+                window.location.href = 'home/'; // Corrected redirection path
+            }, 300); // Match this duration to the CSS fadeOut animation duration (0.3s)
         }
 
         function animateConfetti() {
