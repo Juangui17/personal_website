@@ -1,10 +1,76 @@
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-D81V23HR8G"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
+  // --- Google Consent Mode Implementation for Europe ---
+  // Default all consent types to 'denied' BEFORE your config command.
+  // This is crucial for GDPR compliance if no consent banner is present
+  // or if consent is not yet given.
+  // We'll update this based on user choice later in the script.
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'analytics_storage': 'denied',
+    'functionality_storage': 'denied',
+    'personalization_storage': 'denied',
+    'security_storage': 'granted' // Usually granted by default for security purposes
+  });
+
+  // Check for existing consent from localStorage
+  const consentGiven = localStorage.getItem('user_consent');
+  if (consentGiven === 'granted') {
+      gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'analytics_storage': 'granted',
+          'functionality_storage': 'granted',
+          'personalization_storage': 'granted'
+      });
+  } else if (consentGiven === 'denied') {
+       gtag('consent', 'update', {
+          'ad_storage': 'denied',
+          'analytics_storage': 'denied',
+          'functionality_storage': 'denied',
+          'personalization_storage': 'denied'
+      });
+  }
+
+  // Set a short wait_for_update if you expect the banner to appear immediately
+  // and the user might interact with it quickly on first load.
+  gtag('consent', 'default', {
+      'wait_for_update': 500 // Wait up to 500ms for consent to be updated before sending data
+  });
+
+
   gtag('config', 'G-D81V23HR8G');
+
+  // Function to grant consent
+  function grantConsent() {
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'analytics_storage': 'granted',
+      'functionality_storage': 'granted',
+      'personalization_storage': 'granted'
+    });
+    localStorage.setItem('user_consent', 'granted');
+    document.getElementById('cookieConsentBanner').style.display = 'none'; // Hide the banner
+    console.log('Consent granted!');
+  }
+
+  // Function to deny consent
+  function denyConsent() {
+    gtag('consent', 'update', {
+      'ad_storage': 'denied',
+      'analytics_storage': 'denied',
+      'functionality_storage': 'denied',
+      'personalization_storage': 'denied'
+    });
+    localStorage.setItem('user_consent', 'denied');
+    document.getElementById('cookieConsentBanner').style.display = 'none'; // Hide the banner
+    console.log('Consent denied!');
+  }
+
 </script>
 
 <!DOCTYPE html>
@@ -13,7 +79,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>CIAO, SONO JUANGUI! - My Personal Website</title>
+    <!-- Include Tailwind CSS for rapid modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Tailwind Configuration for colors and filters -->
     <script>
         tailwind.config = {
             theme: {
@@ -55,6 +123,7 @@
             ]
         }
     </script>
+    <!-- Google Fonts: Inter para texto principal -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
@@ -165,13 +234,92 @@
             box-shadow: theme('boxShadow.button-bubble-active');
             transform: scale(0.98);
         }
+
+        /* Cookie Consent Banner Specific Styles */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000; /* High z-index to ensure it's on top */
+            padding: 1.5rem; /* px-6 py-6 */
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 40rem; /* max-w-xl - Adjusted for better fit */
+            border-radius: 0.75rem; /* rounded-xl */
+            /* Apply glass effects */
+            background-color: var(--button-transparent-base);
+            backdrop-filter: var(--backdropFilter-blur-glass);
+            -webkit-backdrop-filter: var(--backdropFilter-blur-glass); /* For Safari */
+            box-shadow: var(--boxShadow-glass);
+            display: flex; /* Flexbox for content alignment */
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+            gap: 1rem; /* Space between text and buttons */
+            text-align: center;
+            transform: translateY(100%); /* Start off-screen */
+            animation: slide-up 0.5s ease-out forwards; /* Slide up on load */
+        }
+
+        @keyframes slide-up {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .cookie-banner.hidden {
+            display: none;
+        }
+
+        .cookie-banner-buttons {
+            display: flex;
+            flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+            justify-content: center;
+            gap: 0.75rem; /* Space between buttons */
+            width: 100%; /* Ensure buttons take full width of container */
+        }
+
+        .cookie-banner-buttons .button { /* Reusing existing button classes/styles */
+            flex-grow: 1; /* Allow buttons to grow to fill space */
+            min-width: 120px; /* Minimum width for buttons */
+        }
+
+        /* Specific styling for the primary "Accept All" button if desired */
+        .cookie-banner-buttons .button-accept {
+            /* You could add a more solid background here if you want it to stand out */
+            /* For now, keeping it consistent with button-transparent-base */
+        }
+        .cookie-banner-buttons .button-reject {
+            /* Maybe a less prominent style, like text-only or lighter background */
+            background-color: rgba(255, 255, 255, 0.2); /* Lighter transparency */
+        }
+        .cookie-banner-buttons .button-manage {
+             background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Adjust for smaller screens */
+        @media (max-width: 768px) {
+            .cookie-banner {
+                padding: 1rem;
+                border-radius: 0; /* No border-radius on small screens for full-width bottom bar */
+            }
+            .cookie-banner-buttons {
+                flex-direction: column; /* Stack buttons vertically */
+                gap: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen relative">
+    <!-- Blobs de Fondo Dinámicos y Auto-animados -->
     <div id="desktopBlob" class="moving-blob hidden md:block"></div>
     <div id="mobileBlob" class="moving-blob md:hidden"></div>
     
     <div class="text-center px-4 py-16 sm:px-8 sm:py-20 md:py-24 w-full max-w-xl mx-auto flex flex-col items-center justify-center relative z-10">
+        <!-- Aplica animación de entrada a este contenedor -->
         <div class="animate-entry-text"> 
             <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 uppercase">
                 CIAO, SONO JUANGUI!
@@ -187,7 +335,28 @@
         </div>
     </div>
 
+    <!-- Cookie Consent Banner -->
+    <div id="cookieConsentBanner" class="cookie-banner hidden">
+        <p class="text-base text-text-primary-dark mb-4 md:mb-0">
+            Usamos cookies para mejorar tu experiencia en nuestro sitio web. Al hacer clic en "Aceptar", aceptas el uso de todas las cookies.
+        </p>
+        <div class="cookie-banner-buttons">
+            <button id="acceptCookies" class="button button-accept relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-glass text-button-text-dark font-bold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow whitespace-nowrap">
+                Aceptar Todo
+            </button>
+            <button id="rejectCookies" class="button button-reject relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-glass text-button-text-dark font-bold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow whitespace-nowrap">
+                Rechazar
+            </button>
+            <!-- Optional: Add a "Manage Preferences" button -->
+            <!-- <button id="manageCookies" class="button button-manage relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-glass text-button-text-dark font-bold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow whitespace-nowrap">
+                Gestionar Preferencias
+            </button> -->
+        </div>
+    </div>
+
+
     <script>
+        // --- Existing JavaScript (Confetti, iOS zoom fix) ---
         let confettiParticles = [];
         const gravity = 0.5;
         
@@ -318,6 +487,39 @@
             if (document.documentElement.clientWidth !== window.innerWidth) {
                 document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no');
             }
+        });
+
+        // --- Cookie Consent Banner JavaScript Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const consentBanner = document.getElementById('cookieConsentBanner');
+            const acceptBtn = document.getElementById('acceptCookies');
+            const rejectBtn = document.getElementById('rejectCookies');
+            // const manageBtn = document.getElementById('manageCookies'); // Uncomment if you add manage button
+
+            const userConsent = localStorage.getItem('user_consent');
+
+            if (!userConsent) {
+                // If no consent is stored, show the banner
+                consentBanner.classList.remove('hidden');
+            } else {
+                // If consent is already given/denied, ensure banner is hidden
+                consentBanner.classList.add('hidden');
+            }
+
+            acceptBtn.addEventListener('click', () => {
+                grantConsent();
+            });
+
+            rejectBtn.addEventListener('click', () => {
+                denyConsent();
+            });
+
+            // If you add a manage preferences button, uncomment this:
+            // manageBtn.addEventListener('click', () => {
+            //    alert('Manage Preferences functionality would go here.');
+            //    // This would typically open a modal or navigate to a privacy policy page
+            //    // where users can fine-tune their consent.
+            // });
         });
     </script>
 </body>
