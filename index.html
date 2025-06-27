@@ -292,7 +292,7 @@
         .cookie-banner-buttons {
             display: flex;
             flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
-            justify-content: center;
+            justify-content: center; /* Default to center for desktop */
             gap: 0.75rem; /* Space between buttons */
             width: 100%; /* Ensure buttons take full width of container */
         }
@@ -308,6 +308,7 @@
             padding: 0.5rem 1rem; /* Adjust padding for visual balance */
             border-radius: 9999px; /* Fully rounded for pill shape */
             transition: all 0.4s ease; /* Smooth transition for hover/active effects */
+            text-align: center; /* Ensure text is centered within buttons */
         }
 
         /* Base styling for the primary "Accept All" button with liquid glass theme */
@@ -364,8 +365,17 @@
                 border-radius: 1.25rem; /* rounded-2xl */
             }
             .cookie-banner-buttons {
-                flex-direction: column; /* Stack buttons vertically for better tap targets */
-                gap: 0.5rem;
+                flex-direction: row; /* Ensure buttons are in a row */
+                justify-content: space-between; /* Place buttons at opposite ends */
+                gap: 0.5rem; /* Reduced gap between buttons */
+            }
+            .cookie-banner-buttons .button {
+                flex-grow: 0; /* Don't let buttons grow to fill remaining space */
+                min-width: unset; /* Remove min-width constraint */
+                width: 48%; /* Each button takes roughly half the width */
+                max-width: 150px; /* Max width to prevent them from becoming too large on slightly bigger mobile screens */
+                padding: 0.6rem 0.8rem; /* Adjusted padding for smaller buttons */
+                font-size: 0.9rem; /* Slightly smaller font size */
             }
             .cookie-banner p {
                 font-size: 0.875rem; /* Smaller text on mobile for compactness */
@@ -382,11 +392,11 @@
                 }
             }
 
-            /* Mobile-specific permanent liquid glass buttons with pastel colors */
+            /* Mobile-specific permanent liquid glass buttons with pastel colors and BLACK text */
             .cookie-banner-buttons .button-accept {
                 /* Using rgba for the pastel green with reduced opacity for liquid glass effect */
                 background-color: rgba(117, 232, 137, 0.6); /* Pastel green with ~60% opacity */
-                color: #ffffff; /* White text */
+                color: #000000; /* Black text for mobile */
                 border: 1px solid rgba(117, 232, 137, 0.9); /* Slightly more opaque border for definition */
                 /* Keeping a subtle glass shadow effect, perhaps enhancing with the color */
                 box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(117, 232, 137, 0.4);
@@ -397,7 +407,7 @@
             .cookie-banner-buttons .button-reject {
                 /* Using rgba for the pastel red with reduced opacity for liquid glass effect */
                 background-color: rgba(249, 151, 151, 0.6); /* Pastel red with ~60% opacity */
-                color: #ffffff; /* White text */
+                color: #000000; /* Black text for mobile */
                 border: 1px solid rgba(249, 151, 151, 0.9); /* Slightly more opaque border for definition */
                 /* Keeping a subtle glass shadow effect, perhaps enhancing with the color */
                 box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(249, 151, 151, 0.4);
