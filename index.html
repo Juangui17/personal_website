@@ -1,3 +1,4 @@
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-D81V23HR8G"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -80,7 +81,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>CIAO, SONO JUANGUI! - My Personal Website</title>
+    <!-- Include Tailwind CSS for rapid modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Tailwind Configuration for colors and filters -->
     <script>
         tailwind.config = {
             theme: {
@@ -118,6 +121,7 @@
             ]
         }
     </script>
+    <!-- Google Fonts: Inter para texto principal -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
@@ -243,6 +247,16 @@
             transform: scale(0.98);
         }
 
+        /* Page transition fade out */
+        .page-fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
         /* Cookie Consent Banner Specific Styles */
         .cookie-banner {
             position: fixed;
@@ -334,7 +348,7 @@
         @media (min-width: 769px) {
             .cookie-banner-buttons .button-accept:hover {
                 background-color: #75e889; /* Solid green on hover */
-                color: #484848; /* White text on hover for better contrast */
+                color: #ffffff; /* White text on hover for better contrast */
                 box-shadow: 0 0 15px rgba(117, 232, 137, 0.8); /* Green glow on hover */
             }
             .cookie-banner-buttons .button-reject:hover {
@@ -397,11 +411,11 @@
                 }
             }
 
-            /* Mobile-specific permanent liquid glass buttons with pastel colors and WHITE text */
+            /* Mobile-specific permanent liquid glass buttons with pastel colors */
             .cookie-banner-buttons .button-accept {
                 /* Using rgba for the pastel green with reduced opacity for liquid glass effect */
                 background-color: rgba(117, 232, 137, 0.6); /* Pastel green with ~60% opacity */
-                color: #484848; /* White text for mobile */
+                color: #000000; /* Black text for mobile - CORRECTED */
                 border: 1px solid rgba(117, 232, 137, 0.9); /* Slightly more opaque border for definition */
                 /* Keeping a subtle glass shadow effect, perhaps enhancing with the color */
                 box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(117, 232, 137, 0.4);
@@ -424,10 +438,13 @@
     </style>
 </head>
 <body>
+    <!-- Blobs de Fondo Dinámicos y Auto-animados -->
     <div id="desktopBlob" class="moving-blob hidden md:block"></div>
     <div id="mobileBlob" class="moving-blob md:hidden"></div>
     
+    <!-- Main content container - this is now absolutely positioned and centered -->
     <div class="main-content">
+        <!-- Applies entry animation to this container -->
         <div class="animate-entry-text"> 
             <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 uppercase">
                 CIAO, SONO JUANGUI!
@@ -443,18 +460,24 @@
         </div>
     </div>
 
+    <!-- Cookie Consent Banner (fixed at bottom, centered, animating from bottom-up) -->
     <div id="cookieConsentBanner" class="cookie-banner hidden">
         <p class="text-base text-text-primary-dark mb-4 md:mb-0 pt-4">
             We use cookies to enhance your experience.<br>Click "<b>Accept All</b>" to agree.
         </p>
         <div class="cookie-banner-buttons">
+            <!-- Order changed: Reject on left, Accept on right -->
             <button id="rejectCookies" class="button button-reject relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="denyConsent()">
                 Reject
             </button>
             <button id="acceptCookies" class="button button-accept relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="grantConsent()">
                 Accept All
             </button>
-            </div>
+            <!-- Optional: Add a "Manage Preferences" button -->
+            <!-- <button id="manageCookies" class="button button-manage relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
+                Manage Preferences
+            </button> -->
+        </div>
     </div>
 
 
@@ -522,6 +545,14 @@
 
         let animationFrameId = null;
 
+        // Function to initiate page transition after confetti
+        function initiatePageTransition() {
+            document.body.classList.add('page-fade-out'); // Add fade-out class to body
+            setTimeout(() => {
+                window.location.href = 'home.html'; // Navigate after fade-out animation
+            }, 500); // Match this duration to the CSS fadeOut animation duration
+        }
+
         function animateConfetti() {
             for (let i = confettiParticles.length - 1; i >= 0; i--) {
                 const p = confettiParticles [i];
@@ -549,6 +580,8 @@
                 animationFrameId = requestAnimationFrame(animateConfetti);
             } else {
                 animationFrameId = null;
+                // All confetti gone, initiate page transition
+                initiatePageTransition();
             }
         }
 
@@ -559,11 +592,9 @@
 
             battiCinqueButton.disabled = true; 
 
-            await new Promise(resolve => setTimeout(resolve, 5000)); 
-
-            console.log("Simulated action complete. Confetti displayed.");
-
-            battiCinqueButton.disabled = false; 
+            // No need for a separate setTimeout here for button re-enable,
+            // as we are immediately transitioning to a new page.
+            // The new page will have its own initial state.
         });
 
         // --- New JavaScript to attempt to prevent iOS zoom ---
