@@ -143,7 +143,7 @@
             border-radius: 50%;
             z-index: -1;
             pointer-events: none; /* No interfiere con el ratón */
-            opacity: 0.84; /* Reduced opacity by 15% */
+            opacity: 0.75; /* Reduced opacity by 10% more */
         }
 
         /* Blob Azul (Desktop) - Patrón W */
@@ -250,10 +250,10 @@
             border-bottom-left-radius: 0; /* No bottom radius */
             border-bottom-right-radius: 0; /* No bottom radius */
             /* Apply glass effects with increased contrast */
-            background-color: rgba(255, 255, 255, 0.9); /* Increased opacity for more contrast */
+            background-color: rgba(255, 255, 255, 0.95); /* Increased opacity for more contrast, more solid liquid glass */
             backdrop-filter: var(--backdropFilter-blur-glass);
             -webkit-backdrop-filter: var(--backdropFilter-blur-glass); /* For Safari */
-            box-shadow: 0 -4px 20px 0 rgba(31, 38, 135, 0.15); /* Shadow for coming up from bottom */
+            box-shadow: 0 -4px 20px 0 rgba(31, 38, 135, 0.2); /* Slightly larger and more opaque shadow for definition */
             display: flex; /* Flexbox for content alignment */
             flex-direction: column;
             align-items: center; /* Center content horizontally */
@@ -294,16 +294,19 @@
 
         /* Specific styling for the primary "Accept All" button if desired */
         .cookie-banner-buttons .button-accept {
-            background-color: rgba(59, 130, 246, 0.9); /* More prominent blue */
+            background-color: rgba(59, 130, 246, 0.9); /* More prominent blue for primary action */
             color: white; /* White text for contrast */
+            font-weight: 600; /* Make it bolder */
         }
         .cookie-banner-buttons .button-reject {
             background-color: rgba(255, 255, 255, 0.6); /* Lighter transparency */
-            color: var(--button-text-dark); /* Keep blue text */
+            color: #3b82f6; /* Keep blue text */
+            font-weight: 600; /* Make it bolder */
         }
         .cookie-banner-buttons .button-manage {
              background-color: rgba(255, 255, 255, 0.6);
-             color: var(--button-text-dark);
+             color: #3b82f6;
+             font-weight: 600;
         }
 
         /* Adjust for smaller screens (phones) */
@@ -319,6 +322,17 @@
             }
             .cookie-banner p {
                 font-size: 0.875rem; /* Smaller text on mobile for compactness */
+            }
+             /* Adjust animation for mobile to end at 10px from bottom */
+            @keyframes slide-in-from-bottom {
+                from {
+                    bottom: -100%;
+                    opacity: 0;
+                }
+                to {
+                    bottom: 0; /* Still flush with bottom on mobile */
+                    opacity: 1;
+                }
             }
         }
     </style>
