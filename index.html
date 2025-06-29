@@ -79,10 +79,10 @@
             theme: {
                 extend: {
                     colors: {
-                        'light-bg-start': '#e0f2f7', /* Fondo azul claro */
-                        'light-bg-end': '#f0faff',   /* Fondo azul más claro */
-                        'text-primary-dark': '#1a202c', /* Texto oscuro principal */
-                        'text-secondary-dark': '#4a5568', /* Texto oscuro secundario */
+                        'light-bg-start': '#e0f2f7',
+                        'light-bg-end': '#f0faff',
+                        'text-primary-dark': '#1a202c',
+                        'text-secondary-dark': '#4a5568',
                     },
                     boxShadow: {
                         'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
@@ -113,38 +113,32 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* REVISED: Base font size set in rem */
         html {
-            font-size: 16px; /* Base for rem units */
+            font-size: 16px;
         }
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            /* REVISED: Use min-height 100vh for flexibility and consistent centering */
-            min-height: 100vh; 
+            min-height: 100vh;
             background: radial-gradient(circle at center, var(--light-bg-start) 0%, var(--light-bg-end) 100%);
-            /* REVISED: Use flexbox for main body content centering */
             display: flex;
-            flex-direction: column; /* Stack content vertically */
-            justify-content: center; /* Center main content vertically */
-            align-items: center; /* Center main content horizontally */
-            overflow: hidden; /* Evita barras de desplazamiento */
-            position: relative; /* Needed for absolutely positioned children like blobs */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden; 
+            overflow-y: auto; 
+            position: relative;
         }
 
-        /* Main content container - now centered with flexbox */
         .main-content {
             text-align: center;
             padding: 0 1rem;
             z-index: 10;
-            width: 100%; /* Take full width for text alignment */
-            /* REVISED: Add max-width for better readability on large screens and center it */
-            max-width: 28rem; /* Keeps content contained, similar to the banner */
-            margin: 0 auto; /* Ensures it's centered if it doesn't take full width */
-            box-sizing: border-box; /* Include padding in width */
-            /* Removed absolute positioning here as body flexbox handles centering */
-            /* If you truly need absolute positioning for some reason, ensure it's calculated correctly */
+            width: 100%;
+            max-width: 28rem;
+            margin: 0 auto;
+            box-sizing: border-box;
         }
 
         /* Blobs de Fondo Dinámicos */
@@ -154,13 +148,11 @@
             z-index: -1;
             pointer-events: none;
             opacity: 0.6;
-            /* REVISED: Added transition for smoother media query changes */
-            transition: all 0.8s ease-in-out; 
+            transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out; 
         }
 
         /* Blob Azul (Desktop) - Patrón W */
         #desktopBlob {
-            /* REVISED: Use vw/vh for base size, min/max for constraints */
             width: 90vw; 
             height: 90vh; 
             min-width: 800px;
@@ -168,16 +160,17 @@
             background: radial-gradient(circle, rgba(50, 120, 200, 1) 0%, rgba(50, 120, 200, 0) 80%);
             filter: blur(180px);
             animation: w-move 40s infinite alternate ease-in-out;
-            /* REVISED: Start desktop blob off-screen on smaller viewports */
-            transform: translate(100%, 100%) scale(0.5); /* Hide off-screen initially on small devices */
+            transform: translate(100vw, 100vh) scale(0.1); 
+            opacity: 0;
         }
 
+        /* REVISED: Adjusted keyframe values to keep the blob's center more contained */
         @keyframes w-move {
-            0% { transform: translate(5%, 15%) scale(0.85); }
-            25% { transform: translate(45%, 55%) scale(0.95); }
-            50% { transform: translate(75%, 15%) scale(1.05); }
-            75% { transform: translate(45%, 55%) scale(1.0); }
-            100% { transform: translate(5%, 15%) scale(0.85); }
+            0% { transform: translate(calc(50vw - 40vw), calc(50vh - 40vh)) scale(0.85); } /* Top-leftish */
+            25% { transform: translate(calc(50vw + 10vw), calc(50vh + 20vh)) scale(0.95); } /* Bottom-rightish */
+            50% { transform: translate(calc(50vw + 30vw), calc(50vh - 30vh)) scale(1.05); } /* Top-rightish */
+            75% { transform: translate(calc(50vw - 20vw), calc(50vh + 10vh)) scale(1.0); } /* Bottom-leftish */
+            100% { transform: translate(calc(50vw - 40vw), calc(50vh - 40vh)) scale(0.85); }
         }
 
         /* Blob Azul (Mobile) - Patrón Triangular */
@@ -189,39 +182,39 @@
             background: radial-gradient(circle, rgba(50, 120, 200, 1) 0%, rgba(50, 120, 200, 0) 80%);
             filter: blur(120px);
             animation: triangular-move 30s infinite alternate ease-in-out;
-            /* REVISED: Start mobile blob off-screen on larger viewports */
-            transform: translate(-100%, -100%) scale(0.5); /* Hide off-screen initially on large devices */
+            transform: translate(-100vw, -100vh) scale(0.1); 
+            opacity: 0;
         }
 
+        /* REVISED: Adjusted keyframe values for mobile blob */
         @keyframes triangular-move {
-            0% { transform: translate(15vw, 65vh) scale(0.85); }
-            33% { transform: translate(65vw, 25vh) scale(0.95); }
-            66% { transform: translate(40vw, 45vh) scale(1.05); opacity: 0.98; }
-            100% { transform: translate(15vw, 65vh) scale(0.85); }
+            0% { transform: translate(calc(50vw - 40vw), calc(50vh + 10vh)) scale(0.85); } /* Bottom-leftish */
+            33% { transform: translate(calc(50vw + 10vw), calc(50vh - 30vh)) scale(0.95); } /* Top-rightish */
+            66% { transform: translate(calc(50vw - 15vw), calc(50vh - 10vh)) scale(1.05); opacity: 0.98; } /* More central */
+            100% { transform: translate(calc(50vw - 40vw), calc(50vh + 10vh)) scale(0.85); }
         }
 
-        /* REVISED: Media query to show desktop blob and hide mobile blob on larger screens */
+        /* Media query to show desktop blob and hide mobile blob on larger screens */
         @media (min-width: 769px) {
             #desktopBlob {
-                /* REVISED: Ensure desktop blob is correctly positioned and animated */
-                transform: translate(5%, 15%) scale(0.85); /* Initial state of its animation */
+                transform: translate(calc(50vw - 40vw), calc(50vh - 40vh)) scale(0.85); /* Animation start state */
+                opacity: 0.6;
             }
             #mobileBlob {
-                display: none; /* Hide mobile blob on desktop */
+                display: none;
             }
         }
 
-        /* REVISED: Media query to show mobile blob and hide desktop blob on smaller screens */
+        /* Media query to show mobile blob and hide desktop blob on smaller screens */
         @media (max-width: 768px) {
             #mobileBlob {
-                /* REVISED: Ensure mobile blob is correctly positioned and animated */
-                transform: translate(15vw, 65vh) scale(0.85); /* Initial state of its animation */
+                transform: translate(calc(50vw - 40vw), calc(50vh + 10vh)) scale(0.85); /* Animation start state */
+                opacity: 0.6;
             }
             #desktopBlob {
-                display: none; /* Hide desktop blob on mobile */
+                display: none;
             }
         }
-
 
         /* Animación de entrada para título y subtítulo */
         @keyframes slide-down-settle {
@@ -353,14 +346,12 @@
             justify-content: center;
         }
 
-        /* Base styling for the primary "Accept All" button with liquid glass theme */
         .cookie-banner-buttons .button-accept {
             background-color: rgba(255, 255, 255, 0.7);
             color: #049c1e;
             border: 1px solid rgba(255, 255, 255, 0.8);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3);
         }
-        /* Base styling for the "Reject" button with liquid glass theme */
         .cookie-banner-buttons .button-reject {
             background-color: rgba(255, 255, 255, 0.7);
             color: #d11313;
@@ -368,7 +359,6 @@
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3);
         }
         
-        /* Desktop Hover Effects (min-width: 769px) */
         @media (min-width: 769px) {
             .cookie-banner-buttons .button-accept:hover {
                 background-color: #75e889;
@@ -382,7 +372,6 @@
             }
         }
 
-        /* Active state for both buttons (applies to both desktop click and mobile tap) */
         .cookie-banner-buttons .button-accept:active {
             background-color: #75e889;
             color: #ffffff;
@@ -397,14 +386,11 @@
             transform: scale(0.98);
         }
 
-
-        /* Adjust for smaller screens (phones) */
         @media (max-width: 768px) {
             .cookie-banner {
                 padding: 0.5rem 1rem;
                 max-width: 100%;
-                border-radius: 1.25rem; /* rounded-2xl for all corners on mobile */
-                /* REVISED: Ensure it respects safe areas on iOS devices */
+                border-radius: 1.25rem;
                 padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
             }
             .cookie-banner p {
@@ -424,8 +410,6 @@
                 padding: 0.6rem 0.8rem;
                 font-size: 0.9rem;
             }
-             /* REVISED: Removed duplicate @keyframes for slide-in-from-bottom */
-            /* Mobile-specific permanent liquid glass buttons with pastel colors */
             .cookie-banner-buttons .button-accept {
                 background-color: rgba(117, 232, 137, 0.6);
                 color: #000000;
@@ -470,29 +454,26 @@
             We use cookies to enhance your experience.<br>Click "<b>Accept All</b>" to agree.
         </p>
         <div class="cookie-banner-buttons">
-            <button id="rejectCookies" class="button button-reject relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="denyConsent()">
+            <button id="rejectCookies" class="button button-reject relative inline-flex items-center justify-content-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="denyConsent()">
                 Reject
             </button>
-            <button id="acceptCookies" class="button button-accept relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="grantConsent()">
+            <button id="acceptCookies" class="button button-accept relative inline-flex items-center justify-content-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="grantConsent()">
                 Accept All
             </button>
         </div>
     </div>
 
     <script>
-        // --- Existing JavaScript (Confetti, iOS zoom fix) ---
         let confettiParticles = [];
         const gravity = 0.5;
         
-        // Define settings based on screen width
         let numConfetti = 100;
         let maxInitialSpeed = 20;
         let minInitialSpeed = 5;
         let initialUpwardForce = 25;
 
-        // Optimize for mobile (adjust for screens less than 768px wide)
         if (window.innerWidth < 768) {
-            numConfetti = 40; // Reduced particles for mobile
+            numConfetti = 40;
             maxInitialSpeed = 15;
             minInitialSpeed = 8;
             initialUpwardForce = 20;
@@ -500,10 +481,8 @@
 
         function throwConfetti(event) {
             const button = event.target;
-            // Confetti colors: only blues, yellows, and warm tones (red/orange, excluding greens)
             const colors = ['#87CEEB', '#FFD700', '#FF6347', '#ADD8E6', '#6495ED', '#FFA07A']; 
             
-            // REVISED: Start confetti from the bottom center of the screen
             const startX = window.innerWidth / 2;
             const startY = window.innerHeight; 
 
@@ -513,8 +492,7 @@
                 confettiElement.style.backgroundColor = colors [Math.floor(Math.random() * colors.length)];
                 confettiElement.style.opacity = 1;
 
-                // REVISED: Confetti starting points are more randomized across the bottom width
-                confettiElement.style.left = `${startX + (Math.random() - 0.5) * window.innerWidth * 0.4}px`; /* Spread around center */
+                confettiElement.style.left = `${startX + (Math.random() - 0.5) * window.innerWidth * 0.4}px`;
                 confettiElement.style.top = `${startY}px`; 
 
                 confettiElement.style.width = `${6 + Math.random() * 8}px`; 
@@ -522,8 +500,7 @@
 
                 document.body.appendChild(confettiElement);
 
-                // REVISED: Adjust angle for upward spread, mostly upwards or slight side
-                const angle = Math.random() * Math.PI * 0.6 - (Math.PI * 0.3); // Angle from -54 to 54 degrees
+                const angle = Math.random() * Math.PI * 0.6 - (Math.PI * 0.3);
                 const speed = minInitialSpeed + Math.random() * (maxInitialSpeed - minInitialSpeed);
 
                 confettiParticles.push({
@@ -546,12 +523,11 @@
 
         let animationFrameId = null;
 
-        // Function to initiate page transition after confetti
         function initiatePageTransition() {
-            document.body.classList.add('page-fade-out'); // Add fade-out class to body
+            document.body.classList.add('page-fade-out');
             setTimeout(() => {
                 window.location.href = 'home/';
-            }, 300); // Match this duration to the CSS fadeOut animation duration (0.3s)
+            }, 300);
         }
 
         function animateConfetti() {
@@ -570,7 +546,6 @@
                 p.element.style.transform = `translate(${p.x}px, ${p.y}px) rotate(${p.rotation}deg)`;
                 p.element.style.opacity = p.opacity;
 
-                // Remove particle if it's too far off screen or fully transparent
                 if (p.opacity <= 0 || p.y > window.innerHeight + 100 || p.x < -100 || p.x > window.innerWidth + 100) {
                     p.element.remove();
                     confettiParticles.splice(i, 1);
@@ -581,24 +556,15 @@
                 animationFrameId = requestAnimationFrame(animateConfetti);
             } else {
                 animationFrameId = null;
-                // All confetti gone, initiate page transition
                 initiatePageTransition();
             }
         }
 
         const battiCinqueButton = document.getElementById('battiCinqueButton');
-        
         battiCinqueButton.addEventListener('click', async (event) => { 
             throwConfetti(event); 
         });
 
-        // --- REVISED: Simplified iOS zoom prevention ---
-        // The previous methods with passive: false can sometimes interfere with scrolling.
-        // The most effective general prevention is the viewport meta tag itself.
-        // Removing specific touch listeners unless you face persistent, unpreventable zoom.
-        // Test thoroughly without these first.
-        
-        // --- Cookie Consent Banner JavaScript Logic ---
         document.addEventListener('DOMContentLoaded', () => {
             const consentBanner = document.getElementById('cookieConsentBanner');
             const userConsent = localStorage.getItem('user_consent');
