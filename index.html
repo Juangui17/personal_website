@@ -1,4 +1,3 @@
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-D81V23HR8G"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -7,9 +6,6 @@
 
   // --- Google Consent Mode Implementation for Europe ---
   // Default all consent types to 'denied' BEFORE your config command.
-  // This is crucial for GDPR compliance if no consent banner is present
-  // or if consent is not yet given.
-  // I'll update this based on user choice later in the script.
   gtag('consent', 'default', {
     'ad_storage': 'denied',
     'analytics_storage': 'denied',
@@ -37,11 +33,9 @@
   }
 
   // Set a short wait_for_update if you expect the banner to appear immediately
-  // and the user might interact with it quickly on first load.
   gtag('consent', 'default', {
       'wait_for_update': 500 // Wait up to 500ms for consent to be updated before sending data
   });
-
 
   gtag('config', 'G-D81V23HR8G');
 
@@ -55,7 +49,6 @@
     });
     localStorage.setItem('user_consent', 'granted');
     document.getElementById('cookieConsentBanner').style.display = 'none'; // Hide the banner
-    // No need to adjust padding-bottom on body as main content is absolutely positioned
     console.log('Consent granted!');
   }
 
@@ -69,7 +62,6 @@
     });
     localStorage.setItem('user_consent', 'denied');
     document.getElementById('cookieConsentBanner').style.display = 'none'; // Hide the banner
-    // No need to adjust padding-bottom on body as main content is absolutely positioned
     console.log('Consent denied!');
   }
 
@@ -79,11 +71,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CIAO, SONO JUANGUI! - My Personal Website</title>
-    <!-- Include Tailwind CSS for rapid modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Custom Tailwind Configuration for colors and filters -->
     <script>
         tailwind.config = {
             theme: {
@@ -95,17 +85,17 @@
                         'text-secondary-dark': '#4a5568', /* Texto oscuro secundario */
                     },
                     boxShadow: {
-                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.25)', /* A bit stronger shadow for contrast */
-                        'button-bubble': 'inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(59, 130, 246, 0.1)', /* Sombras internas más nítidas */
-                        'button-bubble-active': 'inset 0 0 0 2px rgba(59, 130, 246, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 40px rgba(59, 130, 246, 0.5)', /* Estado activo más fuerte */
-                        'button-pulse-glow': '0 0 25px rgba(59, 130, 246, 0.6)', /* Brillo pulsante más notorio */
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                        'button-bubble': 'inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(59, 130, 246, 0.1)',
+                        'button-bubble-active': 'inset 0 0 0 2px rgba(59, 130, 246, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 40px rgba(59, 130, 246, 0.5)',
+                        'button-pulse-glow': '0 0 25px rgba(59, 130, 246, 0.6)',
                     },
                     backdropFilter: {
                         'none': 'none',
-                        'blur-glass': 'blur(50px) saturate(300%)', /* Más intenso blur y saturate para "Liquid Glass" */
+                        'blur-glass': 'blur(50px) saturate(300%)',
                     },
                     borderRadius: {
-                        '4xl': '2rem', /* Predominantly rounded, "pill-like" shapes */
+                        '4xl': '2rem',
                     }
                 }
             },
@@ -121,33 +111,40 @@
             ]
         }
     </script>
-    <!-- Google Fonts: Inter para texto principal -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* REVISED: Base font size set in rem */
+        html {
+            font-size: 16px; /* Base for rem units */
+        }
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            height: 100vh;
-            background: radial-gradient(circle at center, var(--light-bg-start) 0%, var(--light-bg-end) 100%); /* Degradado radial sutil */
-            display: flex; /* Use flexbox to center content for initial layout */
-            justify-content: center; /* Center horizontally for initial layout */
-            align-items: center; /* Center vertically for initial layout */
+            /* REVISED: Use min-height 100vh for flexibility and consistent centering */
+            min-height: 100vh; 
+            background: radial-gradient(circle at center, var(--light-bg-start) 0%, var(--light-bg-end) 100%);
+            /* REVISED: Use flexbox for main body content centering */
+            display: flex;
+            flex-direction: column; /* Stack content vertically */
+            justify-content: center; /* Center main content vertically */
+            align-items: center; /* Center main content horizontally */
             overflow: hidden; /* Evita barras de desplazamiento */
-            position: relative; /* Needed for absolutely positioned children */
+            position: relative; /* Needed for absolutely positioned children like blobs */
         }
 
-        /* Main content container - this is now absolutely positioned and centered */
+        /* Main content container - now centered with flexbox */
         .main-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* Keeps content perfectly centered */
             text-align: center;
-            padding: 0 1rem; /* Adjust padding as needed */
-            z-index: 10; /* Ensure it's above blobs, but below banner */
+            padding: 0 1rem;
+            z-index: 10;
             width: 100%; /* Take full width for text alignment */
-            max-width: 28rem; /* Match banner max-width for consistency if desired */
+            /* REVISED: Add max-width for better readability on large screens and center it */
+            max-width: 28rem; /* Keeps content contained, similar to the banner */
+            margin: 0 auto; /* Ensures it's centered if it doesn't take full width */
+            box-sizing: border-box; /* Include padding in width */
+            /* Removed absolute positioning here as body flexbox handles centering */
+            /* If you truly need absolute positioning for some reason, ensure it's calculated correctly */
         }
 
         /* Blobs de Fondo Dinámicos */
@@ -155,19 +152,24 @@
             position: absolute;
             border-radius: 50%;
             z-index: -1;
-            pointer-events: none; /* No interfiere con el ratón */
-            opacity: 0.6; /* Reduced opacity */
+            pointer-events: none;
+            opacity: 0.6;
+            /* REVISED: Added transition for smoother media query changes */
+            transition: all 0.8s ease-in-out; 
         }
 
         /* Blob Azul (Desktop) - Patrón W */
         #desktopBlob {
-            width: 100vw; /* Adjusted size */
-            height: 100vw; /* Adjusted size */
-            min-width: 800px; /* Adjusted minimum size */
-            min-height: 800px; /* Adjusted minimum size */
+            /* REVISED: Use vw/vh for base size, min/max for constraints */
+            width: 90vw; 
+            height: 90vh; 
+            min-width: 800px;
+            min-height: 800px;
             background: radial-gradient(circle, rgba(50, 120, 200, 1) 0%, rgba(50, 120, 200, 0) 80%);
-            filter: blur(180px); /* Slightly adjusted blur */
+            filter: blur(180px);
             animation: w-move 40s infinite alternate ease-in-out;
+            /* REVISED: Start desktop blob off-screen on smaller viewports */
+            transform: translate(100%, 100%) scale(0.5); /* Hide off-screen initially on small devices */
         }
 
         @keyframes w-move {
@@ -180,13 +182,15 @@
 
         /* Blob Azul (Mobile) - Patrón Triangular */
         #mobileBlob {
-            width: 120vw; /* Adjusted size for mobile */
-            height: 120vw; /* Adjusted size for mobile */
-            min-width: 500px; /* Adjusted minimum size */
-            min-height: 500px; /* Adjusted minimum size */
+            width: 120vw;
+            height: 120vw;
+            min-width: 500px;
+            min-height: 500px;
             background: radial-gradient(circle, rgba(50, 120, 200, 1) 0%, rgba(50, 120, 200, 0) 80%);
-            filter: blur(120px); /* Slightly adjusted blur */
+            filter: blur(120px);
             animation: triangular-move 30s infinite alternate ease-in-out;
+            /* REVISED: Start mobile blob off-screen on larger viewports */
+            transform: translate(-100%, -100%) scale(0.5); /* Hide off-screen initially on large devices */
         }
 
         @keyframes triangular-move {
@@ -195,6 +199,29 @@
             66% { transform: translate(40vw, 45vh) scale(1.05); opacity: 0.98; }
             100% { transform: translate(15vw, 65vh) scale(0.85); }
         }
+
+        /* REVISED: Media query to show desktop blob and hide mobile blob on larger screens */
+        @media (min-width: 769px) {
+            #desktopBlob {
+                /* REVISED: Ensure desktop blob is correctly positioned and animated */
+                transform: translate(5%, 15%) scale(0.85); /* Initial state of its animation */
+            }
+            #mobileBlob {
+                display: none; /* Hide mobile blob on desktop */
+            }
+        }
+
+        /* REVISED: Media query to show mobile blob and hide desktop blob on smaller screens */
+        @media (max-width: 768px) {
+            #mobileBlob {
+                /* REVISED: Ensure mobile blob is correctly positioned and animated */
+                transform: translate(15vw, 65vh) scale(0.85); /* Initial state of its animation */
+            }
+            #desktopBlob {
+                display: none; /* Hide desktop blob on mobile */
+            }
+        }
+
 
         /* Animación de entrada para título y subtítulo */
         @keyframes slide-down-settle {
@@ -220,7 +247,7 @@
             position: absolute;
             background-color: currentColor;
             opacity: 0;
-            border-radius: 0; /* Formas rectangulares/cuadradas */
+            border-radius: 0;
             pointer-events: none;
             transform-origin: center;
         }
@@ -231,7 +258,7 @@
                 box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(59, 130, 246, 0.1);
             }
             50% {
-                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 25px rgba(59, 130, 246, 0.6); /* Enhanced glow */
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 25px rgba(59, 130, 246, 0.6);
             }
             100% {
                 box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(59, 130, 246, 0.1);
@@ -243,13 +270,13 @@
 
         /* Button active state for press effect (burbujeante) */
         .button-active-shadow:active {
-            box-shadow: inset 0 0 0 2px rgba(59, 130, 246, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 40px rgba(59, 130, 246, 0.5); /* Stronger active state */
+            box-shadow: inset 0 0 0 2px rgba(59, 130, 246, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.25), 0 0 40px rgba(59, 130, 246, 0.5);
             transform: scale(0.98);
         }
 
         /* Page transition fade out */
         .page-fade-out {
-            animation: fadeOut 0.3s ease-out forwards; /* Transition speed changed to 0.3s */
+            animation: fadeOut 0.3s ease-out forwards;
         }
 
         @keyframes fadeOut {
@@ -260,31 +287,29 @@
         /* Cookie Consent Banner Specific Styles */
         .cookie-banner {
             position: fixed;
-            bottom: 0; /* Fixed at the very bottom */
+            bottom: 0;
             left: 50%;
-            transform: translateX(-50%); /* Centered horizontally */
-            z-index: 1000; /* High z-index to ensure it's on top */
-            padding: 0.75rem 1.5rem; /* Reduced vertical padding */
-            max-width: 28rem; /* Adjusted max-width for a more compact appearance */
-            width: 100%; /* Take full width of its max-width container */
-            box-sizing: border-box; /* Include padding in width calculation */
-            /* Increased rounding for top corners on desktop */
-            border-top-left-radius: 1.25rem; /* rounded-2xl */
-            border-top-right-radius: 1.25rem; /* rounded-2xl */
-            border-bottom-left-radius: 0; /* No bottom radius */
-            border-bottom-right-radius: 0; /* No bottom radius */
-            /* Apply glass effects with increased contrast */
-            background-color: rgba(255, 255, 255, 0.95); /* Increased opacity for more contrast, more solid liquid glass */
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding: 0.75rem 1.5rem;
+            max-width: 28rem;
+            width: 100%;
+            box-sizing: border-box;
+            border-top-left-radius: 1.25rem;
+            border-top-right-radius: 1.25rem;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            background-color: rgba(255, 255, 255, 0.95);
             backdrop-filter: var(--backdropFilter-blur-glass);
-            -webkit-backdrop-filter: var(--backdropFilter-blur-glass); /* For Safari */
-            box-shadow: 0 -4px 20px 0 rgba(31, 38, 135, 0.2); /* Slightly larger and more opaque shadow for definition */
-            display: flex; /* Flexbox for content alignment */
+            -webkit-backdrop-filter: var(--backdropFilter-blur-glass);
+            box-shadow: 0 -4px 20px 0 rgba(31, 38, 135, 0.2);
+            display: flex;
             flex-direction: column;
-            align-items: center; /* Center content horizontally */
-            gap: 0.5rem; /* Reduced space between text and buttons */
+            align-items: center;
+            gap: 0.5rem;
             text-align: center;
-            opacity: 0; /* Start hidden for fade-in */
-            animation: slide-in-from-bottom 0.8s ease-out forwards; /* Changed animation duration to 0.8s */
+            opacity: 0;
+            animation: slide-in-from-bottom 0.8s ease-out forwards;
         }
 
         /* Keyframes for the bottom-to-up slide transition */
@@ -294,7 +319,7 @@
                 opacity: 0;
             }
             to {
-                bottom: 0; /* Animate to its final fixed position flush with the bottom */
+                bottom: 0;
                 opacity: 1;
             }
         }
@@ -305,70 +330,69 @@
 
         .cookie-banner-buttons {
             display: flex;
-            flex-wrap: nowrap; /* Prevent buttons from wrapping */
-            justify-content: center; /* Default to center for desktop */
-            gap: 0.5rem; /* Reduced space between buttons */
-            width: 100%; /* Ensure buttons take full width of container */
+            flex-wrap: nowrap;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
         }
 
-        .cookie-banner-buttons .button { /* Reusing existing button classes/styles */
-            flex-grow: 1; /* Allow buttons to grow to fill space */
-            flex-basis: 0; /* Allow flex-grow to work evenly */
-            min-width: 120px; /* Minimum width for buttons */
-            /* Common liquid glass styles are applied here, including backdrop-filter */
+        .cookie-banner-buttons .button {
+            flex-grow: 1;
+            flex-basis: 0;
+            min-width: 120px;
             backdrop-filter: var(--backdropFilter-blur-glass);
             -webkit-backdrop-filter: var(--backdropFilter-blur-glass);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* General button shadow */
-            font-weight: 600; /* Make it bolder for readability */
-            padding: 0.5rem 1rem; /* Adjust padding for visual balance */
-            border-radius: 9999px; /* Fully rounded for pill shape */
-            transition: all 0.4s ease; /* Smooth transition for hover/active effects */
-            text-align: center; /* Ensure text is centered within buttons */
-            display: flex; /* Use flexbox to center text inside button */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            transition: all 0.4s ease;
+            text-align: center;
+            display: flex;
             align-items: center;
             justify-content: center;
         }
 
         /* Base styling for the primary "Accept All" button with liquid glass theme */
         .cookie-banner-buttons .button-accept {
-            background-color: rgba(255, 255, 255, 0.7); /* Increased opacity for more contrast */
-            color: #049c1e; /* Updated text color for better contrast */
-            border: 1px solid rgba(255, 255, 255, 0.8); /* Lighter border for definition */
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3); /* Subtle glass shadow */
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #049c1e;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3);
         }
         /* Base styling for the "Reject" button with liquid glass theme */
         .cookie-banner-buttons .button-reject {
-            background-color: rgba(255, 255, 255, 0.7); /* Increased opacity for more contrast */
-            color: #d11313; /* Red text for distinction */
-            border: 1px solid rgba(255, 255, 255, 0.8); /* Lighter border for definition */
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3); /* Subtle glass shadow */
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #d11313;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3);
         }
         
         /* Desktop Hover Effects (min-width: 769px) */
         @media (min-width: 769px) {
             .cookie-banner-buttons .button-accept:hover {
-                background-color: #75e889; /* Solid green on hover */
-                color: #ffffff; /* White text on hover for better contrast */
-                box-shadow: 0 0 15px rgba(117, 232, 137, 0.8); /* Green glow on hover */
+                background-color: #75e889;
+                color: #ffffff;
+                box-shadow: 0 0 15px rgba(117, 232, 137, 0.8);
             }
             .cookie-banner-buttons .button-reject:hover {
-                background-color: #f99797; /* Solid red on hover */
-                color: #ffffff; /* White text on hover for better contrast */
-                box-shadow: 0 0 15px rgba(249, 151, 151, 0.8); /* Red glow on hover */
+                background-color: #f99797;
+                color: #ffffff;
+                box-shadow: 0 0 15px rgba(249, 151, 151, 0.8);
             }
         }
 
         /* Active state for both buttons (applies to both desktop click and mobile tap) */
         .cookie-banner-buttons .button-accept:active {
-            background-color: #75e889; /* Keep solid green on active (for consistency) */
-            color: #ffffff; /* Keep white text on active (for consistency) */
+            background-color: #75e889;
+            color: #ffffff;
             box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.7);
             transform: scale(0.98);
         }
 
         .cookie-banner-buttons .button-reject:active {
-            background-color: #f99797; /* Keep solid red on active (for consistency) */
-            color: #ffffff; /* Keep white text on active (for consistency) */
+            background-color: #f99797;
+            color: #ffffff;
             box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.7);
             transform: scale(0.98);
         }
@@ -377,60 +401,44 @@
         /* Adjust for smaller screens (phones) */
         @media (max-width: 768px) {
             .cookie-banner {
-                padding: 0.5rem 1rem; /* Further reduced vertical padding for mobile */
-                max-width: 100%; /* Take full width on small screens */
-                /* Increased rounding for all corners on mobile */
-                border-radius: 1.25rem; /* rounded-2xl */
+                padding: 0.5rem 1rem;
+                max-width: 100%;
+                border-radius: 1.25rem; /* rounded-2xl for all corners on mobile */
+                /* REVISED: Ensure it respects safe areas on iOS devices */
+                padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
             }
             .cookie-banner p {
-                font-size: 0.875rem; /* Smaller text on mobile for compactness */
-                margin-bottom: 0.25rem; /* Significantly reduced space below paragraph */
-                padding-top: 0.25rem; /* Reduced top padding */
+                font-size: 0.875rem;
+                margin-bottom: 0.25rem;
+                padding-top: 0.25rem;
             }
             .cookie-banner-buttons {
-                flex-direction: row; /* Ensure buttons are in a row */
-                justify-content: space-between; /* Place buttons at opposite ends */
-                gap: 0.5rem; /* Keep a minimal gap between buttons */
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0.5rem;
             }
             .cookie-banner-buttons .button {
-                flex-grow: 1; /* Allow buttons to grow */
-                flex-basis: calc(50% - 0.25rem); /* Make each button approximately 50% width minus half the gap */
-                max-width: unset; /* Remove max-width constraint to allow full growth */
-                padding: 0.6rem 0.8rem; /* Adjusted padding for smaller buttons */
-                font-size: 0.9rem; /* Slightly smaller font size */
+                flex-grow: 1;
+                flex-basis: calc(50% - 0.25rem);
+                max-width: unset;
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
             }
-             /* Adjust animation for mobile to end at 10px from bottom */
-            @keyframes slide-in-from-bottom {
-                from {
-                    bottom: -100%;
-                    opacity: 0;
-                }
-                to {
-                    bottom: 0; /* Still flush with bottom on mobile */
-                    opacity: 1;
-                }
-            }
-
+             /* REVISED: Removed duplicate @keyframes for slide-in-from-bottom */
             /* Mobile-specific permanent liquid glass buttons with pastel colors */
             .cookie-banner-buttons .button-accept {
-                /* Using rgba for the pastel green with reduced opacity for liquid glass effect */
-                background-color: rgba(117, 232, 137, 0.6); /* Pastel green with ~60% opacity */
-                color: #000000; /* Black text for mobile - CORRECTED */
-                border: 1px solid rgba(117, 232, 137, 0.9); /* Slightly more opaque border for definition */
-                /* Keeping a subtle glass shadow effect, perhaps enhancing with the color */
+                background-color: rgba(117, 232, 137, 0.6);
+                color: #000000;
+                border: 1px solid rgba(117, 232, 137, 0.9);
                 box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3);
-                /* Ensure backdrop-filter is applied - it's inherited from .button, but explicit is fine if needed */
                 backdrop-filter: var(--backdropFilter-blur-glass);
                 -webkit-backdrop-filter: var(--backdropFilter-blur-glass);
             }
             .cookie-banner-buttons .button-reject {
-                /* Using rgba for the pastel red with reduced opacity for liquid glass effect */
-                background-color: rgba(249, 151, 151, 0.6); /* Pastel red with ~60% opacity */
-                color: #ffffff; /* White text for mobile */
-                border: 1px solid rgba(249, 151, 151, 0.9); /* Slightly more opaque border for definition */
-                /* Keeping a subtle glass shadow effect, perhaps enhancing with the color */
+                background-color: rgba(249, 151, 151, 0.6);
+                color: #ffffff;
+                border: 1px solid rgba(249, 151, 151, 0.9);
                 box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.05), 0 0 10px rgba(255, 255, 255, 0.3);
-                /* Ensure backdrop-filter is applied */
                 backdrop-filter: var(--backdropFilter-blur-glass);
                 -webkit-backdrop-filter: var(--backdropFilter-blur-glass);
             }
@@ -438,13 +446,10 @@
     </style>
 </head>
 <body>
-    <!-- Blobs de Fondo Dinámicos y Auto-animados -->
     <div id="desktopBlob" class="moving-blob hidden md:block"></div>
     <div id="mobileBlob" class="moving-blob md:hidden"></div>
     
-    <!-- Main content container - this is now absolutely positioned and centered -->
     <div class="main-content">
-        <!-- Applies entry animation to this container -->
         <div class="animate-entry-text"> 
             <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 uppercase">
                 CIAO, SONO JUANGUI!
@@ -460,26 +465,19 @@
         </div>
     </div>
 
-    <!-- Cookie Consent Banner (fixed at bottom, centered, animating from bottom-up) -->
     <div id="cookieConsentBanner" class="cookie-banner hidden">
         <p class="text-base text-text-primary-dark mb-4 md:mb-0 pt-4">
             We use cookies to enhance your experience.<br>Click "<b>Accept All</b>" to agree.
         </p>
         <div class="cookie-banner-buttons">
-            <!-- Order changed: Reject on left, Accept on right -->
             <button id="rejectCookies" class="button button-reject relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="denyConsent()">
                 Reject
             </button>
             <button id="acceptCookies" class="button button-accept relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap" onclick="grantConsent()">
                 Accept All
             </button>
-            <!-- Optional: Add a "Manage Preferences" button -->
-            <!-- <button id="manageCookies" class="button button-manage relative inline-flex items-center justify-center border-none transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
-                Manage Preferences
-            </button> -->
         </div>
     </div>
-
 
     <script>
         // --- Existing JavaScript (Confetti, iOS zoom fix) ---
@@ -505,7 +503,8 @@
             // Confetti colors: only blues, yellows, and warm tones (red/orange, excluding greens)
             const colors = ['#87CEEB', '#FFD700', '#FF6347', '#ADD8E6', '#6495ED', '#FFA07A']; 
             
-            const rect = button.getBoundingClientRect();
+            // REVISED: Start confetti from the bottom center of the screen
+            const startX = window.innerWidth / 2;
             const startY = window.innerHeight; 
 
             for (let i = 0; i < numConfetti; i++) {
@@ -514,7 +513,8 @@
                 confettiElement.style.backgroundColor = colors [Math.floor(Math.random() * colors.length)];
                 confettiElement.style.opacity = 1;
 
-                confettiElement.style.left = `${Math.random() * window.innerWidth}px`; 
+                // REVISED: Confetti starting points are more randomized across the bottom width
+                confettiElement.style.left = `${startX + (Math.random() - 0.5) * window.innerWidth * 0.4}px`; /* Spread around center */
                 confettiElement.style.top = `${startY}px`; 
 
                 confettiElement.style.width = `${6 + Math.random() * 8}px`; 
@@ -522,7 +522,8 @@
 
                 document.body.appendChild(confettiElement);
 
-                const angle = Math.random() * Math.PI - (Math.PI / 2); 
+                // REVISED: Adjust angle for upward spread, mostly upwards or slight side
+                const angle = Math.random() * Math.PI * 0.6 - (Math.PI * 0.3); // Angle from -54 to 54 degrees
                 const speed = minInitialSpeed + Math.random() * (maxInitialSpeed - minInitialSpeed);
 
                 confettiParticles.push({
@@ -549,7 +550,7 @@
         function initiatePageTransition() {
             document.body.classList.add('page-fade-out'); // Add fade-out class to body
             setTimeout(() => {
-                window.location.href = 'home/'; // Corrected redirection path
+                window.location.href = 'home/';
             }, 300); // Match this duration to the CSS fadeOut animation duration (0.3s)
         }
 
@@ -589,48 +590,24 @@
         
         battiCinqueButton.addEventListener('click', async (event) => { 
             throwConfetti(event); 
-            // Removed battiCinqueButton.disabled = true; to avoid potential interference with redirection
-            // The page will transition, so re-enabling is not necessary here.
         });
 
-        // --- New JavaScript to attempt to prevent iOS zoom ---
-        // This is a common workaround, but not 100% foolproof against all Safari behaviors.
-        document.addEventListener('gesturestart', function (e) {
-            e.preventDefault(); // Prevent pinch zoom
-        });
-        document.addEventListener('touchstart', function (e) {
-            // Prevent default touch behavior for multi-touch (potential zoom)
-            if (e.touches.length > 1) {
-                e.preventDefault();
-            }
-        }, { passive: false }); // Use passive: false for preventDefault
-        document.addEventListener('touchmove', function (e) {
-            // Prevent default touch behavior for multi-touch (potential zoom)
-            if (e.touches.length > 1) {
-                e.preventDefault();
-            }
-        }, { passive: false }); // Use passive: false for preventDefault
-
-        // Attempt to reset viewport scale if it changes unexpectedly
-        window.addEventListener('resize', function () {
-            // This is a fallback. If the zoom changes, try to reset it.
-            if (document.documentElement.clientWidth !== window.innerWidth) {
-                document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no');
-            }
-        });
-
+        // --- REVISED: Simplified iOS zoom prevention ---
+        // The previous methods with passive: false can sometimes interfere with scrolling.
+        // The most effective general prevention is the viewport meta tag itself.
+        // Removing specific touch listeners unless you face persistent, unpreventable zoom.
+        // Test thoroughly without these first.
+        
         // --- Cookie Consent Banner JavaScript Logic ---
         document.addEventListener('DOMContentLoaded', () => {
             const consentBanner = document.getElementById('cookieConsentBanner');
             const userConsent = localStorage.getItem('user_consent');
 
             if (!userConsent) {
-                // If no consent is stored, show the banner after 3 seconds
                 setTimeout(() => {
                     consentBanner.classList.remove('hidden');
-                }, 3000); // 3000 milliseconds = 3 seconds
+                }, 3000);
             } else {
-                // If consent is already given/denied, ensure banner is hidden
                 consentBanner.classList.add('hidden');
             }
         });
