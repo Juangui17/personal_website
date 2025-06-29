@@ -138,6 +138,10 @@
             max-width: 28rem;
             margin: 0 auto;
             box-sizing: border-box;
+            /* New: Initial state for main-content to avoid blankness */
+            opacity: 1; /* Ensure it's visible by default */
+            transform: translateY(0); /* Ensure it's not off-screen */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* For fade out */
         }
 
         /* Blobs de Fondo Dinámicos */
@@ -151,7 +155,6 @@
         }
 
         /* Desktop Blob - Patrón W */
-        /* This blob will now be responsible for desktop ONLY */
         #desktopBlob {
             width: 50vw; 
             height: 50vh; 
@@ -180,10 +183,13 @@
                 opacity: 0.6;
             }
         }
-        /* No media query for mobileBlob as it's removed */
-
 
         /* Animación de entrada para título y subtítulo */
+        /* Removed initial opacity and transform, will be added by JS only on first load/pageshow */
+        .animate-entry-text {
+            /* These properties will be applied by JS for the animation effect */
+        }
+        /* Define the actual animation keyframes */
         @keyframes slide-down-settle {
             0% {
                 opacity: 0;
@@ -198,8 +204,9 @@
                 opacity: 1;
             }
         }
-        .animate-entry-text {
-            animation: slide-down-settle 1.2s ease-out forwards;
+        /* Class to apply the animation */
+        .apply-entry-animation {
+             animation: slide-down-settle 1.2s ease-out forwards;
         }
 
         /* Confeti - estilo "papel" */
@@ -234,14 +241,18 @@
             transform: scale(0.98);
         }
 
-        /* Page transition fade out */
-        .page-fade-out {
-            animation: fadeOut 0.3s ease-out forwards;
+        /* New: Button disabled state */
+        .button-disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            box-shadow: none !important; /* Override pulse glow */
+            pointer-events: none; /* Ensure no interaction */
         }
 
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
+        /* Page transition fade out - Now targeting main-content */
+        .main-content.page-fade-out {
+            opacity: 0;
+            transform: translateY(-20px); /* Slight upward movement while fading */
         }
 
         /* Cookie Consent Banner Specific Styles */
@@ -400,7 +411,7 @@
     <div id="desktopBlob" class="moving-blob"></div> 
     
     <div class="main-content">
-        <div class="animate-entry-text"> 
+        <div id="intro-text" class="animate-entry-text"> 
             <h1 class="text-4xl sm:text-5xl font-extrabold text-text-primary-dark mb-4 uppercase">
                 CIAO, SONO JUANGUI!
             </h1>
@@ -411,6 +422,10 @@
         <div class="flex flex-col items-center space-y-4">
             <button id="battiCinqueButton" class="relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-glass text-button-text-dark font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow button-pulse-animation overflow-hidden">
                 <span id="buttonText" class="relative z-10 opacity-100 whitespace-nowrap">Batti Cinque! 🖐🏼</span>
+                <svg id="spinner" class="animate-spin h-5 w-5 text-current hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
             </button>
         </div>
     </div>
@@ -438,6 +453,7 @@
         let minInitialSpeed = 5;
         let initialUpwardForce = 25;
 
+        // Optimized values for confetti based on the user's previous mobile testing feedback
         if (window.innerWidth < 768) {
             numConfetti = 40;
             maxInitialSpeed = 15;
@@ -445,12 +461,27 @@
             initialUpwardForce = 20;
         }
 
+        const battiCinqueButton = document.getElementById('battiCinqueButton');
+        const buttonText = document.getElementById('buttonText');
+        const spinner = document.getElementById('spinner');
+        const mainContent = document.querySelector('.main-content'); // Get main content div
+        const introText = document.getElementById('intro-text'); // Get the intro text div
+
+        let animationFrameId = null; // To manage confetti animation frame
+
         function throwConfetti(event) {
-            const button = event.target;
+            // Disable the button and show loading state immediately
+            battiCinqueButton.setAttribute('disabled', 'true');
+            battiCinqueButton.classList.add('button-disabled');
+            buttonText.classList.add('hidden'); // Hide text
+            spinner.classList.remove('hidden'); // Show spinner
+
             const colors = ['#87CEEB', '#FFD700', '#FF6347', '#ADD8E6', '#6495ED', '#FFA07A']; 
             
-            const startX = window.innerWidth / 2;
-            const startY = window.innerHeight; 
+            // Start confetti from the button's center, not screen center
+            const buttonRect = battiCinqueButton.getBoundingClientRect();
+            const startX = buttonRect.left + buttonRect.width / 2;
+            const startY = buttonRect.top + buttonRect.height / 2; 
 
             for (let i = 0; i < numConfetti; i++) {
                 const confettiElement = document.createElement('div');
@@ -458,27 +489,28 @@
                 confettiElement.style.backgroundColor = colors [Math.floor(Math.random() * colors.length)];
                 confettiElement.style.opacity = 1;
 
-                confettiElement.style.left = `${startX + (Math.random() - 0.5) * window.innerWidth * 0.4}px`;
-                confettiElement.style.top = `${startY}px`; 
+                // Adjust initial position based on button's center
+                confettiElement.style.left = `${startX + (Math.random() - 0.5) * buttonRect.width}px`;
+                confettiElement.style.top = `${startY + (Math.random() - 0.5) * buttonRect.height}px`; 
 
                 confettiElement.style.width = `${6 + Math.random() * 8}px`; 
                 confettiElement.style.height = `${6 + Math.random() * 8}px`;
 
                 document.body.appendChild(confettiElement);
 
-                const angle = Math.random() * Math.PI * 0.6 - (Math.PI * 0.3);
+                const angle = Math.random() * Math.PI * 0.6 - (Math.PI * 0.3); // Adjust angle for upward spread
                 const speed = minInitialSpeed + Math.random() * (maxInitialSpeed - minInitialSpeed);
 
                 confettiParticles.push({
                     element: confettiElement,
-                    x: 0,
-                    y: 0,
+                    x: 0, // Relative X for transform
+                    y: 0, // Relative Y for transform
                     vx: Math.cos(angle) * speed,
                     vy: Math.sin(angle) * speed - initialUpwardForce,
                     rotation: Math.random() * 360,
                     rotationSpeed: (Math.random() - 0.5) * 20,
                     opacity: 1,
-                    decay: 0.01
+                    decay: 0.01 
                 });
             }
 
@@ -487,16 +519,13 @@
             }
         }
 
-        let animationFrameId = null;
+        const MAX_CONFETTI_ANIMATION_TIME = 1000; // 1 second
+        let startTime = null;
 
-        function initiatePageTransition() {
-            document.body.classList.add('page-fade-out');
-            setTimeout(() => {
-                window.location.href = 'home/';
-            }, 300);
-        }
+        function animateConfetti(currentTime) {
+            if (!startTime) startTime = currentTime;
+            const elapsedTime = currentTime - startTime;
 
-        function animateConfetti() {
             for (let i = confettiParticles.length - 1; i >= 0; i--) {
                 const p = confettiParticles [i];
 
@@ -507,7 +536,7 @@
 
                 p.rotation += p.rotationSpeed;
 
-                p.opacity -= p.decay;
+                p.opacity -= p.decay * (elapsedTime / MAX_CONFETTI_ANIMATION_TIME);
 
                 p.element.style.transform = `translate(${p.x}px, ${p.y}px) rotate(${p.rotation}deg)`;
                 p.element.style.opacity = p.opacity;
@@ -518,18 +547,36 @@
                 }
             }
 
-            if (confettiParticles.length > 0) {
+            if (confettiParticles.length > 0 && elapsedTime < MAX_CONFETTI_ANIMATION_TIME) {
                 animationFrameId = requestAnimationFrame(animateConfetti);
             } else {
                 animationFrameId = null;
+                startTime = null; // Reset for next click
                 initiatePageTransition();
             }
         }
 
-        const battiCinqueButton = document.getElementById('battiCinqueButton');
-        battiCinqueButton.addEventListener('click', async (event) => { 
-            throwConfetti(event); 
+        function initiatePageTransition() {
+            // Apply fade-out class to main content
+            mainContent.classList.add('page-fade-out'); 
+            // The timeout for redirection should match the CSS fade-out duration
+            setTimeout(() => {
+                window.location.href = 'home/';
+            }, 300); 
+        }
+
+        battiCinqueButton.addEventListener('click', (event) => { 
+            if (!battiCinqueButton.hasAttribute('disabled')) {
+                throwConfetti(event); 
+            }
         });
+
+        // Function to apply the entry animation
+        function applyIntroAnimation() {
+            introText.classList.remove('apply-entry-animation'); // Remove to re-trigger
+            void introText.offsetWidth; // Trigger reflow
+            introText.classList.add('apply-entry-animation'); // Add to apply animation
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             const consentBanner = document.getElementById('cookieConsentBanner');
@@ -543,6 +590,35 @@
                 consentBanner.classList.add('hidden');
             }
         });
+
+        // Use 'pageshow' for robust handling of back/forward cache
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) { // Check if page is retrieved from BFCACHE
+                // Re-enable button and reset state
+                battiCinqueButton.removeAttribute('disabled');
+                battiCinqueButton.classList.remove('button-disabled');
+                buttonText.classList.remove('hidden');
+                spinner.classList.add('hidden');
+
+                // Ensure main content is visible and remove fade-out class if present
+                mainContent.classList.remove('page-fade-out');
+                mainContent.style.opacity = ''; // Clear inline style if any
+                mainContent.style.transform = ''; // Clear inline style if any
+
+                // Re-apply the intro animation
+                applyIntroAnimation();
+            } else {
+                // Initial load, apply animation
+                applyIntroAnimation();
+            }
+        });
+
+        // Initial application on first load (if not from BFCACHE)
+        // This is handled by the initial check in pageshow.
+        // It's good practice to ensure it runs even if pageshow.persisted is false.
+        // Or simply call it once on DOMContentLoaded if you prefer.
+        document.addEventListener('DOMContentLoaded', applyIntroAnimation);
+
     </script>
 </body>
 </html>
