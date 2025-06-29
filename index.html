@@ -138,10 +138,9 @@
             max-width: 28rem;
             margin: 0 auto;
             box-sizing: border-box;
-            /* New: Initial state for main-content to avoid blankness */
-            opacity: 1; /* Ensure it's visible by default */
-            transform: translateY(0); /* Ensure it's not off-screen */
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* For fade out */
+            opacity: 1; 
+            transform: translateY(0); 
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out; 
         }
 
         /* Blobs de Fondo Dinámicos */
@@ -161,7 +160,6 @@
             background: radial-gradient(circle, rgba(50, 120, 200, 1) 0%, rgba(50, 120, 200, 0) 80%);
             filter: blur(180px); 
             animation: w-move 40s infinite alternate ease-in-out;
-            /* Hidden by default, will be shown by media query for desktop */
             display: none; 
             transform: translate(100vw, 100vh) scale(0.1); 
             opacity: 0;
@@ -178,18 +176,16 @@
         /* Media query to show desktop blob on larger screens */
         @media (min-width: 769px) {
             #desktopBlob {
-                display: block; /* Show desktop blob */
-                transform: translate(calc(50vw - 40vw), calc(50vh - 40vh)) scale(1.0); /* Animation start state */
+                display: block; 
+                transform: translate(calc(50vw - 40vw), calc(50vh - 40vh)) scale(1.0); 
                 opacity: 0.6;
             }
         }
 
         /* Animación de entrada para título y subtítulo */
-        /* Removed initial opacity and transform, will be added by JS only on first load/pageshow */
-        .animate-entry-text {
-            /* These properties will be applied by JS for the animation effect */
+        .apply-entry-animation {
+             animation: slide-down-settle 1.2s ease-out forwards;
         }
-        /* Define the actual animation keyframes */
         @keyframes slide-down-settle {
             0% {
                 opacity: 0;
@@ -203,10 +199,6 @@
                 transform: translateY(0);
                 opacity: 1;
             }
-        }
-        /* Class to apply the animation */
-        .apply-entry-animation {
-             animation: slide-down-settle 1.2s ease-out forwards;
         }
 
         /* Confeti - estilo "papel" */
@@ -241,18 +233,18 @@
             transform: scale(0.98);
         }
 
-        /* New: Button disabled state */
+        /* Button disabled state */
         .button-disabled {
             opacity: 0.7;
             cursor: not-allowed;
-            box-shadow: none !important; /* Override pulse glow */
-            pointer-events: none; /* Ensure no interaction */
+            box-shadow: none !important; 
+            pointer-events: none; 
         }
 
         /* Page transition fade out - Now targeting main-content */
         .main-content.page-fade-out {
             opacity: 0;
-            transform: translateY(-20px); /* Slight upward movement while fading */
+            transform: translateY(-20px); 
         }
 
         /* Cookie Consent Banner Specific Styles */
@@ -453,7 +445,6 @@
         let minInitialSpeed = 5;
         let initialUpwardForce = 25;
 
-        // Optimized values for confetti based on the user's previous mobile testing feedback
         if (window.innerWidth < 768) {
             numConfetti = 40;
             maxInitialSpeed = 15;
@@ -463,22 +454,28 @@
 
         const battiCinqueButton = document.getElementById('battiCinqueButton');
         const buttonText = document.getElementById('buttonText');
-        const spinner = document.getElementById('spinner');
-        const mainContent = document.querySelector('.main-content'); // Get main content div
-        const introText = document.getElementById('intro-text'); // Get the intro text div
+        const spinner = document.getElementById('spinner'); // Re-added reference to spinner
+        const mainContent = document.querySelector('.main-content'); 
+        const introText = document.getElementById('intro-text'); 
 
-        let animationFrameId = null; // To manage confetti animation frame
+        let animationFrameId = null; 
+
+        // New: Minimum time the confetti animation should run (in milliseconds)
+        const MIN_CONFETTI_RUN_TIME = 500; // 0.5 seconds
+        let confettiAnimationStartTime = 0;
 
         function throwConfetti(event) {
-            // Disable the button and show loading state immediately
+            // Clear any existing confetti before starting new ones
+            clearConfetti();
+
+            // Disable the button and show loading state
             battiCinqueButton.setAttribute('disabled', 'true');
             battiCinqueButton.classList.add('button-disabled');
-            buttonText.classList.add('hidden'); // Hide text
+            buttonText.classList.add('hidden'); // Hide button text
             spinner.classList.remove('hidden'); // Show spinner
 
             const colors = ['#87CEEB', '#FFD700', '#FF6347', '#ADD8E6', '#6495ED', '#FFA07A']; 
             
-            // Start confetti from the button's center, not screen center
             const buttonRect = battiCinqueButton.getBoundingClientRect();
             const startX = buttonRect.left + buttonRect.width / 2;
             const startY = buttonRect.top + buttonRect.height / 2; 
@@ -489,7 +486,6 @@
                 confettiElement.style.backgroundColor = colors [Math.floor(Math.random() * colors.length)];
                 confettiElement.style.opacity = 1;
 
-                // Adjust initial position based on button's center
                 confettiElement.style.left = `${startX + (Math.random() - 0.5) * buttonRect.width}px`;
                 confettiElement.style.top = `${startY + (Math.random() - 0.5) * buttonRect.height}px`; 
 
@@ -498,13 +494,13 @@
 
                 document.body.appendChild(confettiElement);
 
-                const angle = Math.random() * Math.PI * 0.6 - (Math.PI * 0.3); // Adjust angle for upward spread
+                const angle = Math.random() * Math.PI * 0.6 - (Math.PI * 0.3); 
                 const speed = minInitialSpeed + Math.random() * (maxInitialSpeed - minInitialSpeed);
 
                 confettiParticles.push({
                     element: confettiElement,
-                    x: 0, // Relative X for transform
-                    y: 0, // Relative Y for transform
+                    x: 0, 
+                    y: 0, 
                     vx: Math.cos(angle) * speed,
                     vy: Math.sin(angle) * speed - initialUpwardForce,
                     rotation: Math.random() * 360,
@@ -515,16 +511,18 @@
             }
 
             if (!animationFrameId) {
+                confettiAnimationStartTime = performance.now(); // Record start time for minimum duration
                 animationFrameId = requestAnimationFrame(animateConfetti);
             }
         }
 
-        const MAX_CONFETTI_ANIMATION_TIME = 1000; // 1 second
-        let startTime = null;
+        const MAX_CONFETTI_ANIMATION_TIME = 1000; 
+        let animationFrameCallbackTime = 0; // To store the time when animateConfetti was last called
 
         function animateConfetti(currentTime) {
-            if (!startTime) startTime = currentTime;
-            const elapsedTime = currentTime - startTime;
+            if (!confettiAnimationStartTime) confettiAnimationStartTime = currentTime; // Should be set in throwConfetti
+            const elapsedTime = currentTime - confettiAnimationStartTime;
+            animationFrameCallbackTime = currentTime; // Update the last callback time
 
             for (let i = confettiParticles.length - 1; i >= 0; i--) {
                 const p = confettiParticles [i];
@@ -536,7 +534,7 @@
 
                 p.rotation += p.rotationSpeed;
 
-                p.opacity -= p.decay * (elapsedTime / MAX_CONFETTI_ANIMATION_TIME);
+                p.opacity -= p.decay * (elapsedTime / MAX_CONFETTI_ANIMATION_TIME); 
 
                 p.element.style.transform = `translate(${p.x}px, ${p.y}px) rotate(${p.rotation}deg)`;
                 p.element.style.opacity = p.opacity;
@@ -547,19 +545,23 @@
                 }
             }
 
-            if (confettiParticles.length > 0 && elapsedTime < MAX_CONFETTI_ANIMATION_TIME) {
+            // Condition for continuation:
+            // 1. There are still particles left OR
+            // 2. The minimum run time hasn't passed yet
+            if (confettiParticles.length > 0 || (elapsedTime < MIN_CONFETTI_RUN_TIME)) {
                 animationFrameId = requestAnimationFrame(animateConfetti);
             } else {
+                // Animation finished or minimum time met
                 animationFrameId = null;
-                startTime = null; // Reset for next click
+                confettiAnimationStartTime = 0; // Reset start time
                 initiatePageTransition();
             }
         }
 
         function initiatePageTransition() {
-            // Apply fade-out class to main content
             mainContent.classList.add('page-fade-out'); 
-            // The timeout for redirection should match the CSS fade-out duration
+            // Hide the spinner when initiating page transition
+            spinner.classList.add('hidden'); 
             setTimeout(() => {
                 window.location.href = 'home/';
             }, 300); 
@@ -571,11 +573,21 @@
             }
         });
 
-        // Function to apply the entry animation
         function applyIntroAnimation() {
-            introText.classList.remove('apply-entry-animation'); // Remove to re-trigger
-            void introText.offsetWidth; // Trigger reflow
-            introText.classList.add('apply-entry-animation'); // Add to apply animation
+            introText.classList.remove('apply-entry-animation'); 
+            void introText.offsetWidth; 
+            introText.classList.add('apply-entry-animation'); 
+        }
+
+        // New function to clear all confetti particles
+        function clearConfetti() {
+            confettiParticles.forEach(p => p.element.remove());
+            confettiParticles = []; // Clear the array
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId); // Stop any ongoing animation
+                animationFrameId = null;
+            }
+            confettiAnimationStartTime = 0; // Reset timer
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -591,32 +603,28 @@
             }
         });
 
-        // Use 'pageshow' for robust handling of back/forward cache
         window.addEventListener('pageshow', (event) => {
-            if (event.persisted) { // Check if page is retrieved from BFCACHE
+            if (event.persisted) { 
+                // Clear any leftover confetti when navigating back from BFCACHE
+                clearConfetti();
+
                 // Re-enable button and reset state
                 battiCinqueButton.removeAttribute('disabled');
                 battiCinqueButton.classList.remove('button-disabled');
                 buttonText.classList.remove('hidden');
-                spinner.classList.add('hidden');
+                spinner.classList.add('hidden'); // Ensure spinner is hidden on back navigation
 
                 // Ensure main content is visible and remove fade-out class if present
                 mainContent.classList.remove('page-fade-out');
-                mainContent.style.opacity = ''; // Clear inline style if any
-                mainContent.style.transform = ''; // Clear inline style if any
+                mainContent.style.opacity = ''; 
+                mainContent.style.transform = ''; 
 
-                // Re-apply the intro animation
                 applyIntroAnimation();
             } else {
-                // Initial load, apply animation
                 applyIntroAnimation();
             }
         });
 
-        // Initial application on first load (if not from BFCACHE)
-        // This is handled by the initial check in pageshow.
-        // It's good practice to ensure it runs even if pageshow.persisted is false.
-        // Or simply call it once on DOMContentLoaded if you prefer.
         document.addEventListener('DOMContentLoaded', applyIntroAnimation);
 
     </script>
