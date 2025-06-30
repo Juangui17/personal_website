@@ -184,6 +184,45 @@
             }
         }
     </style>
+    <script>
+        function getDeviceMakeAndOS() {
+            let deviceMake = 'unknown';
+            let osType = 'unknown';
+            const userAgent = navigator.userAgent;
+
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                deviceMake = 'Apple';
+                osType = 'iOS';
+            } else if (/Android/.test(userAgent)) {
+                osType = 'Android';
+                if (/Samsung/i.test(userAgent)) {
+                    deviceMake = 'Samsung';
+                } else if (/Pixel/i.test(userAgent)) {
+                    deviceMake = 'Google Pixel';
+                } else {
+                    deviceMake = 'Generic Android'; // More generic for other Android devices
+                }
+            } else if (/Windows Phone|Edge|Trident/.test(userAgent)) { // Includes older Edge/IE on mobile
+                osType = 'Windows Mobile';
+                deviceMake = 'Microsoft';
+            } else if (/Macintosh|Mac OS X/.test(userAgent)) {
+                deviceMake = 'Apple';
+                osType = 'macOS';
+            } else if (/Windows/.test(userAgent)) {
+                deviceMake = 'PC';
+                osType = 'Windows';
+            } else if (/Linux/.test(userAgent)) {
+                deviceMake = 'PC';
+                osType = 'Linux';
+            } else {
+                // Fallback for other or unrecognized devices (e.g., specific Linux distros, Chrome OS, etc.)
+                deviceMake = 'Other';
+                osType = 'Other';
+            }
+
+            return { deviceMake, osType };
+        }
+    </script>
 </head>
 <body>
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KSK2PSN9"
@@ -200,14 +239,36 @@
         <div class="contact-buttons-container">
             <div class="contact-button-container">
                 <a href="mailto:juan.ggc17@gmail.com" class="email-link" aria-label="Email me"
-                   onclick="gtag('event', 'contact_click', { 'event_category': 'engagement', 'event_label': 'Email Click', 'contact_method': 'email' });"> <div class="icon-wrapper">
+                   onclick="
+                       const deviceInfo = getDeviceMakeAndOS(); // Get device info here
+                       gtag('event', 'contact_click', { 
+                           'event_category': 'engagement', 
+                           'event_label': 'Email Click', 
+                           'contact_method': 'email',
+                           'platform': 'web', // Explicitly 'web' for browser-based access
+                           'device_make': deviceInfo.deviceMake, // Dynamic device make
+                           'os_type': deviceInfo.osType // Dynamic OS type
+                       });
+                   "> 
+                   <div class="icon-wrapper">
                         <span class="button-emoji">✉️</span>
                     </div>
                 </a>
             </div>
             <div class="contact-button-container">
                 <a href="https://www.linkedin.com/in/soyjuangui/" target="_blank" rel="noopener noreferrer" class="linkedin-link" aria-label="Connect on LinkedIn"
-                   onclick="gtag('event', 'contact_click', { 'event_category': 'engagement', 'event_label': 'LinkedIn Click', 'contact_method': 'linkedin' });"> <div class="icon-wrapper">
+                   onclick="
+                       const deviceInfo = getDeviceMakeAndOS(); // Get device info here
+                       gtag('event', 'contact_click', { 
+                           'event_category': 'engagement', 
+                           'event_label': 'LinkedIn Click', 
+                           'contact_method': 'linkedin',
+                           'platform': 'web', // Explicitly 'web' for browser-based access
+                           'device_make': deviceInfo.deviceMake, // Dynamic device make
+                           'os_type': deviceInfo.osType // Dynamic OS type
+                       });
+                   "> 
+                   <div class="icon-wrapper">
                         <svg class="linkedin-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.044-1.852-3.044-1.853 0-2.136 1.445-2.136 2.951v5.662H9.593V9.216h3.413v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.462 2.462 0 01-2.462-2.465c0-1.366.94-2.465 2.462-2.465c1.35 0 2.463 1.1 2.463 2.465c0 1.365-.945 2.465-2.463 2.465zm-.001 0h.001zM3.857 9.216H7.2V20.452H3.857V9.216z"/>
                         </svg>

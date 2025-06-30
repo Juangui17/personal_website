@@ -333,6 +333,45 @@
             }
         }
     </style>
+    <script>
+        function getDeviceMakeAndOS() {
+            let deviceMake = 'unknown';
+            let osType = 'unknown';
+            const userAgent = navigator.userAgent;
+
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                deviceMake = 'Apple';
+                osType = 'iOS';
+            } else if (/Android/.test(userAgent)) {
+                osType = 'Android';
+                if (/Samsung/i.test(userAgent)) {
+                    deviceMake = 'Samsung';
+                } else if (/Pixel/i.test(userAgent)) {
+                    deviceMake = 'Google Pixel';
+                } else {
+                    deviceMake = 'Generic Android'; // More generic for other Android devices
+                }
+            } else if (/Windows Phone|Edge|Trident/.test(userAgent)) { // Includes older Edge/IE on mobile
+                osType = 'Windows Mobile';
+                deviceMake = 'Microsoft';
+            } else if (/Macintosh|Mac OS X/.test(userAgent)) {
+                deviceMake = 'Apple';
+                osType = 'macOS';
+            } else if (/Windows/.test(userAgent)) {
+                deviceMake = 'PC';
+                osType = 'Windows';
+            } else if (/Linux/.test(userAgent)) {
+                deviceMake = 'PC';
+                osType = 'Linux';
+            } else {
+                // Fallback for other or unrecognized devices (e.g., specific Linux distros, Chrome OS, etc.)
+                deviceMake = 'Other';
+                osType = 'Other';
+            }
+
+            return { deviceMake, osType };
+        }
+    </script>
 </head>
 <body>
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KSK2PSN9"
@@ -349,8 +388,8 @@
             </p>
         </div>
         <div class="flex flex-col items-center space-y-4">
-            <button id="battiCinqueButton" class="relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-glass text-button-text-dark font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow button-pulse-animation overflow-hidden"
-                    data-gtm-event="batti_cinque_click"> <span id="buttonText" class="relative z-10 opacity-100 whitespace-nowrap">Batti Cinque! 🖐🏼</span>
+            <button id="battiCinqueButton" class="relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-glass text-button-text-dark font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow button-pulse-animation overflow-hidden">
+                <span id="buttonText" class="relative z-10 opacity-100 whitespace-nowrap">Batti Cinque! 🖐🏼</span>
                 <svg id="spinner" class="animate-spin h-5 w-5 text-current hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -375,13 +414,10 @@
 
     <script>
         // --- Google Consent Mode Implementation for Europe ---
-        // This part remains on the page to set consent defaults BEFORE GTM loads,
-        // and to handle the banner interactions.
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
 
         // Default all consent types to 'denied' BEFORE your config command.
-        // GTM will pick this up.
         gtag('consent', 'default', {
             'ad_storage': 'denied',
             'analytics_storage': 'denied',
@@ -409,7 +445,6 @@
         }
 
         // Set a short wait_for_update if you expect the banner to appear immediately
-        // GTM will respect this.
         gtag('consent', 'default', {
             'wait_for_update': 500 
         });
@@ -468,6 +503,7 @@
         const MIN_CONFETTI_RUN_TIME = 800; 
         let confettiAnimationStartTime = 0;
 
+        // Modified throwConfetti function to include gtag event with new parameters
         function throwConfetti(event) {
             clearConfetti();
 
@@ -476,10 +512,15 @@
             buttonText.classList.add('hidden'); 
             spinner.classList.remove('hidden'); 
 
-            // Track the "Batti Cinque!" button click
+            const deviceInfo = getDeviceMakeAndOS(); // Get device info here
+
+            // Track the "Batti Cinque!" button click with new parameters
             gtag('event', 'batti_cinque_click', {
                 'event_category': 'engagement',
-                'event_label': 'Batti Cinque Button Click'
+                'event_label': 'Batti Cinque Button Click',
+                'platform': 'web', // Explicitly 'web' for browser-based access
+                'device_make': deviceInfo.deviceMake, // Dynamic device make
+                'os_type': deviceInfo.osType // Dynamic OS type
             });
 
             const colors = ['#87CEEB', '#FFD700', '#FF6347', '#ADD8E6', '#6495ED', '#FFA07A']; 
@@ -570,6 +611,7 @@
             }, 300); 
         }
 
+        // Modified event listener for battiCinqueButton to call throwConfetti
         battiCinqueButton.addEventListener('click', (event) => { 
             if (!battiCinqueButton.hasAttribute('disabled')) {
                 throwConfetti(event); 
