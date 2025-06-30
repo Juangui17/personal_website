@@ -1,76 +1,11 @@
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-D81V23HR8G"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  // --- Google Consent Mode Implementation for Europe ---
-  // Default all consent types to 'denied' BEFORE your config command.
-  gtag('consent', 'default', {
-    'ad_storage': 'denied',
-    'analytics_storage': 'denied',
-    'functionality_storage': 'denied',
-    'personalization_storage': 'denied',
-    'security_storage': 'granted' // Usually granted by default for security purposes
-  });
-
-  // Check for existing consent from localStorage
-  const consentGiven = localStorage.getItem('user_consent');
-  if (consentGiven === 'granted') {
-      gtag('consent', 'update', {
-          'ad_storage': 'granted',
-          'analytics_storage': 'granted',
-          'functionality_storage': 'granted',
-          'personalization_storage': 'granted'
-      });
-  } else if (consentGiven === 'denied') {
-       gtag('consent', 'update', {
-          'ad_storage': 'denied',
-          'analytics_storage': 'denied',
-          'functionality_storage': 'denied',
-          'personalization_storage': 'denied'
-      });
-  }
-
-  // Set a short wait_for_update if you expect the banner to appear immediately
-  gtag('consent', 'default', {
-      'wait_for_update': 500 // Wait up to 500ms for consent to be updated before sending data
-  });
-
-  gtag('config', 'G-D81V23HR8G');
-
-  // Function to grant consent
-  function grantConsent() {
-    gtag('consent', 'update', {
-      'ad_storage': 'granted',
-      'analytics_storage': 'granted',
-      'functionality_storage': 'granted',
-      'personalization_storage': 'granted'
-    });
-    localStorage.setItem('user_consent', 'granted');
-    document.getElementById('cookieConsentBanner').style.display = 'none'; // Hide the banner
-    console.log('Consent granted!');
-  }
-
-  // Function to deny consent
-  function denyConsent() {
-    gtag('consent', 'update', {
-      'ad_storage': 'denied',
-      'analytics_storage': 'denied',
-      'functionality_storage': 'denied',
-      'personalization_storage': 'denied'
-    });
-    localStorage.setItem('user_consent', 'denied');
-    document.getElementById('cookieConsentBanner').style.display = 'none'; // Hide the banner
-    console.log('Consent denied!');
-  }
-
-</script>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script> <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CIAO, SONO JUANGUI! - My Personal Website</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -400,6 +335,7 @@
     </style>
 </head>
 <body>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="desktopBlob" class="moving-blob"></div> 
     
     <div class="main-content">
@@ -437,6 +373,77 @@
     </div>
 
     <script>
+        // --- Google Consent Mode Implementation for Europe ---
+        // This part remains on the page to set consent defaults BEFORE GTM loads,
+        // and to handle the banner interactions.
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+
+        // Default all consent types to 'denied' BEFORE your config command.
+        // GTM will pick this up.
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'analytics_storage': 'denied',
+            'functionality_storage': 'denied',
+            'personalization_storage': 'denied',
+            'security_storage': 'granted' // Usually granted by default for security purposes
+        });
+
+        // Check for existing consent from localStorage
+        const consentGiven = localStorage.getItem('user_consent');
+        if (consentGiven === 'granted') {
+            gtag('consent', 'update', {
+                'ad_storage': 'granted',
+                'analytics_storage': 'granted',
+                'functionality_storage': 'granted',
+                'personalization_storage': 'granted'
+            });
+        } else if (consentGiven === 'denied') {
+            gtag('consent', 'update', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+                'functionality_storage': 'denied',
+                'personalization_storage': 'denied'
+            });
+        }
+
+        // Set a short wait_for_update if you expect the banner to appear immediately
+        // GTM will respect this.
+        gtag('consent', 'default', {
+            'wait_for_update': 500 // Wait up to 500ms for consent to be updated before sending data
+        });
+
+        // *** REMOVE THE DIRECT gtag('config', 'G-D81V23HR8G'); HERE ***
+        // This will now be handled by a GA4 Configuration Tag in GTM.
+
+        // Function to grant consent - remains on page
+        function grantConsent() {
+            gtag('consent', 'update', {
+                'ad_storage': 'granted',
+                'analytics_storage': 'granted',
+                'functionality_storage': 'granted',
+                'personalization_storage': 'granted'
+            });
+            localStorage.setItem('user_consent', 'granted');
+            document.getElementById('cookieConsentBanner').style.display = 'none'; // Hide the banner
+            console.log('Consent granted!');
+        }
+
+        // Function to deny consent - remains on page
+        function denyConsent() {
+            gtag('consent', 'update', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+                'functionality_storage': 'denied',
+                'personalization_storage': 'denied'
+            });
+            localStorage.setItem('user_consent', 'denied');
+            document.getElementById('cookieConsentBanner').style.display = 'none'; // Hide the banner
+            console.log('Consent denied!');
+        }
+
+
+        // --- Existing Page Logic (Confetti, Animations, etc.) ---
         let confettiParticles = [];
         const gravity = 0.5;
         
@@ -454,25 +461,22 @@
 
         const battiCinqueButton = document.getElementById('battiCinqueButton');
         const buttonText = document.getElementById('buttonText');
-        const spinner = document.getElementById('spinner'); // Re-added reference to spinner
+        const spinner = document.getElementById('spinner'); 
         const mainContent = document.querySelector('.main-content'); 
         const introText = document.getElementById('intro-text'); 
 
         let animationFrameId = null; 
 
-        // New: Minimum time the confetti animation should run (in milliseconds)
         const MIN_CONFETTI_RUN_TIME = 800; // 0.8 seconds
         let confettiAnimationStartTime = 0;
 
         function throwConfetti(event) {
-            // Clear any existing confetti before starting new ones
             clearConfetti();
 
-            // Disable the button and show loading state
             battiCinqueButton.setAttribute('disabled', 'true');
             battiCinqueButton.classList.add('button-disabled');
-            buttonText.classList.add('hidden'); // Hide button text
-            spinner.classList.remove('hidden'); // Show spinner
+            buttonText.classList.add('hidden'); 
+            spinner.classList.remove('hidden'); 
 
             const colors = ['#87CEEB', '#FFD700', '#FF6347', '#ADD8E6', '#6495ED', '#FFA07A']; 
             
@@ -511,18 +515,18 @@
             }
 
             if (!animationFrameId) {
-                confettiAnimationStartTime = performance.now(); // Record start time for minimum duration
+                confettiAnimationStartTime = performance.now(); 
                 animationFrameId = requestAnimationFrame(animateConfetti);
             }
         }
 
         const MAX_CONFETTI_ANIMATION_TIME = 1000; 
-        let animationFrameCallbackTime = 0; // To store the time when animateConfetti was last called
+        let animationFrameCallbackTime = 0; 
 
         function animateConfetti(currentTime) {
-            if (!confettiAnimationStartTime) confettiAnimationStartTime = currentTime; // Should be set in throwConfetti
+            if (!confettiAnimationStartTime) confettiAnimationStartTime = currentTime; 
             const elapsedTime = currentTime - confettiAnimationStartTime;
-            animationFrameCallbackTime = currentTime; // Update the last callback time
+            animationFrameCallbackTime = currentTime; 
 
             for (let i = confettiParticles.length - 1; i >= 0; i--) {
                 const p = confettiParticles [i];
@@ -545,22 +549,17 @@
                 }
             }
 
-            // Condition for continuation:
-            // 1. There are still particles left OR
-            // 2. The minimum run time hasn't passed yet
             if (confettiParticles.length > 0 || (elapsedTime < MIN_CONFETTI_RUN_TIME)) {
                 animationFrameId = requestAnimationFrame(animateConfetti);
             } else {
-                // Animation finished or minimum time met
                 animationFrameId = null;
-                confettiAnimationStartTime = 0; // Reset start time
+                confettiAnimationStartTime = 0; 
                 initiatePageTransition();
             }
         }
 
         function initiatePageTransition() {
             mainContent.classList.add('page-fade-out'); 
-            // Hide the spinner when initiating page transition
             spinner.classList.add('hidden'); 
             setTimeout(() => {
                 window.location.href = 'home/';
@@ -579,15 +578,14 @@
             introText.classList.add('apply-entry-animation'); 
         }
 
-        // New function to clear all confetti particles
         function clearConfetti() {
             confettiParticles.forEach(p => p.element.remove());
-            confettiParticles = []; // Clear the array
+            confettiParticles = []; 
             if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId); // Stop any ongoing animation
+                cancelAnimationFrame(animationFrameId); 
                 animationFrameId = null;
             }
-            confettiAnimationStartTime = 0; // Reset timer
+            confettiAnimationStartTime = 0; 
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -605,16 +603,13 @@
 
         window.addEventListener('pageshow', (event) => {
             if (event.persisted) { 
-                // Clear any leftover confetti when navigating back from BFCACHE
                 clearConfetti();
 
-                // Re-enable button and reset state
                 battiCinqueButton.removeAttribute('disabled');
                 battiCinqueButton.classList.remove('button-disabled');
                 buttonText.classList.remove('hidden');
-                spinner.classList.add('hidden'); // Ensure spinner is hidden on back navigation
+                spinner.classList.add('hidden'); 
 
-                // Ensure main content is visible and remove fade-out class if present
                 mainContent.classList.remove('page-fade-out');
                 mainContent.style.opacity = ''; 
                 mainContent.style.transform = ''; 
