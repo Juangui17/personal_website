@@ -5,10 +5,10 @@
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script> <meta charset="UTF-8">
+    })(window,document,'script','dataLayer','GTM-KSK2PSN9');</script>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <title>Home</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Home</title> <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
@@ -186,7 +186,8 @@
     </style>
 </head>
 <body>
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KSK2PSN9"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="card">
         <h1>Working on the site</h1>
         <p>Come back later to know more</p>
@@ -194,7 +195,7 @@
     </div>
 
     <div class="contact-section">
-        <p>Here are a few ways we can connect:</p>
+        <p>Let’s connect!</p>
 
         <div class="contact-buttons-container">
             <div class="contact-button-container">
@@ -217,25 +218,19 @@
     </div>
 
     <script>
-        // --- Google Consent Mode Implementation for Europe ---
-        // This part remains on the page to set consent defaults BEFORE GTM loads,
-        // and to handle the banner interactions if you re-introduce a banner on this page,
-        // or if you want to explicitly update consent based on user action on this page.
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
 
         // Default all consent types to 'denied' BEFORE your config command.
-        // GTM will pick this up.
         gtag('consent', 'default', {
             'ad_storage': 'denied',
             'analytics_storage': 'denied',
             'functionality_storage': 'denied',
             'personalization_storage': 'denied',
-            'security_storage': 'granted' // Usually granted by default for security purposes
+            'security_storage': 'granted' 
         });
 
         // Check for existing consent from localStorage
-        // This ensures consent state persists across pages
         const consentGiven = localStorage.getItem('user_consent');
         if (consentGiven === 'granted') {
             gtag('consent', 'update', {
@@ -253,23 +248,12 @@
             });
         }
 
-        // Set a short wait_for_update if you expect the banner to appear immediately
-        // and the user might interact with it quickly on first load.
         gtag('consent', 'default', {
-            'wait_for_update': 500 // Wait up to 500ms for consent to be updated before sending data
+            'wait_for_update': 500 
         });
 
-        // *** IMPORTANT: REMOVE THE DIRECT gtag('config', 'G-D81V23HR8G'); HERE ***
-        // This will now be handled by a "Google Analytics: GA4 Configuration" Tag that you
-        // set up inside your Google Tag Manager container.
-        // gtag('config', 'G-D81V23HR8G'); // <--- REMOVE THIS LINE
-
-        // If you were to add consent management buttons on this page later,
-        // the functions grantConsent() and denyConsent() would be here.
-        // Since there's no visible banner or buttons in this HTML, these functions
-        // are not strictly needed on *this specific page* unless you plan to add them.
-        // However, keeping them here ensures `gtag` is defined if you ever do.
-
+        // These functions are kept here for consistency,
+        // even if no direct consent banner/buttons are present on this specific page.
         function grantConsent() {
             gtag('consent', 'update', {
                 'ad_storage': 'granted',
@@ -278,7 +262,6 @@
                 'personalization_storage': 'granted'
             });
             localStorage.setItem('user_consent', 'granted');
-            // document.getElementById('cookieConsentBanner').style.display = 'none'; // No banner on this page currently
             console.log('Consent granted!');
         }
 
@@ -290,7 +273,6 @@
                 'personalization_storage': 'denied'
             });
             localStorage.setItem('user_consent', 'denied');
-            // document.getElementById('cookieConsentBanner').style.display = 'none'; // No banner on this page currently
             console.log('Consent denied!');
         }
 

@@ -5,10 +5,10 @@
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script> <meta charset="UTF-8">
+    })(window,document,'script','dataLayer','GTM-KSK2PSN9');</script>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inside Juangui</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Inside Juangui</title> <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -335,7 +335,8 @@
     </style>
 </head>
 <body>
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KSK2PSN9"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="desktopBlob" class="moving-blob"></div> 
     
     <div class="main-content">
@@ -386,7 +387,7 @@
             'analytics_storage': 'denied',
             'functionality_storage': 'denied',
             'personalization_storage': 'denied',
-            'security_storage': 'granted' // Usually granted by default for security purposes
+            'security_storage': 'granted' 
         });
 
         // Check for existing consent from localStorage
@@ -410,11 +411,8 @@
         // Set a short wait_for_update if you expect the banner to appear immediately
         // GTM will respect this.
         gtag('consent', 'default', {
-            'wait_for_update': 500 // Wait up to 500ms for consent to be updated before sending data
+            'wait_for_update': 500 
         });
-
-        // *** REMOVE THE DIRECT gtag('config', 'G-D81V23HR8G'); HERE ***
-        // This will now be handled by a GA4 Configuration Tag in GTM.
 
         // Function to grant consent - remains on page
         function grantConsent() {
@@ -467,7 +465,7 @@
 
         let animationFrameId = null; 
 
-        const MIN_CONFETTI_RUN_TIME = 800; // 0.8 seconds
+        const MIN_CONFETTI_RUN_TIME = 800; 
         let confettiAnimationStartTime = 0;
 
         function throwConfetti(event) {
