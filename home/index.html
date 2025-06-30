@@ -8,7 +8,8 @@
     })(window,document,'script','dataLayer','GTM-KSK2PSN9');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <title>Home</title> <script src="https://cdn.tailwindcss.com"></script>
+    <title>Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
@@ -69,7 +70,6 @@
                 font-size: 4rem; /* Even larger emoji for mobile */
             }
         }
-
 
         .card h1 {
             font-size: 1.25rem; /* Further reduced font size for the title */
@@ -185,42 +185,71 @@
         }
     </style>
     <script>
-        function getDeviceMakeAndOS() {
-            let deviceMake = 'unknown';
-            let osType = 'unknown';
-            const userAgent = navigator.userAgent;
+        // --- IMPORTANT: Consent Management Logic ---
+        // It is strongly recommended to move this consent logic into Google Tag Manager
+        // using Custom HTML tags and appropriate triggers for better management.
+        // Keeping it here is only if you strictly prefer direct HTML implementation for consent.
 
-            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                deviceMake = 'Apple';
-                osType = 'iOS';
-            } else if (/Android/.test(userAgent)) {
-                osType = 'Android';
-                if (/Samsung/i.test(userAgent)) {
-                    deviceMake = 'Samsung';
-                } else if (/Pixel/i.test(userAgent)) {
-                    deviceMake = 'Google Pixel';
-                } else {
-                    deviceMake = 'Generic Android'; // More generic for other Android devices
-                }
-            } else if (/Windows Phone|Edge|Trident/.test(userAgent)) { // Includes older Edge/IE on mobile
-                osType = 'Windows Mobile';
-                deviceMake = 'Microsoft';
-            } else if (/Macintosh|Mac OS X/.test(userAgent)) {
-                deviceMake = 'Apple';
-                osType = 'macOS';
-            } else if (/Windows/.test(userAgent)) {
-                deviceMake = 'PC';
-                osType = 'Windows';
-            } else if (/Linux/.test(userAgent)) {
-                deviceMake = 'PC';
-                osType = 'Linux';
-            } else {
-                // Fallback for other or unrecognized devices (e.g., specific Linux distros, Chrome OS, etc.)
-                deviceMake = 'Other';
-                osType = 'Other';
-            }
+        // Default all consent types to 'denied' BEFORE any config command (which is handled by the GTM snippet).
+        // This initial gtag('consent', 'default', ...) call should ideally be in a GTM Custom HTML tag
+        // that fires on the "Consent Initialization - All Pages" trigger.
+        window.gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'analytics_storage': 'denied',
+            'functionality_storage': 'denied',
+            'personalization_storage': 'denied',
+            'security_storage': 'granted'
+        });
 
-            return { deviceMake, osType };
+        // Check for existing consent from localStorage.
+        // This logic should also be in a GTM Custom HTML tag, potentially firing after the default consent tag.
+        const consentGiven = localStorage.getItem('user_consent');
+        if (consentGiven === 'granted') {
+            window.gtag('consent', 'update', {
+                'ad_storage': 'granted',
+                'analytics_storage': 'granted',
+                'functionality_storage': 'granted',
+                'personalization_storage': 'granted'
+            });
+        } else if (consentGiven === 'denied') {
+            window.gtag('consent', 'update', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+                'functionality_storage': 'denied',
+                'personalization_storage': 'denied'
+            });
+        }
+
+        // The 'wait_for_update' parameter is typically configured within GTM's consent settings
+        // or within the initial consent default tag.
+        // If you are managing consent entirely client-side like this, ensure this is handled.
+        window.gtag('consent', 'default', {
+            'wait_for_update': 500
+        });
+
+        // These functions (grantConsent, denyConsent) would typically be called by UI elements
+        // (e.g., a cookie banner's "Accept" or "Reject" buttons) and would push events to dataLayer
+        // which GTM then uses to update consent.
+        function grantConsent() {
+            window.gtag('consent', 'update', {
+                'ad_storage': 'granted',
+                'analytics_storage': 'granted',
+                'functionality_storage': 'granted',
+                'personalization_storage': 'granted'
+            });
+            localStorage.setItem('user_consent', 'granted');
+            console.log('Consent granted!');
+        }
+
+        function denyConsent() {
+            window.gtag('consent', 'update', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+                'functionality_storage': 'denied',
+                'personalization_storage': 'denied'
+            });
+            localStorage.setItem('user_consent', 'denied');
+            console.log('Consent denied!');
         }
     </script>
 </head>
@@ -240,16 +269,14 @@
             <div class="contact-button-container">
                 <a href="mailto:juan.ggc17@gmail.com" class="email-link" aria-label="Email me"
                    onclick="
-                       const deviceInfo = getDeviceMakeAndOS(); // Get device info here
-                       gtag('event', 'contact_click', { 
-                           'event_category': 'engagement', 
-                           'event_label': 'Email Click', 
-                           'contact_method': 'email',
-                           'platform': 'web', // Explicitly 'web' for browser-based access
-                           'device_make': deviceInfo.deviceMake, // Dynamic device make
-                           'os_type': deviceInfo.osType // Dynamic OS type
+                       // Push data to dataLayer for GTM to process as a custom event.
+                       window.dataLayer.push({
+                           'event': 'contact_click', // This is your custom event name
+                           'event_category': 'engagement',
+                           'event_label': 'Email Click',
+                           'contact_method': 'email'
                        });
-                   "> 
+                   ">
                    <div class="icon-wrapper">
                         <span class="button-emoji">✉️</span>
                     </div>
@@ -258,16 +285,14 @@
             <div class="contact-button-container">
                 <a href="https://www.linkedin.com/in/soyjuangui/" target="_blank" rel="noopener noreferrer" class="linkedin-link" aria-label="Connect on LinkedIn"
                    onclick="
-                       const deviceInfo = getDeviceMakeAndOS(); // Get device info here
-                       gtag('event', 'contact_click', { 
-                           'event_category': 'engagement', 
-                           'event_label': 'LinkedIn Click', 
-                           'contact_method': 'linkedin',
-                           'platform': 'web', // Explicitly 'web' for browser-based access
-                           'device_make': deviceInfo.deviceMake, // Dynamic device make
-                           'os_type': deviceInfo.osType // Dynamic OS type
+                       // Push data to dataLayer for GTM to process as a custom event.
+                       window.dataLayer.push({
+                           'event': 'contact_click', // This is your custom event name
+                           'event_category': 'engagement',
+                           'event_label': 'LinkedIn Click',
+                           'contact_method': 'linkedin'
                        });
-                   "> 
+                   ">
                    <div class="icon-wrapper">
                         <svg class="linkedin-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.044-1.852-3.044-1.853 0-2.136 1.445-2.136 2.951v5.662H9.593V9.216h3.413v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.462 2.462 0 01-2.462-2.465c0-1.366.94-2.465 2.462-2.465c1.35 0 2.463 1.1 2.463 2.465c0 1.365-.945 2.465-2.463 2.465zm-.001 0h.001zM3.857 9.216H7.2V20.452H3.857V9.216z"/>
@@ -277,66 +302,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-
-        // Default all consent types to 'denied' BEFORE your config command.
-        gtag('consent', 'default', {
-            'ad_storage': 'denied',
-            'analytics_storage': 'denied',
-            'functionality_storage': 'denied',
-            'personalization_storage': 'denied',
-            'security_storage': 'granted' 
-        });
-
-        // Check for existing consent from localStorage
-        const consentGiven = localStorage.getItem('user_consent');
-        if (consentGiven === 'granted') {
-            gtag('consent', 'update', {
-                'ad_storage': 'granted',
-                'analytics_storage': 'granted',
-                'functionality_storage': 'granted',
-                'personalization_storage': 'granted'
-            });
-        } else if (consentGiven === 'denied') {
-            gtag('consent', 'update', {
-                'ad_storage': 'denied',
-                'analytics_storage': 'denied',
-                'functionality_storage': 'denied',
-                'personalization_storage': 'denied'
-            });
-        }
-
-        gtag('consent', 'default', {
-            'wait_for_update': 500 
-        });
-
-        // These functions are kept here for consistency,
-        // even if no direct consent banner/buttons are present on this specific page.
-        function grantConsent() {
-            gtag('consent', 'update', {
-                'ad_storage': 'granted',
-                'analytics_storage': 'granted',
-                'functionality_storage': 'granted',
-                'personalization_storage': 'granted'
-            });
-            localStorage.setItem('user_consent', 'granted');
-            console.log('Consent granted!');
-        }
-
-        function denyConsent() {
-            gtag('consent', 'update', {
-                'ad_storage': 'denied',
-                'analytics_storage': 'denied',
-                'functionality_storage': 'denied',
-                'personalization_storage': 'denied'
-            });
-            localStorage.setItem('user_consent', 'denied');
-            console.log('Consent denied!');
-        }
-
-    </script>
 </body>
 </html>
