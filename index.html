@@ -8,7 +8,7 @@
     })(window,document,'script','dataLayer','GTM-KSK2PSN9');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inside Juangui</title> <script src="https://cdn.tailwindcss.com"></script>
+    <title>Juangui's Portfolio</title> <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -349,8 +349,8 @@
             </p>
         </div>
         <div class="flex flex-col items-center space-y-4">
-            <button id="battiCinqueButton" class="relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-glass text-button-text-dark font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow button-pulse-animation overflow-hidden">
-                <span id="buttonText" class="relative z-10 opacity-100 whitespace-nowrap">Batti Cinque! 🖐🏼</span>
+            <button id="battiCinqueButton" class="relative inline-flex items-center justify-center bg-button-transparent-base border-none backdrop-blur-glass text-button-text-dark font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-button-hover-base shadow-button-bubble button-active-shadow button-pulse-animation overflow-hidden"
+                    data-gtm-event="batti_cinque_click"> <span id="buttonText" class="relative z-10 opacity-100 whitespace-nowrap">Batti Cinque! 🖐🏼</span>
                 <svg id="spinner" class="animate-spin h-5 w-5 text-current hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -475,6 +475,12 @@
             battiCinqueButton.classList.add('button-disabled');
             buttonText.classList.add('hidden'); 
             spinner.classList.remove('hidden'); 
+
+            // Track the "Batti Cinque!" button click
+            gtag('event', 'batti_cinque_click', {
+                'event_category': 'engagement',
+                'event_label': 'Batti Cinque Button Click'
+            });
 
             const colors = ['#87CEEB', '#FFD700', '#FF6347', '#ADD8E6', '#6495ED', '#FFA07A']; 
             
