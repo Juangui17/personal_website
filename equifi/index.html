@@ -730,7 +730,7 @@
         <div class="liquid-glass-card p-8 sm:p-12 rounded-2xl max-w-4xl w-full text-center mb-6"> <!-- Changed mb-8 to mb-6 -->
             <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">EquiFi</h1>
             <p class="text-blue-600 text-lg sm:text-xl font-semibold mb-4">Make Sense of Your Stock Options.</p>
-            <p class="text-gray-700 mb-10 sm:mb-12 max-w-2xl mx-auto leading-relaxed text-justify">Got stock options but not sure what they’re worth (don't know if you should buy them?) — or what to do with them? EquiFi is a simple tool to help you estimate potential gains (after taxes and costs). Everyone’s case is different, but this is a good place to start playing with the numbers!</p>
+            <p class="text-gray-700 mb-10 sm:mb-12 max-w-2xl mx-auto leading-relaxed text-justify">Got stock options but not sure what they’re worth, if you should buy them, or if you’re getting a bad deal? EquiFi helps you estimate potential gains after taxes and costs — a simple way to start making sense of it all.</p>
 
             <div class="grid md:grid-cols-3 gap-8 text-left mb-10 sm:mb-12">
                 <div class="flex items-start space-x-4">
@@ -786,8 +786,8 @@
                     </svg>
                 </div>
                 <div class="ml-3">
-                    <h3 class="text-red-800 font-semibold mb-1">Important Disclaimer</h3>
-                    <p class="text-sm text-red-700 text-justify">This calculator provides estimates for educational purposes only and should not be considered as professional tax, legal, or financial advice. Tax laws are complex and subject to change. Results may vary based on individual circumstances, tax treaty benefits, timing of transactions, and other factors not accounted for in this simplified calculator. Always consult with qualified tax professionals, financial advisors, or legal experts before making any investment or tax-related decisions.</p>
+                    <h3 class="text-red-800 font-semibold mb-1">Disclaimer</h3>
+                    <p class="text-sm text-red-700 text-justify">This calculator is for educational purposes only and doesn’t provide tax, legal, or financial advice. Results are estimates and may not reflect your personal situation. Consult a qualified professional before making any decisions.</p>
                 </div>
             </div>
         </div>
@@ -1105,7 +1105,7 @@
                         </details>
                     </div>
                     <div class="mt-8 p-4 border-l-4 border-blue-500 bg-blue-50/70 rounded-2xl liquid-glass-card">
-                        <p class="text-sm text-blue-800 text-justify"><span class="font-bold">Disclaimer:</span> Tax laws are complex and subject to change. This information is for general guidance only and is not tax advice. Always consult with qualified tax professionals in both the U.S. and your country of residence for personalized advice.</p>
+                        <p class="text-sm text-blue-800 text-justify"><span class="font-bold">Disclaimer:</span> This calculator is for educational purposes only and doesn’t provide tax, legal, or financial advice. Results are estimates and may not reflect your personal situation. Consult a qualified professional before making any decisions.</p>
                     </div>
                 </div>
             </section>
@@ -1526,17 +1526,18 @@
                     if (percentageText) {
                         // Regex to find percentages with decimals (e.g., "13.5%" or "30.4%")
                         // It handles both single percentages (e.g., "35%") and ranges (e.g., "4-13.5%")
-                        const percentageRegex = /(\d+(\.\d+)?)%-(\d+(\.\d+)?)%|(\d+(\.\d+)?)%/;
+                        // This regex is more robust for capturing decimal parts.
+                        const percentageRegex = /(\d+(?:\.\d+)?)%-(\d+(?:\.\d+)?)%|(\d+(?:\.\d+)?)%/;
                         const match = percentageText.match(percentageRegex);
 
                         if (match) {
                             let roundedPercentageString = '';
-                            if (match[1] && match[3]) { // Case: X.X%-Y.Y% or X%-Y.Y% or X.X%-Y%
+                            if (match[1] && match[2]) { // Case: X.X%-Y.Y% (match[1] is first number, match[2] is second number)
                                 const val1 = Math.round(parseFloat(match[1]));
-                                const val2 = Math.round(parseFloat(match[3]));
+                                const val2 = Math.round(parseFloat(match[2]));
                                 roundedPercentageString = `(${val1}-${val2}%)`;
-                            } else if (match[5]) { // Case: X.X%
-                                const val = Math.round(parseFloat(match[5]));
+                            } else if (match[3]) { // Case: X.X% (match[3] is the single number)
+                                const val = Math.round(parseFloat(match[3]));
                                 roundedPercentageString = `(${val}%)`;
                             }
                             // Reconstruct the display text with the rounded percentage
