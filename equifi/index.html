@@ -632,7 +632,7 @@
 
             /* Center calculate button on mobile */
             .calculate-button-wrapper {
-                justify-content: center; /* Center the button */
+                justify-content: center;
             }
         }
 
@@ -676,8 +676,8 @@
         });
 
         // Check for existing consent from localStorage.
-        // This logic should also be in a GTM Custom HTML tag, potentially firing after the default consent tag.
-        const consentGiven = localStorage.getItem('user_consent');
+        // Changed to 'let' to avoid redeclaration error
+        let consentGiven = localStorage.getItem('user_consent');
         if (consentGiven === 'granted') {
             window.gtag('consent', 'update', {
                 'ad_storage': 'granted',
@@ -832,7 +832,7 @@
             <section id="calculator" class="content-section active">
                 <div class="liquid-glass-card p-8 rounded-2xl">
                     <h2 class="text-2xl font-bold mb-2 text-gray-900">Equity Outcome Calculator</h2>
-                    <p class="text-gray-600 mb-8">Ready to see your equity soar? This calculator helps you estimate potential outcomes, assuming your shares are already exercised or will be soon. Let's crunch some numbers!</p>
+                    <p class="text-gray-600 mb-8 text-justify">Wondering what your stock options are worth? This calculator helps you estimate potential outcomes if your shares are exercised or will be soon.</p>
 
                     <!-- Step 1 -->
                     <div class="mb-6">
@@ -840,7 +840,7 @@
                         <div class="space-y-4">
                             <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 liquid-glass-input">
                                 <input type="radio" name="country" value="colombia" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" id="country-colombia">
-                                <span class="ml-3 text-gray-700">�🇴 Colombia (15%)</span>
+                                <span class="ml-3 text-gray-700">🇨🇴 Colombia (15%)</span>
                             </label>
                             <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 liquid-glass-input">
                                 <input type="radio" name="country" value="italy" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" id="country-italy">
@@ -881,7 +881,7 @@
                             </details>
                             <div id="chile-tax-rate-error" class="error-message hidden">Please select a tax rate for Chile.</div>
                         </div>
-                        <p class="text-sm text-gray-500 mt-4">For more detailed tax information, explore the tax rules below.</p>
+                        <p class="text-sm text-gray-500 mt-4 text-justify">For more detailed tax information, explore the tax rules below.</p>
                     </div>
 
                     <!-- Step 2 & 3 -->
@@ -972,7 +972,7 @@
                             </summary>
                             <div class="details-content p-4 text-gray-600">
                                 <h4 class="text-lg font-semibold text-gray-700 mb-2">Stock Option Taxation in Colombia</h4> <!-- Removed flag -->
-                                <p class="text-gray-600 mb-4">If you’ve received stock options and plan to sell them in Colombia, here’s how the taxation works depending on holding period, listing status, and the total value of the sale.</p>
+                                <p class="text-gray-600 mb-4 text-justify">If you’ve received stock options and plan to sell them in Colombia, here’s how the taxation works depending on holding period, listing status, and the total value of the sale.</p>
                                 
                                 <h5 class="text-md font-semibold text-gray-700 mb-2">📅 Holding Period & Tax Treatment</h5>
                                 <div class="overflow-x-auto mb-4">
@@ -993,7 +993,7 @@
                                 <p class="text-gray-600 mb-2 text-justify">If you sell shares less than 2 years after exercising your options, the gain is treated as ordinary income and taxed under Colombia’s progressive tax rates, ranging from 0% to 33%.</p>
                                 <p class="text-gray-600 mb-4 text-justify">If you hold the shares for 2 years or more, the profit qualifies as a "ganancia ocasional" (occasional gain) and is taxed at a flat 15% rate.</p>
                                 <p class="text-sm text-gray-700 mb-4 text-justify">📰 According to Semana Magazine, the 2022 tax reform (Law 2277) increased the tax on occasional gains from 10% to 15% for individuals and corporations alike.</p>
-                                <p class="text-sm text-gray-700 mb-4">Source: <a href="https://www.semana.com/reforma-tributaria" target="_blank" class="text-blue-600 hover:underline">Semana.com – Reforma tributaria</a></p>
+                                <p class="text-sm text-gray-700 mb-4 text-justify">Source: <a href="https://www.semana.com/reforma-tributaria" target="_blank" class="text-blue-600 hover:underline">Semana.com – Reforma tributaria</a></p>
 
                                 <h5 class="text-md font-semibold text-gray-700 mb-2">📈 Listed vs. Unlisted Shares</h5>
                                 <ul class="list-disc list-inside space-y-2 mb-4 text-justify">
@@ -1006,7 +1006,7 @@
                                     <li>For privately held shares, no exemption applies; only the holding period determines the tax rate.</li>
                                 </ul>
                                 <p class="text-sm text-gray-700 mb-4 text-justify">📊 According to Pulzo, small sales of public shares (under 3%) are exempt from capital gains tax, while larger transactions are subject to the standard income or occasional gain treatment.</p>
-                                <p class="text-sm text-gray-700 mb-4">Source: <a href="https://www.pulzo.com/dividendos-y-acciones" target="_blank" class="text-blue-600 hover:underline">Pulzo.com – Dividendos y acciones</a></p>
+                                <p class="text-sm text-gray-700 mb-4 text-justify">Source: <a href="https://www.pulzo.com/dividendos-y-acciones" target="_blank" class="text-blue-600 hover:underline">Pulzo.com – Dividendos y acciones</a></p>
 
                                 <h5 class="text-md font-semibold text-gray-700 mb-2">💡 Summary Table</h5>
                                 <div class="overflow-x-auto mb-4">
@@ -1043,7 +1043,7 @@
                             </summary>
                             <div class="details-content p-4 text-gray-600">
                                 <h4 class="text-lg font-semibold text-gray-700 mb-2">Italy Tax Rules Overview</h4>
-                                <ul class="list-disc list-inside space-y-2">
+                                <ul class="list-disc list-inside space-y-2 text-justify">
                                     <li>This calculator assumes a 26% Capital Gains Tax for Italy.</li>
                                     <li>Assuming you are not a US citizen and have not spent 183 days or more in the US, you do not have to pay US capital gains tax.</li>
                                     <li>As an Italian tax resident, you are taxed on your worldwide income.</li>
@@ -1061,8 +1061,8 @@
                             </summary>
                             <div class="details-content p-4 text-gray-600">
                                 <h4 class="text-lg font-semibold text-gray-700 mb-2">Stock Option Taxation in Chile (as of 2024)</h4> <!-- Removed flag -->
-                                <p class="mb-4"><span class="font-bold">🔹 General Rule</span></p>
-                                <p class="mb-2">If your employer grants you stock options in Chile:</p>
+                                <p class="mb-4 text-justify"><span class="font-bold">🔹 General Rule</span></p>
+                                <p class="mb-2 text-justify">If your employer grants you stock options in Chile:</p>
                                 <ul class="list-disc list-inside space-y-1 mb-4 text-justify">
                                     <li>When you exercise them (buy the shares), the difference between the market value and the exercise price is taxed as employment income and added to your global complementary income.</li>
                                     <li>When you sell the shares, any additional gain is taxed as a capital gain, but only if the shares qualify.</li>
@@ -1106,7 +1106,7 @@
                                 <p class="text-sm font-bold text-gray-700 mb-4">💡 1 UF ≈ $36,000 CLP ≈ $41 USD (2024)</p>
 
                                 <h4 class="text-lg font-semibold text-gray-700 mb-2">📌 References & Legal Sources</h4>
-                                <ul class="list-disc list-inside space-y-1">
+                                <ul class="list-disc list-inside space-y-1 text-justify">
                                     <li>SII Oficio N° 1187 (2020): <a href="https://www.sii.cl/normativa_legislacion/oficios/2020/circu1187.pdf" target="_blank" class="text-blue-600 hover:underline">View here</a></li>
                                     <li>General SII Stock Options Guide: <a href="https://www.sii.cl/stockoptions" target="_blank" class="text-blue-600 hover:underline">sii.cl/stockoptions</a></li>
                                 </ul>
@@ -1123,7 +1123,7 @@
             <section id="selling-rules" class="content-section">
                 <div class="liquid-glass-card p-8 rounded-2xl">
                     <h2 class="text-2xl font-bold mb-2 text-gray-900">Understanding Your Liquidity Options</h2>
-                    <p class="text-gray-600 mb-8">Navigate the pathways to selling your shares, whether your company is private or has gone public.</p>
+                    <p class="text-gray-600 mb-8 text-justify">Navigate the pathways to selling your shares, whether your company is private or has gone public.</p>
                     <details class="group mb-8">
                         <summary class="flex items-center justify-between p-4 rounded-lg cursor-pointer details-summary-header">
                             <h3 class="text-xl font-bold text-gray-800">🛩️ Private Companies</h3>
@@ -1131,22 +1131,22 @@
                         </summary>
                         <div class="details-content p-4 text-gray-600">
                             <h4 class="text-lg font-semibold text-gray-700 mb-2">Selling Shares While Private</h4>
-                            <p class="text-gray-600 mb-8">Selling shares in a <span class="font-bold text-gray-800">private</span> company like this is a controlled process. You cannot sell them on an open market. Instead, you must follow the "<span class="font-bold text-gray-800">Right of First Refusal</span>" (ROFR) process outlined in your agreement.</p>
+                            <p class="text-gray-600 mb-8 text-justify">Selling shares in a <span class="font-bold text-gray-800">private</span> company like this is a controlled process. You cannot sell them on an open market. Instead, you must follow the "<span class="font-bold text-gray-800">Right of First Refusal</span>" (ROFR) process outlined in your agreement.</p>
                             
                             <div class="space-y-8">
                                 <div class="flex items-start">
                                     <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">1</div>
                                     <div class="ml-6">
                                         <h4 class="text-lg font-semibold text-gray-800">Propose the Sale</h4>
-                                        <p class="text-gray-600 mt-1">You find a potential buyer and agree on a price. You must then send a written "<span class="font-semibold text-gray-800">Notice</span>" to the company (often through platforms like <span class="font-semibold text-gray-800">Carta</span>) with all the details of the proposed sale.</p>
+                                        <p class="text-gray-600 mt-1 text-justify">You find a potential buyer and agree on a price. You must then send a written "<span class="font-semibold text-gray-800">Notice</span>" to the company (often through platforms like <span class="font-semibold text-gray-800">Carta</span>) with all the details of the proposed sale.</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start">
                                     <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">2</div>
                                     <div class="ml-6">
                                         <h4 class="text-lg font-semibold text-gray-800">Company's Decision (30 Days)</h4>
-                                        <p class="text-gray-600 mt-1 mb-4">The company reviews your proposal and has three options:</p>
-                                        <ul class="list-disc list-inside space-y-2 text-gray-600">
+                                        <p class="text-gray-600 mt-1 mb-4 text-justify">The company reviews your proposal and has three options:</p>
+                                        <ul class="list-disc list-inside space-y-2 text-gray-600 text-justify">
                                             <li><span class="font-semibold text-gray-800">Exercise ROFR:</span> The company buys the shares from you at your proposed price.</li>
                                             <li><span class="font-semibold text-gray-800">Decline & Approve:</span> The company passes on buying and approves your sale to the third party.</li>
                                             <li><span class="font-semibold text-gray-800">Decline & Reject:</span> The company passes on buying but does <span class="font-bold">not</span> approve the transfer. The sale cannot proceed.</li>
@@ -1157,13 +1157,13 @@
                                     <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">3</div>
                                     <div class="ml-6">
                                         <h4 class="text-lg font-semibold text-gray-800">Finalize the Sale</h4>
-                                        <p class="text-gray-600 mt-1">If the company approves the transfer, you have 120 days to complete the sale to your buyer at the agreed-upon price (or a higher one).</p>
+                                        <p class="text-gray-600 mt-1 text-justify">If the company approves the transfer, you have 120 days to complete the sale to your buyer at the agreed-upon price (or a higher one).</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="mt-12 p-4 border-l-4 border-blue-500 bg-blue-50/70 rounded-2xl liquid-glass-card">
-                                <p class="text-sm text-blue-800">Important: Remember that your stock options are simply the <span class="font-semibold text-gray-800">right to buy</span> shares. Once you exercise your options by paying the exercise price, they <span class="font-semibold text-gray-800">become actual shares</span> that you own. The rules above apply to the sale of these <span class="font-semibold text-gray-800">shares</span>.</p>
+                                <p class="text-sm text-blue-800 text-justify">Important: Remember that your stock options are simply the <span class="font-semibold text-gray-800">right to buy</span> shares. Once you exercise your options by paying the exercise price, they <span class="font-semibold text-gray-800">become actual shares</span> that you own. The rules above apply to the sale of these <span class="font-semibold text-gray-800">shares</span>.</p>
                             </div>
                         </div>
                     </details>
@@ -1175,40 +1175,40 @@
                         </summary>
                         <div class="details-content text-gray-600">
                             <h4 class="text-lg font-semibold text-gray-700 mb-2">Selling Shares After a Public Acquisition (IPO/Direct Listing)</h4>
-                            <p class="text-gray-600 mb-8">If your company goes <span class="font-bold text-gray-800">public</span> (e.g., via an Initial Public Offering or Direct Listing), the rules for selling your shares change significantly. You will no longer be subject to <span class="font-bold text-gray-800">private company restrictions</span> like the Right of First Refusal.</p>
+                            <p class="text-gray-600 mb-8 text-justify">If your company goes <span class="font-bold text-gray-800">public</span> (e.g., via an Initial Public Offering or Direct Listing), the rules for selling your shares change significantly. You will no longer be subject to <span class="font-bold text-gray-800">private company restrictions</span> like the Right of First Refusal.</p>
 
                             <div class="space-y-6">
                                 <div class="flex items-start">
                                     <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">1</div>
                                     <div class="ml-6">
                                         <h4 class="text-lg font-semibold text-gray-800">Liquidity and Market Access</h4>
-                                        <p class="text-gray-600 mt-1">Once <span class="font-semibold text-gray-800">public</span>, your shares can be sold on a stock exchange (e.g., NASDAQ, NYSE) through a brokerage account. This provides significantly more liquidity compared to <span class="font-semibold text-gray-800">private</span> sales.</p>
+                                        <p class="text-gray-600 mt-1 text-justify">Once <span class="font-semibold text-gray-800">public</span>, your shares can be sold on a stock exchange (e.g., NASDAQ, NYSE) through a brokerage account. This provides significantly more liquidity compared to <span class="font-semibold text-gray-800">private</span> sales.</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start">
                                     <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">2</div>
                                     <div class="ml-6">
                                         <h4 class="text-lg font-semibold text-gray-800">Lock-up Periods</h4>
-                                        <p class="text-gray-600 mt-1">Be aware of "<span class="font-semibold text-gray-800">lock-up</span>" periods, typically 90 to 180 days after the IPO. During this time, insiders (including employees with equity) are restricted from selling shares to prevent market flooding and price volatility. Your company will notify you of these dates.</p>
+                                        <p class="text-gray-600 mt-1 text-justify">Be aware of "<span class="font-semibold text-gray-800">lock-up</span>" periods, typically 90 to 180 days after the IPO. During this time, insiders (including employees with equity) are restricted from selling shares to prevent market flooding and price volatility. Your company will notify you of these dates.</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start">
                                     <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">3</div>
                                     <div class="ml-6">
                                         <h4 class="text-lg font-semibold text-gray-800">Trading Windows & Blackout Periods</h4>
-                                        <p class="text-gray-600 mt-1">Even after lock-up, you can typically only sell during specific "<span class="font-semibold text-gray-800">trading windows</span>" and must avoid "<span class="font-semibold text-gray-800">blackout periods</span>" (e.g., before earnings announcements) to prevent insider trading. Your company's legal or HR department will provide guidelines.</p>
+                                        <p class="text-gray-600 mt-1 text-justify">Even after lock-up, you can typically only sell during specific "<span class="font-semibold text-gray-800">trading windows</span>" and must avoid "<span class="font-semibold text-gray-800">blackout periods</span>" (e.g., before earnings announcements) to prevent insider trading. Your company's legal or HR department will provide guidelines.</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start">
                                     <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">4</div>
                                     <div class="ml-6">
                                         <h4 class="text-lg font-semibold text-gray-800">Brokerage Account Required</h4>
-                                        <p class="text-gray-600 mt-1">You will need a <span class="font-semibold text-gray-800">brokerage account</span> (often provided by the company's equity plan administrator) to hold and sell your <span class="font-semibold text-gray-800">public shares</span>.</p>
+                                        <p class="text-gray-600 mt-1 text-justify">You will need a <span class="font-semibold text-gray-800">brokerage account</span> (often provided by the company's equity plan administrator) to hold and sell your <span class="font-semibold text-gray-800">public shares</span>.</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="mt-8 p-4 border-l-4 border-blue-500 bg-blue-50/70 rounded-2xl liquid-glass-card">
-                                <p class="text-sm text-blue-800">Selling shares in a <span class="font-semibold text-gray-800">public market</span> offers more flexibility but comes with its own set of regulations and timing considerations. Always stay informed about your company's policies and consult with a financial advisor.</p>
+                                <p class="text-sm text-blue-800 text-justify">Selling shares in a <span class="font-semibold text-gray-800">public market</span> offers more flexibility but comes with its own set of regulations and timing considerations. Always stay informed about your company's policies and consult with a financial advisor.</p>
                             </div>
                         </div>
                     </details>
@@ -1219,7 +1219,7 @@
             <section id="acquisition" class="content-section">
                 <div class="liquid-glass-card p-8 rounded-2xl">
                     <h2 class="text-2xl font-bold mb-4 text-gray-900">In Case of Acquisition</h2>
-                    <p class="text-gray-600 mb-8">An acquisition, or "<span class="font-bold text-gray-800">Change of Control</span>," can significantly impact your equity. Your agreements include provisions for this event, most notably a "<span class="font-bold text-gray-800">Double Trigger</span>" acceleration clause.</p>
+                    <p class="text-gray-600 mb-8 text-justify">An acquisition, or "<span class="font-bold text-gray-800">Change of Control</span>," can significantly impact your equity. Your agreements include provisions for this event, most notably a "<span class="font-bold text-gray-800">Double Trigger</span>" acceleration clause.</p>
 
                     <div class="space-y-8">
                         <details class="group">
@@ -1229,13 +1229,13 @@
                             </summary>
                             <div class="details-content p-4 text-gray-600">
                                 <h4 class="text-lg font-semibold text-gray-700 mb-2">Double Trigger Explanation</h4>
-                                <p class="text-gray-600 mt-1">This is a key protection for you. It requires two events to happen for your unvested shares to accelerate:</p>
-                                <ul class="list-disc list-inside space-y-2">
+                                <p class="text-gray-600 mt-1 text-justify">This is a key protection for you. It requires two events to happen for your unvested shares to accelerate:</p>
+                                <ul class="list-disc list-inside space-y-2 text-justify">
                                     <li><span class="font-semibold text-gray-800">1. First Trigger:</span> The company undergoes a <span class="font-semibold text-gray-800">Change of Control</span> (is acquired).</li>
                                     <li><span class="font-semibold text-gray-800">2. Second Trigger:</span> Your service is terminated <span class="font-bold text-gray-800">without Cause</span> within a specific window (60 days before or 12 months after the acquisition).</li>
                                 </ul>
                                 <div class="mt-4 p-4 border-l-4 border-blue-500 bg-blue-50/70 rounded-2xl liquid-glass-card">
-                                    <p class="text-sm text-blue-800">If both triggers occur, <span class="font-bold text-gray-800">100% of your unvested shares immediately become vested</span>, allowing you to benefit from them in the acquisition.</p>
+                                    <p class="text-sm text-blue-800 text-justify">If both triggers occur, <span class="font-bold text-gray-800">100% of your unvested shares immediately become vested</span>, allowing you to benefit from them in the acquisition.</p>
                                 </div>
                             </div>
                         </details>
@@ -1247,8 +1247,8 @@
                             </summary>
                             <div class="details-content p-4 text-gray-600">
                                 <h4 class="text-lg font-semibold text-gray-700 mb-2">Share Treatment Details</h4>
-                                <p class="text-gray-600 mt-1">In an acquisition, the company's board has broad discretion. Your shares/options could be:</p>
-                                <ul class="list-disc list-inside space-y-2 text-gray-600 pl-4">
+                                <p class="text-gray-600 mt-1 text-justify">In an acquisition, the company's board has broad discretion. Your shares/options could be:</p>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600 pl-4 text-justify">
                                     <li><span class="font-semibold text-gray-800">Continued or assumed</span> by the acquiring company.</li>
                                     <li><span class="font-semibold text-gray-800">Substituted</span> for new equity in the acquirer.</li>
                                     <li><span class="font-semibold text-gray-800">Cashed out:</span> Cancelled in exchange for a payment equal to the sale price minus your exercise price.</li>
@@ -1264,13 +1264,13 @@
                             </summary>
                             <div class="details-content p-4 text-gray-600">
                                 <h4 class="text-lg font-semibold text-gray-700 mb-2">Change of Control Definition</h4>
-                                <p class="text-gray-600 mb-4">Your agreements specify what constitutes a "<span class="font-bold text-gray-800">Change of Control</span>" event for the company. This typically includes, but is not limited to, the following scenarios:</p>
-                                <ul class="list-disc list-inside space-y-2 text-gray-600 pl-4">
+                                <p class="text-gray-600 mb-4 text-justify">Your agreements specify what constitutes a "<span class="font-bold text-gray-800">Change of Control</span>" event for the company. This typically includes, but is not limited to, the following scenarios:</p>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600 pl-4 text-justify">
                                     <li>A sale of all or substantially all of the Company's assets (unless to an "<span class="font-semibold text-gray-800">Excluded Entity</span>" as defined in the plan).</li>
                                     <li>A merger, consolidation, or other capital reorganization where the Company combines with another entity (unless to an "<span class="font-semibold text-gray-800">Excluded Entity</span>").</li>
                                     <li>A transaction where any "person" (or group of persons acting together) gains beneficial ownership of all of the Company's outstanding voting securities.</li>
                                     <li>Certain transactions are explicitly not considered a Change of Control, such as:
-                                        <ul class="list-circle list-inside space-y-1 text-gray-600 pl-6">
+                                        <ul class="list-circle list-inside space-y-1 text-gray-600 pl-6 text-justify">
                                             <li>Changing the Company's jurisdiction of incorporation.</li>
                                             <li>Creating a holding company where the proportional ownership remains the same.</li>
                                             <li>Obtaining Board-approved funding.</li>
@@ -1278,7 +1278,7 @@
                                     </li>
                                 </ul>
                                 <div class="mt-8 p-4 border-l-4 border-blue-500 bg-blue-50/70 rounded-2xl liquid-glass-card">
-                                    <p class="text-sm text-blue-800">Understanding these definitions is crucial as a <span class="font-bold text-gray-800">Change of Control</span> is the first trigger for potential vesting acceleration and dictates how your equity will be handled.</p>
+                                    <p class="text-sm text-blue-800 text-justify">Understanding these definitions is crucial as a <span class="font-bold text-gray-800">Change of Control</span> is the first trigger for potential vesting acceleration and dictates how your equity will be handled.</p>
                                 </div>
                             </div>
                         </details>
@@ -1452,8 +1452,9 @@
             if (isChileSelected) {
                 const checkedChileTax = document.querySelector('#checklist input[name="chile-tax-radio"]:checked');
                 if (!checkedChileTax) {
-                    showHideError(chileTaxRateError, false, 'Please select a tax rate for Chile.');
-                    allInputsValid = false; 
+                    console.error('Chile tax rate not selected in calculation block, despite validation passing. This indicates a logic error.');
+                    showHideError(chileTaxRateError, false, 'Please select a tax rate for Chile.'); // Ensure UI error is shown as fallback
+                    allInputsValid = false; // Set to false if Chile is selected and no tax rate is chosen
                 } else {
                     showHideError(chileTaxRateError, true, '');
                 }
