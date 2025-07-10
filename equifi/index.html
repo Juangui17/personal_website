@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KSK2PSN9');</script>
+    <!-- End Google Tag Manager -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_TAG_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'YOUR_TAG_ID');
+    </script>
+    <title>EquiFi - Make Sense of Your Stock Options</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <!-- Include Chart.js Datalabels Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Ensure body takes full height and centers its content */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column; /* Allows content to stack vertically if needed */
+        }
+        /* Liquid Glass Design Principles */
+        /* This creates a subtle frosted glass effect */
+        .liquid-glass-card {
+            background-color: rgba(255, 255, 255, 0.6); /* Slightly transparent white */
+            backdrop-filter: blur(15px) saturate(180%); /* Increased blur for more frosted effect */
+            -webkit-backdrop-filter: blur(15px) saturate(180%); /* Safari support */
+            border: 1px solid rgba(209, 213, 219, 0.3); /* Subtle border */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.08); /* Slightly stronger shadow */
+        }
+
+        /* Enhancing interactivity for inputs */
+        .liquid-glass-input {
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(209, 213, 219, 0.5);
+            transition: all 0.2s ease-in-out;
+            border-radius: 0.5rem; /* rounded-lg */
+        }
+        .liquid-glass-input:focus {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-color: rgba(59, 130, 246, 0.7); /* Blue-500 with transparency */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* Focus ring */
+        }
+
+        /* Disabled button style */
+        .btn-disabled {
+            @apply bg-gray-300 text-gray-500 cursor-not-allowed;
+        }
+        .btn-enabled {
+            @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+        }
+
+        /* Calculate Button - High Level (New Styles) */
+        .btn-calculate-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem; /* gap-4 */
+        }
+
+        .btn-calculate-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(to right, #6366f1, #ec4899, #facc15); /* indigo-500, pink-500, yellow-400 */
+            border-radius: 0.75rem; /* rounded-xl */
+            filter: blur(12px); /* blur-lg */
+            opacity: 0.6; /* Initial opacity */
+            transition: opacity 1000ms, filter 1000ms;
+            z-index: -1; /* Ensure it's behind the button */
+        }
+
+        .btn-calculate-container:hover::before {
+            opacity: 1;
+            transition: opacity 200ms, filter 200ms;
+        }
+
+        .btn-calculate-high-level {
+            position: relative; /* Needed for z-index to work against pseudo-element */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem; /* text-lg */
+            border-radius: 0.75rem; /* rounded-xl */
+            background-color: #1f2937; /* gray-900 */
+            padding: 0.75rem 2rem; /* px-8 py-3 */
+            font-weight: 600; /* font-semibold */
+            color: white;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* default shadow */
+            z-index: 1; /* Ensure button is above the blur effect */
+        }
+
+        .btn-calculate-high-level:hover {
+            background-color: #374151; /* gray-800 */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(75, 85, 99, 0.3); /* hover:shadow-lg hover:shadow-gray-600/30 */
+            transform: translateY(-0.125rem); /* hover:-translate-y-0.5 */
+        }
+
+        .btn-calculate-high-level.btn-disabled {
+            background-color: #9ca3af; /* gray-400 */
+            color: #4b5563; /* gray-600 */
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* New Navigation Bar Styles */
+        .tab-bar {
+            background-color: rgba(255, 255, 255, 0.7); /* More opaque for a solid look */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 1.5rem; /* rounded-3xl for more rounded tabs */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(209, 213, 219, 0.4);
+            padding: 0.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-bar .nav-link {
+            flex-grow: 1; /* Allow tabs to grow and fill space */
+            text-align: center;
+            padding: 0.75rem 1.5rem; /* More padding for larger touch targets */
+            font-weight: 600; /* Semi-bold */
+            color: #4B5563; /* gray-700 */
+            border-radius: 1.25rem; /* rounded-2xl for tab buttons */
+            transition: all 0.3s ease-in-out;
+            background-color: transparent; /* Default transparent */
+            border: none; /* No individual button border */
+        }
+
+        .tab-bar .nav-link:hover {
+            background-color: rgba(243, 244, 246, 0.5); /* Lighter hover effect */
+            color: #1F2937; /* gray-900 */
+        }
+
+        .tab-bar .nav-link.active {
+            background-color: rgba(59, 130, 246, 0.8); /* Blue-500 for active tab with transparency */
+            color: white;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3); /* Subtle shadow for active tab */
+        }
+
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        /* Styles for the details/summary toggles in Selling Rules and Acquisition */
+        .details-summary-header {
+            background-color: rgba(255, 255, 255, 0.8); /* More opaque for better contrast */
+            backdrop-filter: blur(10px) saturate(150%); /* Stronger blur and saturation */
+            -webkit-backdrop-filter: blur(10px) saturate(150%);
+            border: 1px solid rgba(209, 213, 219, 0.5); /* More visible border */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Clearer shadow */
+            transition: all 0.3s ease-in-out;
+            border-radius: 0.75rem; /* Ensure summary is rounded */
+        }
+        .details-summary-header:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out; /* Increased transition duration for a smoother slide */
+            background-color: rgba(255, 255, 255, 0.4); /* Lighter glass for accordion content */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-top: 1px solid rgba(209, 213, 219, 0.2);
+            border-bottom-left-radius: 0.75rem; /* rounded-lg for bottom left */
+            border-bottom-right-radius: 0.75rem; /* rounded-lg for bottom right */
+        }
+        details[open] .details-content {
+            max-height: 2000px; /* Increased max-height to ensure content is not cut off during animation */
+            padding: 1rem; /* Added padding for content inside the opened section */
+            /* Adjust border-radius for opened state, so only bottom corners are rounded if header is also rounded */
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+        details[open] .details-summary-header {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-bottom-color: transparent; /* Hide bottom border when open to blend with content */
+        }
+
+        /* Error message style */
+        .error-message {
+            @apply text-red-500 text-sm mt-1;
+            color: red; /* Explicit fallback for red text */
+        }
+
+        /* Custom Checklist Styles */
+        #chile-tax-rate-dropdown {
+            position: relative;
+            width: 100%; /* Take full width of its parent */
+            max-width: 380px; /* Increased max-width for text fit */
+            text-align: left; /* Align to the left */
+        }
+
+        #chile-tax-rate-dropdown summary {
+            background-color: rgba(255, 255, 255, 0.7); /* Default white background */
+            color: #1F2937; /* Default black text */
+            padding: 0.5rem 1rem; /* Adjusted padding to match other inputs (p-2) */
+            border-radius: 0.5rem;
+            cursor: pointer;
+            list-style: none; /* Remove default marker */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease-in-out;
+            border: 1px solid rgba(209, 213, 219, 0.5); /* Default gray border */
+            font-size: 0.875rem; /* text-sm */
+            white-space: nowrap; /* Ensure text stays on one line */
+            overflow: hidden; /* Hide overflow text */
+            text-overflow: ellipsis; /* Add ellipsis for overflow */
+        }
+        /* Style for selected state (white background, black text) */
+        #chile-tax-rate-dropdown.selected summary {
+            background-color: rgba(255, 255, 255, 0.9); /* White background */
+            color: #1F2937; /* Black text */
+            border-color: rgba(209, 213, 219, 0.6); /* Match liquid-glass-input border */
+        }
+        /* No blue hover for summary */
+        #chile-tax-rate-dropdown summary:hover {
+            background-color: rgba(243, 244, 246, 0.5); /* Light gray hover effect */
+            color: #1F2937; /* Black text on hover */
+            border-color: rgba(209, 213, 219, 0.6); /* Keep border color consistent */
+        }
+        #chile-tax-rate-dropdown.selected summary:hover {
+            background-color: rgba(243, 244, 246, 0.5); /* Light gray hover effect for selected state */
+            color: #1F2937; /* Black text on hover for selected state */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Keep original shadow on hover for selected state */
+        }
+
+
+        #chile-tax-rate-dropdown summary::-webkit-details-marker {
+            display: none; /* Hide default arrow in Webkit browsers */
+        }
+
+        #chile-tax-rate-dropdown summary svg {
+            transition: transform 0.2s ease-in-out;
+        }
+
+        #chile-tax-rate-dropdown details[open] summary svg {
+            transform: rotate(180deg);
+        }
+
+        #checklist {
+            position: absolute; /* Make it float over content */
+            top: 100%; /* Position right below the summary */
+            left: 0;
+            width: 100%; /* Take full width of the parent dropdown */
+            background-color: white; /* Solid white background */
+            z-index: 20; /* Ensure it's above other content */
+            --background: white; /* Changed to solid white */
+            --text: #414856;
+            --check: #3B82F6; /* Blue color for checkmark */
+            --disabled: #9CA3AF; /* Lighter gray for disabled text */
+            height: auto;
+            min-height: auto; /* Removed min-height */
+            border-radius: 0.5rem; /* Match dropdown header radius */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow for floating */
+            padding: 0; /* Removed padding to make options joined */
+            display: grid;
+            grid-template-columns: 20px auto; /* Adjusted for smaller checkbox */
+            align-items: center;
+            justify-content: start;
+            gap: 0; /* Removed gap to make options joined */
+            border: 1px solid rgba(209, 213, 219, 0.6);
+            backdrop-filter: blur(0px); /* Removed blur for solid background */
+            -webkit-backdrop-filter: blur(0px); /* Removed blur for solid background */
+            margin-top: 0; /* Removed margin-top to eliminate space */
+            border-top-left-radius: 0; /* Remove top-left radius to blend with summary */
+            border-top-right-radius: 0; /* Remove top-right radius to blend with summary */
+            
+            /* Scrollable styles - Adjusted for 4 visible items */
+            max-height: calc(4 * 2.5rem); /* Approximately 4 rows (2.5rem per row height) */
+            overflow-y: auto; /* Enable vertical scrolling */
+            /* padding-right: 25px; */ /* Removed padding for scrollbar, let browser handle it */
+        }
+
+        #checklist label {
+            color: var(--text);
+            position: relative;
+            cursor: pointer;
+            display: grid;
+            align-items: center;
+            width: fit-content;
+            transition: color 0.3s ease;
+            margin-right: 0;
+            padding: 0.5rem 1rem; /* Added padding to each label */
+            text-align: left;
+            font-size: 0.875rem; /* text-sm, consistent with input labels */
+            white-space: nowrap; /* Ensure text stays on one line */
+            overflow: hidden; /* Hide overflow text */
+            text-overflow: ellipsis; /* Add ellipsis for overflow */
+            max-width: 300px; /* Adjusted max-width for labels to fit text and account for scrollbar */
+            height: 2.5rem; /* Fixed height for each row */
+            display: flex; /* Use flex to center content vertically */
+            align-items: center;
+        }
+        /* No blue hover for checklist labels */
+        #checklist label:hover {
+            background-color: rgba(243, 244, 246, 0.5); /* Light gray hover effect */
+            color: #1F2937; /* Black text on hover */
+        }
+
+        #checklist label::before, #checklist label::after {
+            content: "";
+            position: absolute;
+        }
+
+        #checklist label::before {
+            height: 2px;
+            width: 8px;
+            left: -12px; /* Adjusted left for better alignment */
+            background: var(--check);
+            border-radius: 2px;
+            transition: background 0.3s ease;
+        }
+
+        #checklist label:after {
+            height: 4px;
+            width: 4px;
+            top: 8px;
+            left: -10px; /* Adjusted left for better alignment */
+            border-radius: 50%;
+        }
+
+        #checklist input[type="checkbox"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            position: relative;
+            height: 15px; /* Smaller checkbox */
+            width: 15px; /* Smaller checkbox */
+            outline: none;
+            border: 0;
+            margin: 0;
+            cursor: pointer;
+            background: var(--background);
+            display: grid;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        #checklist input[type="checkbox"]::before, #checklist input[type="checkbox"]::after {
+            content: "";
+            position: absolute;
+            height: 2px;
+            top: auto;
+            background: var(--check);
+            border-radius: 2px;
+        }
+
+        #checklist input[type="checkbox"]::before {
+            width: 0px;
+            right: 60%;
+            transform-origin: right bottom;
+        }
+
+        #checklist input[type="checkbox"]::after {
+            width: 0px;
+            left: 40%;
+            transform-origin: left bottom;
+        }
+
+        #checklist input[type="checkbox"]:checked::before {
+            animation: check-01 0.4s ease forwards;
+        }
+
+        #checklist input[type="checkbox"]:checked::after {
+            animation: check-02 0.4s ease forwards;
+        }
+
+        /* Removed strike-through for selected label */
+        #checklist input[type="checkbox"]:checked + label {
+            color: #1F2937; /* Black text when selected */
+            animation: none; /* Remove move animation */
+            padding-left: 0.5rem; /* Reset padding to default */
+            padding-right: 1rem; /* Reset padding to default */
+            text-decoration: none !important; /* Explicitly remove text-decoration and ensure it overrides */
+        }
+
+        /* Ensure the line is NOT drawn when checked */
+        #checklist input[type="checkbox"]:checked + label::before {
+            background: transparent; /* Make the line transparent when checked */
+            animation: none; /* Remove the slice animation for the line */
+        }
+
+        #checklist input[type="checkbox"]:checked + label::after {
+            animation: firework 0.5s ease forwards 0.1s;
+            box-shadow: 0 0 0 -2px #3B82F6, 0 0 0 -2px #3B82F6, 0 0 0 -2px #3B82F6, 0 0 0 -2px #3B82F6, 0 0 0 -2px #3B82F6, 0 0 0 -2px #3B82F6; /* Blue firework */
+        }
+        /* Override firework animation color to blue */
+        @keyframes firework {
+            0% {
+                opacity: 1;
+                box-shadow: 0 0 0 -2px var(--check), 0 0 0 -2px var(--check), 0 0 0 -2px var(--check), 0 0 0 -2px var(--check), 0 0 0 -2px var(--check), 0 0 0 -2px var(--check);
+            }
+
+            30% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                box-shadow: 0 -15px 0 0px var(--check), 14px -8px 0 0px var(--check), 14px 8px 0 0px var(--check), 0 15px 0 0px var(--check), -14px 8px 0 0px var(--check), -14px -8px 0 0px var(--check);
+            }
+        }
+
+
+        @keyframes move {
+            50% {
+                padding-left: 8px;
+                padding-right: 0px;
+            }
+
+            100% {
+                padding-right: 4px;
+            }
+        }
+
+        @keyframes slice {
+            60% {
+                width: 100%;
+                left: 4px;
+            }
+
+            100% {
+                width: 100%;
+                left: -2px;
+                padding-left: 0;
+            }
+        }
+
+        @keyframes check-01 {
+            0% {
+                width: 4px;
+                top: auto;
+                transform: rotate(0);
+            }
+
+            50% {
+                width: 0px;
+                top: auto;
+                transform: rotate(0);
+            }
+
+            51% {
+                width: 0px;
+                top: 8px;
+                transform: rotate(45deg);
+            }
+
+            100% {
+                width: 5px;
+                top: 8px;
+                transform: rotate(45deg);
+            }
+        }
+
+        @keyframes check-02 {
+            0% {
+                width: 4px;
+                top: auto;
+                transform: rotate(0);
+            }
+
+            50% {
+                width: 0px;
+                top: auto;
+                transform: rotate(0);
+            }
+
+            51% {
+                width: 0px;
+                top: 8px;
+                transform: rotate(-45deg);
+            }
+
+            100% {
+                width: 10px;
+                top: 8px;
+                transform: rotate(-45deg);
+            }
+        }
+
+        /* Toast styles */
+        .toast-container {
+            position: relative;
+            display: inline-block; /* Allows positioning relative to its parent */
+        }
+
+        .toast-message {
+            position: absolute;
+            top: -10px; /* Position above the icon */
+            left: 50%;
+            transform: translateX(-50%) translateY(-100%); /* Center and move up */
+            background-color: rgba(107, 114, 128, 0.9); /* Grey-500 with transparency */
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 280px; /* Fixed width to prevent it from being too wide */
+            white-space: normal; /* Allow text to wrap */
+            text-align: center;
+        }
+
+        .toast-message::after {
+            content: '';
+            position: absolute;
+            bottom: -8px; /* Position below the toast */
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 16px;
+            height: 16px;
+            background-color: rgba(107, 114, 128, 0.9); /* Match toast background */
+            border-radius: 2px; /* Slightly rounded triangle */
+        }
+
+        .toast-container:hover .toast-message {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+    <script>
+        // --- IMPORTANT: Consent Management Logic ---
+        // It is strongly recommended to move this consent logic into Google Tag Manager
+        // using Custom HTML tags and appropriate triggers for better management.
+        // Keeping it here is only if you strictly prefer direct HTML implementation for consent.
+
+        // Default all consent types to 'denied' BEFORE any config command (which is handled by the GTM snippet).
+        // This initial gtag('consent', 'default', ...) call should ideally be in a GTM Custom HTML tag
+        // that fires on the "Consent Initialization - All Pages" trigger.
+        window.gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'analytics_storage': 'denied',
+            'functionality_storage': 'denied',
+            'personalization_storage': 'denied',
+            'security_storage': 'granted'
+        });
+
+        // Check for existing consent from localStorage.
+        // This logic should also be in a GTM Custom HTML tag, potentially firing after the default consent tag.
+        const consentGiven = localStorage.getItem('user_consent');
+        if (consentGiven === 'granted') {
+            window.gtag('consent', 'update', {
+                'ad_storage': 'granted',
+                'analytics_storage': 'granted',
+                'functionality_storage': 'granted',
+                'personalization_storage': 'granted'
+            });
+        } else if (consentGiven === 'denied') {
+            window.gtag('consent', 'update', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+                'functionality_storage': 'denied',
+                'personalization_storage': 'denied'
+            });
+        }
+
+        // The 'wait_for_update' parameter is typically configured within GTM's consent settings
+        // or within the initial consent default tag.
+        // If you are managing consent entirely client-side like this, ensure this is handled.
+        window.gtag('consent', 'default', {
+            'wait_for_update': 500
+        });
+
+        // These functions (grantConsent, denyConsent) would typically be called by UI elements
+        // (e.g., a cookie banner's "Accept" or "Reject" buttons) and would push events to dataLayer
+        // which GTM then uses to update consent.
+        function grantConsent() {
+            window.gtag('consent', 'update', {
+                'ad_storage': 'granted',
+                'analytics_storage': 'granted',
+                'functionality_storage': 'granted',
+                'personalization_storage': 'granted'
+            });
+            localStorage.setItem('user_consent', 'granted');
+            console.log('Consent granted!');
+        }
+
+        function denyConsent() {
+            window.gtag('consent', 'update', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+                'functionality_storage': 'denied',
+                'personalization_storage': 'denied'
+            });
+            localStorage.setItem('user_consent', 'denied');
+            console.log('Consent denied!');
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-blue-200 text-gray-800">
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KSK2PSN9"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- Landing Page Section -->
+    <div id="landing-page" class="container mx-auto p-4 sm:p-6 lg:p-8 flex items-center justify-center flex-grow flex-col">
+        <div class="liquid-glass-card p-8 sm:p-12 rounded-2xl max-w-4xl w-full text-center mb-6"> <!-- Changed mb-8 to mb-6 -->
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">EquiFi</h1>
+            <p class="text-blue-600 text-lg sm:text-xl font-semibold mb-4">Make Sense of Your Stock Options.</p>
+            <p class="text-gray-700 mb-10 sm:mb-12 max-w-2xl mx-auto leading-relaxed text-justify">Got stock options but not sure what they’re worth (don't know if you should buy them?) — or what to do with them? EquiFi is a simple tool to help you estimate potential gains (after taxes and costs). Everyone’s case is different, but this is a good place to start playing with the numbers.</p>
+
+            <div class="grid md:grid-cols-3 gap-8 text-left mb-10 sm:mb-12">
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <!-- Corrected SVG path for globe icon and added text-blue-600 class -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe-icon lucide-globe h-8 w-8 text-blue-600"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Multi-Country Support</h3>
+                        <p class="text-sm text-gray-600">Colombia, Chile & Italy tax rules</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Tax Estimates</h3>
+                        <p class="text-sm text-gray-600">Approximate tax calculations</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Profit Analysis</h3>
+                        <p class="text-sm text-gray-600">Net outcome visualization</p>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="showCalculator()" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition text-lg">
+                Start Calculating
+            </button>
+        </div>
+        <!-- Disclaimer moved outside the main liquid-glass-card -->
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-2xl text-left mt-6 liquid-glass-card max-w-4xl w-full"> <!-- Changed mt-8 to mt-6 -->
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-red-800 font-semibold mb-1">Important Disclaimer</h3>
+                    <p class="text-sm text-red-700 text-justify">This calculator provides estimates for educational purposes only and should not be considered as professional tax, legal, or financial advice. Tax laws are complex and subject to change. Results may vary based on individual circumstances, tax treaty benefits, timing of transactions, and other factors not accounted for in this simplified calculator. Always consult with qualified tax professionals, financial advisors, or legal experts before making any investment or tax-related decisions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Calculator View -->
+    <div id="calculator-view" class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow" style="display: none;">
+        <header class="flex items-center mb-8">
+            <div class="flex-1 text-sm text-gray-500"> <!-- Left side, takes 1/3 of space -->
+                <a href="#" onclick="showLandingPage(); return false;" class="hover:underline">Landing</a> <!-- Modified onclick to call showLandingPage() -->
+                <span class="mx-2">/</span>
+                <span class="font-medium text-gray-700">Home</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center text-center"> <!-- Center, takes 1/3 of space -->
+                <h1 class="text-3xl font-bold text-gray-900">EquiFi</h1>
+                <p class="text-blue-600 text-lg sm:text-xl font-semibold whitespace-nowrap">Make Sense of Your Stock Options.</p>
+            </div>
+            <div class="flex-1"></div> <!-- Right side, takes 1/3 of space -->
+        </header>
+
+        <!-- Updated Navigation: Tab Bar (More defined tabs) -->
+        <nav class="flex justify-center mb-8">
+            <div class="tab-bar">
+                <button class="nav-link active" onclick="showSection('calculator')">Calculator</button>
+                <button class="nav-link" onclick="showSection('selling-rules')">Selling Rules</button>
+                <button class="nav-link" onclick="showSection('acquisition')">Acquisition</button>
+            </div>
+        </nav>
+
+        <main>
+            <!-- Calculator Section -->
+            <section id="calculator" class="content-section active">
+                <div class="liquid-glass-card p-8 rounded-2xl">
+                    <h2 class="text-2xl font-bold mb-2">Equity Outcome Calculator</h2>
+                    <p class="text-gray-600 mb-8">Ready to see your equity soar? This calculator helps you estimate potential outcomes, assuming your shares are already exercised or will be soon. Let's crunch some numbers!</p>
+
+                    <!-- Step 1 -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Step 1: Select your country of tax residence</h3>
+                        <div class="space-y-4">
+                            <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 liquid-glass-input">
+                                <input type="radio" name="country" value="colombia" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" id="country-colombia">
+                                <span class="ml-3 text-gray-700">🇨🇴 Colombia (15%)</span>
+                            </label>
+                            <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 liquid-glass-input">
+                                <input type="radio" name="country" value="italy" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" id="country-italy">
+                                <span class="ml-3 text-gray-700">🇮🇹 Italy (26%)</span>
+                            </label>
+                            <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 liquid-glass-input">
+                                <input type="radio" name="country" value="chile" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" id="country-chile">
+                                <span class="ml-3 text-gray-700">🇨🇱 Chile (Variable Rate)</span>
+                            </label>
+                        </div>
+                        <div id="chile-tax-rate-selector" class="mt-4 pl-8 mb-6" style="display: none;">
+                            <label for="chile-tax-rate" class="block text-sm font-medium text-gray-700 mb-2">What is your approximate gross monthly income? (in CLP)</label>
+                            <!-- Custom dropdown for Chile tax rates -->
+                            <details id="chile-tax-rate-dropdown">
+                                <summary class="liquid-glass-input"> <!-- Apply liquid-glass-input class here -->
+                                    <span id="selected-chile-tax-label">Select an income range</span>
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </summary>
+                                <div id="checklist">
+                                    <input value="0.04" name="chile-tax-radio" type="checkbox" id="chile-tax-01">
+                                    <label for="chile-tax-01">Less than $500.000 CLP (<strong>0-4%</strong>)</label>
+                                    <input value="0.135" name="chile-tax-radio" type="checkbox" id="chile-tax-02">
+                                    <label for="chile-tax-02">$500.000 - $1.000.000 CLP (<strong>4-13.5%</strong>)</label>
+                                    <input value="0.23" name="chile-tax-radio" type="checkbox" id="chile-tax-03">
+                                    <label for="chile-tax-03">$1.000.000 - $2.000.000 CLP (<strong>13.5-23%</strong>)</label>
+                                    <input value="0.304" name="chile-tax-radio" type="checkbox" id="chile-tax-04">
+                                    <label for="chile-tax-04">$2.000.000 - $3.000.000 CLP (<strong>23-30.4%</strong>)</label>
+                                    <input value="0.35" name="chile-tax-radio" type="checkbox" id="chile-tax-05">
+                                    <label for="chile-tax-05">$3.000.000 - $4.500.000 CLP (<strong>30.4-35%</strong>)</label>
+                                    <input value="0.35" name="chile-tax-radio" type="checkbox" id="chile-tax-06">
+                                    <label for="chile-tax-06">$4.500.000 - $6.000.000 CLP (<strong>35%</strong>)</label>
+                                    <input value="0.40" name="chile-tax-radio" type="checkbox" id="chile-tax-07">
+                                    <label for="chile-tax-07">$6.000.000 - $8.500.000 CLP (<strong>35-40%</strong>)</label>
+                                    <input value="0.40" name="chile-tax-radio" type="checkbox" id="chile-tax-08">
+                                    <label for="chile-tax-08">More than $8.500.000 CLP (<strong>40%</strong>)</label>
+                                </div>
+                            </details>
+                            <div id="chile-tax-rate-error" class="error-message hidden">Please select a tax rate for Chile.</div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-4">For more detailed tax information, explore the tax rules below.</p>
+                    </div>
+
+                    <!-- Step 2 & 3 -->
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                           <h3 class="text-lg font-semibold mb-4">Step 2: Enter your shares and exercise price</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="total-shares" class="block text-sm font-medium text-gray-700">Options/Shares:</label> <!-- Changed label here -->
+                                    <input type="text" id="total-shares" placeholder="e.g., 7,000" class="mt-1 block w-full p-2 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 liquid-glass-input">
+                                    <div id="total-shares-error" class="error-message hidden">Please enter total shares.</div>
+                                </div>
+                                <div>
+                                    <label for="exercise-price" class="block text-sm font-medium text-gray-700">Exercise Price / Share:</label>
+                                    <input type="text" id="exercise-price" placeholder="e.g., 0.19" class="mt-1 block w-full p-2 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 liquid-glass-input">
+                                    <div id="exercise-price-error" class="error-message hidden">Please enter an exercise price.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">Step 3: Enter a sale price</h3>
+                            <div class="relative">
+                                <label for="sale-price" class="block text-sm font-medium text-gray-700">
+                                    Per Share (Sale Price/Fair Market Value):
+                                    <span class="toast-container">
+                                        <!-- Corrected SVG to a question mark icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert-icon lucide-circle-alert inline-block align-middle text-gray-500 cursor-pointer ml-1" onmouseover="showToast('sale-price-toast')" onmouseout="hideToast('sale-price-toast')">
+                                            <circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>
+                                        </svg>
+                                        <div id="sale-price-toast" class="toast-message">
+                                            Fair market value (FMV) is the per share price of your company's common stock. FMV shown is rounded to 2 decimal places.
+                                        </div>
+                                    </span>
+                                </label>
+                                <input type="text" id="sale-price" placeholder="0.00" class="mt-1 block w-full p-2 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 liquid-glass-input">
+                                <div id="sale-price-error" class="error-message hidden">Please enter a sale price.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end mt-8">
+                        <div class="btn-calculate-container group">
+                            <button id="calculate-btn" class="btn-calculate-high-level">
+                                Calculate
+                                <svg aria-hidden="true" viewBox="0 0 10 10" height="10" width="10" fill="none" class="mt-0.5 ml-2 -mr-1 stroke-white stroke-2">
+                                    <path d="M0 5h7" class="transition opacity-0 group-hover:opacity-100"></path>
+                                    <path d="M1 1l4 4-4 4" class="transition group-hover:translate-x-[3px]"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div id="results-container" class="mt-8" style="display: none;">
+                    <div class="liquid-glass-card p-8 rounded-2xl mb-8">
+                        <h3 class="text-xl font-bold mb-6">Calculation Results</h3>
+                        <div class="grid md:grid-cols-2 gap-x-8 gap-y-4 text-lg">
+                            <div class="flex justify-between"><span>Total Shares:</span> <span id="res-total-shares" class="font-semibold"></span></div>
+                            <div class="flex justify-between"><span>Gross Profit:</span> <span id="res-gross-profit" class="font-semibold"></span></div>
+                            <div class="flex justify-between"><span>Exercise Cost:</span> <span id="res-exercise-cost" class="font-semibold"></span></div>
+                            <div class="flex justify-between"><span>Tax (<span id="res-tax-rate"></span>%):</span> <span id="res-tax-amount" class="font-semibold"></span></div>
+                            <div class="flex justify-between"><span>Sale Value:</span> <span id="res-sale-value" class="font-semibold"></span></div>
+                            <div class="flex justify-between border-t pt-4 mt-4 md:col-span-2">
+                                <span class="font-bold text-xl" id="net-profit-label">Net Profit:</span>
+                                <span id="res-net-profit" class="font-bold text-xl"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="liquid-glass-card p-8 rounded-2xl">
+                        <h3 class="text-xl font-bold mb-6">Visual Breakdown</h3>
+                        <div class="h-96">
+                            <canvas id="waterfallChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tax Rules Section -->
+                <div class="liquid-glass-card p-8 rounded-2xl mt-8">
+                    <h3 class="text-xl font-bold mb-6">Tax Rules by Country:</h3>
+                    <div class="space-y-4">
+                        <details class="group">
+                            <summary class="flex items-center justify-between p-4 bg-gray-100/70 rounded-lg cursor-pointer hover:bg-gray-200/70 liquid-glass-input">
+                                <span class="font-semibold">🇨🇴 Colombia Tax Rules:</span>
+                                <svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="details-content p-4 text-gray-600">
+                                <h4 class="text-lg font-semibold text-blue-700 mb-2">Stock Option Taxation in Colombia</h4> <!-- Removed flag -->
+                                <p class="text-gray-600 mb-4">If you’ve received stock options and plan to sell them in Colombia, here’s how the taxation works depending on holding period, listing status, and the total value of the sale.</p>
+                                
+                                <h5 class="text-md font-semibold text-blue-600 mb-2">📅 Holding Period & Tax Treatment</h5>
+                                <div class="overflow-x-auto mb-4">
+                                    <table class="min-w-full bg-white rounded-lg shadow overflow-hidden text-sm">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="py-2 px-4 text-left font-semibold text-gray-700">Holding Period</th>
+                                                <th class="py-2 px-4 text-left font-semibold text-gray-700">Tax Category</th>
+                                                <th class="py-2 px-4 text-left font-semibold text-gray-700">Tax Rate</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td class="py-2 px-4 border-b border-gray-200">Less than 2 years</td><td class="py-2 px-4 border-b border-gray-200">Ordinary Income</td><td class="py-2 px-4 border-b border-gray-200">Progressive: 0% to 33%</td></tr>
+                                            <tr><td class="py-2 px-4">2 years or more</td><td class="py-2 px-4">Occasional Gain</td><td class="py-2 px-4">Flat 15%</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p class="text-gray-600 mb-2 text-justify">If you sell shares less than 2 years after exercising your options, the gain is treated as ordinary income and taxed under Colombia’s progressive tax rates, ranging from 0% to 33%.</p>
+                                <p class="text-gray-600 mb-4 text-justify">If you hold the shares for 2 years or more, the profit qualifies as a "ganancia ocasional" (occasional gain) and is taxed at a flat 15% rate.</p>
+                                <p class="text-sm text-gray-700 mb-4 text-justify">📰 According to Semana Magazine, the 2022 tax reform (Law 2277) increased the tax on occasional gains from 10% to 15% for individuals and corporations alike.</p>
+                                <p class="text-sm text-gray-700 mb-4">Source: <a href="https://www.semana.com/reforma-tributaria" target="_blank" class="text-blue-600 hover:underline">Semana.com – Reforma tributaria</a></p>
+
+                                <h5 class="text-md font-semibold text-blue-600 mb-2">📈 Listed vs. Unlisted Shares</h5>
+                                <ul class="list-disc list-inside space-y-2 mb-4 text-justify">
+                                    <li>For publicly traded shares (e.g., listed on a stock exchange like BVC):
+                                        <ul class="list-circle list-inside space-y-1 pl-6">
+                                            <li>If you sell up to 3% of a company’s outstanding shares, your gain is tax-exempt.</li>
+                                            <li>Beyond 3%, the tax rules above (0–33% or 15%) apply depending on holding period.</li>
+                                        </ul>
+                                    </li>
+                                    <li>For privately held shares, no exemption applies; only the holding period determines the tax rate.</li>
+                                </ul>
+                                <p class="text-sm text-gray-700 mb-4 text-justify">📊 According to Pulzo, small sales of public shares (under 3%) are exempt from capital gains tax, while larger transactions are subject to the standard income or occasional gain treatment.</p>
+                                <p class="text-sm text-gray-700 mb-4">Source: <a href="https://www.pulzo.com/dividendos-y-acciones" target="_blank" class="text-blue-600 hover:underline">Pulzo.com – Dividendos y acciones</a></p>
+
+                                <h5 class="text-md font-semibold text-blue-600 mb-2">💡 Summary Table</h5>
+                                <div class="overflow-x-auto mb-4">
+                                    <table class="min-w-full bg-white rounded-lg shadow overflow-hidden text-sm">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="py-2 px-4 text-left font-semibold text-gray-700">Situation</th>
+                                                <th class="py-2 px-4 text-left font-semibold text-gray-700">Tax Rate</th>
+                                                <th class="py-2 px-4 text-left font-semibold text-gray-700">Notes</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td class="py-2 px-4 border-b border-gray-200">Sold &lt; 2 years</td><td class="py-2 px-4 border-b border-gray-200">0–33%</td><td class="py-2 px-4 border-b border-gray-200">Ordinary income (progressive)</td></tr>
+                                            <tr><td class="py-2 px-4 border-b border-gray-200">Sold ≥ 2 years</td><td class="py-2 px-4 border-b border-gray-200">15%</td><td class="py-2 px-4 border-b border-gray-200">Occasional gain</td></tr>
+                                            <tr><td class="py-2 px-4 border-b border-gray-200">Listed Shares ≤ 3%</td><td class="py-2 px-4 border-b border-gray-200">0%</td><td class="py-2 px-4 border-b border-gray-200">Tax-exempt</td></tr>
+                                            <tr><td class="py-2 px-4">Listed Shares > 3%</td><td class="py-2 px-4">0–33% or 15%</td><td class="py-2 px-4">Depends on holding period</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <h4 class="text-lg font-semibold text-blue-700 mb-2">General Considerations:</h4>
+                                <ul class="list-disc list-inside space-y-2 mb-4 text-justify">
+                                    <li>Assuming you are not a US citizen and have not spent 183 days or more in the US, you do not have to pay US capital gains tax.</li>
+                                    <li>As a tax resident, you are taxed on your worldwide income.</li>
+                                    <li>There is no comprehensive income tax treaty between the U.S. and Colombia.</li>
+                                    <li>Physically bringing money into Colombia does not incur additional tax beyond the capital gains tax.</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <details class="group">
+                            <summary class="flex items-center justify-between p-4 bg-gray-100/70 rounded-lg cursor-pointer hover:bg-gray-200/70 liquid-glass-input">
+                                <span class="font-semibold">🇮🇹 Italy Tax Rules:</span>
+                                <svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="details-content p-4 text-gray-600">
+                                <ul class="list-disc list-inside space-y-2">
+                                    <li>This calculator assumes a 26% Capital Gains Tax for Italy.</li>
+                                    <li>Assuming you are not a US citizen and have not spent 183 days or more in the US, you do not have to pay US capital gains tax.</li>
+                                    <li>As an Italian tax resident, you are taxed on your worldwide income.</li>
+                                    <li>Standard Capital Gains Tax (26%): Capital Gains from financial assets are generally subject to a flat 26% tax rate.</li>
+                                    <li>Special Tax Regimes for New Residents: If you qualify as a "new resident" (e.g., not an Italian tax resident for 9 out of the previous 10 years), you might opt for a special flat tax regime (€100,000 or €200,000 annually on foreign-sourced income, regardless of amount) for up to 15 years. This can significantly reduce your tax burden on large gains.</li>
+                                    <li>The U.S. and Italy have an income tax treaty which generally taxes capital gains in your country of residence.</li>
+                                    <li>Physically bringing money into Italy does not incur additional tax beyond the capital gains tax.</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <details class="group">
+                            <summary class="flex items-center justify-between p-4 bg-gray-100/70 rounded-lg cursor-pointer hover:bg-gray-200/70 liquid-glass-input">
+                                <span class="font-semibold">🇨🇱 Chile Tax Rules:</span>
+                                <svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="details-content p-4 text-gray-600">
+                                <h4 class="text-lg font-semibold text-blue-700 mb-2">Stock Option Taxation in Chile (as of 2024)</h4> <!-- Removed flag -->
+                                <p class="mb-4"><span class="font-bold">🔹 General Rule</span></p>
+                                <p class="mb-2">If your employer grants you stock options in Chile:</p>
+                                <ul class="list-disc list-inside space-y-1 mb-4 text-justify">
+                                    <li>When you exercise them (buy the shares), the difference between the market value and the exercise price is taxed as employment income and added to your global complementary income.</li>
+                                    <li>When you sell the shares, any additional gain is taxed as a capital gain, but only if the shares qualify.</li>
+                                </ul>
+                                <div class="bg-red-50 border-l-4 border-red-400 p-3 rounded-md text-sm text-red-700 mb-4">
+                                    <span class="font-bold">⚠️ If the shares don’t meet capital gain exemption criteria, the gain is taxed again as regular income.</span>
+                                </div>
+
+                                <h4 class="text-lg font-semibold text-blue-700 mb-2">General Considerations:</h4>
+                                <ul class="list-disc list-inside space-y-2 mb-4 text-justify">
+                                    <li>Assuming you are not a US citizen and have not spent 183 days or more in the US, you do not have to pay US capital gains tax.</li>
+                                    <li>As a tax resident, you are taxed on your worldwide income.</li>
+                                    <li>There is no comprehensive income tax treaty between the U.S. and Chile.</li>
+                                    <li>Chile's tax system generally allows for foreign tax credits to avoid double taxation.</li>
+                                    <li>Physically bringing money into Chile does not incur additional tax beyond the applicable capital gains tax.</li>
+                                </ul>
+
+                                <h4 class="text-lg font-semibold text-blue-700 mb-2">📉 Capital Gain Tax Rates</h4>
+                                <ul class="list-disc list-inside space-y-1 mb-4 text-justify">
+                                    <li><span class="font-bold">Flat 10%</span> applies if:
+                                        <ul class="list-circle list-inside space-y-0.5 pl-6">
+                                            <li>Shares were acquired through a publicly traded market</li>
+                                            <li>You meet specific reporting and holding conditions</li>
+                                        </ul>
+                                    </li>
+                                    <li>If not exempt, the gain is added to your income and taxed progressively:
+                                        <ul class="list-circle list-inside space-y-0.5 pl-6">
+                                            <li>From 4% up to 40%, depending on your total annual income</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <h4 class="text-lg font-semibold text-blue-700 mb-2">📊 Chilean Income Tax Brackets (2024)</h4>
+                                <div class="overflow-x-auto mb-4">
+                                    <table class="min-w-full bg-white rounded-lg shadow overflow-hidden text-sm">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="py-2 px-4 text-left font-semibold text-gray-700">Marginal Rate</th>
+                                                <th class="py-2 px-4 text-left font-semibold text-gray-700">Annual Income (UF)</th>
+                                                <th class="py-2 px-4 text-left font-semibold text-gray-700">Approx CLP</th>
+                                                <th class="py-2 px-4 text-left font-semibold text-gray-700">USD Approx</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td class="py-2 px-4 border-b border-gray-200">0%</td><td class="py-2 px-4 border-b border-gray-200">0 – 13.5 UF</td><td class="py-2 px-4 border-b border-gray-200">up to ~$500,000 CLP</td><td class="py-2 px-4 border-b border-gray-200">~$550</td></tr>
+                                            <tr><td class="py-2 px-4 border-b border-gray-200">4%</td><td class="py-2 px-4 border-b border-gray-200">13.5 – 30 UF</td><td class="py-2 px-4 border-b border-gray-200">~$500K – $1.1M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$550 – $1,200</td></tr>
+                                            <tr><td class="py-2 px-4 border-b border-gray-200">8%</td><td class="py-2 px-4 border-b border-gray-200">30 – 50 UF</td><td class="py-2 px-4 border-b border-gray-200">~$1.1M – $1.8M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$1,200 – $2,000</td></tr>
+                                            <tr><td class="py-2 px-4 border-b border-gray-200">13.5%</td><td class="py-2 px-4 border-b border-gray-200">50 – 70 UF</td><td class="py-2 px-4 border-b border-gray-200">~$1.8M – $2.6M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$2,000 – $2,900</td></tr>
+                                            <tr><td class="py-2 px-4 border-b border-gray-200">23%</td><td class="py-2 px-4 border-b border-gray-200">70 – 90 UF</td><td class="py-2 px-4 border-b border-gray-200">~$2.6M – $3.4M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$2,900 – $3,800</td></tr>
+                                            <tr><td class="py-2 px-4 border-b border-gray-200">30.4%</td><td class="py-2 px-4 border-b border-gray-200">90 – 120 UF</td><td class="py-2 px-4 border-b border-gray-200">~$3.4M – $4.6M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$3,800 – $5,100</td></tr>
+                                            <tr><td class="py-2 px-4 border-b border-gray-200">35%</td><td class="py-2 px-4 border-b border-gray-200">120 – 310 UF</td><td class="py-2 px-4 border-b border-gray-200">~$4.6M – $12M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$5,100 – $13,600</td></tr>
+                                            <tr><td class="py-2 px-4">40%</td><td class="py-2 px-4">310+ UF</td><td class="py-2 px-4">Over ~$12M CLP</td><td class="py-2 px-4">Over ~$13,600</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p class="text-sm font-bold text-blue-800 mb-4">💡 1 UF ≈ $36,000 CLP ≈ $41 USD (2024)</p>
+
+                                <h4 class="text-lg font-semibold text-blue-700 mb-2">📌 References & Legal Sources</h4>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>SII Oficio N° 1187 (2020): <a href="https://www.sii.cl/normativa_legislacion/oficios/2020/circu1187.pdf" target="_blank" class="text-blue-600 hover:underline">View here</a></li>
+                                    <li>General SII Stock Options Guide: <a href="https://www.sii.cl/stockoptions" target="_blank" class="text-blue-600 hover:underline">sii.cl/stockoptions</a></li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+                    <div class="mt-8 p-4 border-l-4 border-blue-500 bg-blue-50/70 rounded-2xl liquid-glass-card">
+                        <p class="text-sm text-blue-800 text-justify"><span class="font-bold">Disclaimer:</span> Tax laws are complex and subject to change. This information is for general guidance only and is not tax advice. Always consult with qualified tax professionals in both the U.S. and your country of residence for personalized advice.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Selling Rules Section -->
+            <section id="selling-rules" class="content-section">
+                <div class="liquid-glass-card p-8 rounded-2xl">
+                    <h2 class="text-3xl font-bold mb-2 text-blue-800">Understanding Your Liquidity Options</h2>
+                    <p class="text-gray-600 mb-8">Navigate the pathways to selling your shares, whether your company is private or has gone public.</p>
+                    <details class="group mb-8">
+                        <summary class="flex items-center justify-between p-4 rounded-lg cursor-pointer details-summary-header">
+                            <h2 class="text-3xl font-bold text-blue-800">🛩️ Private Companies</h2>
+                            <svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="details-content text-gray-600">
+                            <h3 class="text-2xl font-bold mb-2 text-blue-600">Selling Shares While Private</h3>
+                            <p class="text-gray-600 mb-8">Selling shares in a <span class="font-bold text-blue-700">private</span> company like this is a controlled process. You cannot sell them on an open market. Instead, you must follow the "<span class="font-bold text-blue-700">Right of First Refusal</span>" (ROFR) process outlined in your agreement.</p>
+                            
+                            <div class="space-y-8">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">1</div>
+                                    <div class="ml-6">
+                                        <h3 class="text-xl font-semibold">Propose the Sale</h3>
+                                        <p class="text-gray-600 mt-1">You find a potential buyer and agree on a price. You must then send a written "<span class="font-semibold text-blue-700">Notice</span>" to the company (often through platforms like <span class="font-semibold text-blue-700">Carta</span>) with all the details of the proposed sale.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">2</div>
+                                    <div class="ml-6">
+                                        <h3 class="text-xl font-semibold">Company's Decision (30 Days)</h3>
+                                        <p class="text-gray-600 mt-1 mb-4">The company reviews your proposal and has three options:</p>
+                                        <ul class="list-disc list-inside space-y-2 text-gray-600">
+                                            <li><span class="font-semibold text-blue-700">Exercise ROFR:</span> The company buys the shares from you at your proposed price.</li>
+                                            <li><span class="font-semibold text-blue-700">Decline & Approve:</span> The company passes on buying and approves your sale to the third party.</li>
+                                            <li><span class="font-semibold text-blue-700">Decline & Reject:</span> The company passes on buying but does <span class="font-bold">not</span> approve the transfer. The sale cannot proceed.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">3</div>
+                                    <div class="ml-6">
+                                        <h3 class="text-xl font-semibold">Finalize the Sale</h3>
+                                        <p class="text-gray-600 mt-1">If the company approves the transfer, you have 120 days to complete the sale to your buyer at the agreed-upon price (or a higher one).</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-12 p-4 border-l-4 border-blue-500 bg-blue-50/70 rounded-2xl liquid-glass-card">
+                                <p class="text-sm text-blue-800">Important: Remember that your stock options are simply the <span class="font-semibold text-blue-700">right to buy</span> shares. Once you exercise your options by paying the exercise price, they <span class="font-semibold text-blue-700">become actual shares</span> that you own. The rules above apply to the sale of these <span class="font-semibold text-blue-700">shares</span>.</p>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="group">
+                        <summary class="flex items-center justify-between p-4 rounded-lg cursor-pointer details-summary-header">
+                            <h2 class="text-3xl font-bold text-blue-800">💹 Public Companies</h2>
+                            <svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </summary>
+                        <div class="details-content text-gray-600">
+                            <h3 class="text-2xl font-bold mb-2 text-blue-600">Selling Shares After a Public Acquisition (IPO/Direct Listing)</h3>
+                            <p class="text-gray-600 mb-8">If your company goes <span class="font-bold text-blue-700">public</span> (e.g., via an Initial Public Offering or Direct Listing), the rules for selling your shares change significantly. You will no longer be subject to <span class="font-bold text-blue-700">private company restrictions</span> like the Right of First Refusal.</p>
+
+                            <div class="space-y-6">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">1</div>
+                                    <div class="ml-6">
+                                        <h3 class="text-xl font-semibold">Liquidity and Market Access</h3>
+                                        <p class="text-gray-600 mt-1">Once <span class="font-semibold text-blue-700">public</span>, your shares can be sold on a stock exchange (e.g., NASDAQ, NYSE) through a brokerage account. This provides significantly more liquidity compared to <span class="font-semibold text-blue-700">private</span> sales.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">2</div>
+                                    <div class="ml-6">
+                                        <h3 class="text-xl font-semibold">Lock-up Periods</h3>
+                                        <p class="text-gray-600 mt-1">Be aware of "<span class="font-semibold text-blue-700">lock-up</span>" periods, typically 90 to 180 days after the IPO. During this time, insiders (including employees with equity) are restricted from selling shares to prevent market flooding and price volatility. Your company will notify you of these dates.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">3</div>
+                                    <div class="ml-6">
+                                        <h3 class="text-xl font-semibold">Trading Windows & Blackout Periods</h3>
+                                        <p class="text-gray-600 mt-1">Even after lock-up, you can typically only sell during specific "<span class="font-semibold text-blue-700">trading windows</span>" and must avoid "<span class="font-semibold text-blue-700">blackout periods</span>" (e.g., before earnings announcements) to prevent insider trading. Your company's legal or HR department will provide guidelines.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-blue-600 text-white flex items-center justify-center rounded-full text-xl font-bold">4</div>
+                                    <div class="ml-6">
+                                        <h3 class="text-xl font-semibold">Brokerage Account Required</h3>
+                                        <p class="text-gray-600 mt-1">You will need a <span class="font-semibold text-blue-700">brokerage account</span> (often provided by the company's equity plan administrator) to hold and sell your <span class="font-semibold text-blue-700">public shares</span>.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-8 p-4 border-l-4 border-blue-500 bg-blue-50/70 rounded-2xl liquid-glass-card">
+                                <p class="text-sm text-blue-800">Selling shares in a <span class="font-semibold text-blue-700">public market</span> offers more flexibility but comes with its own set of regulations and timing considerations. Always stay informed about your company's policies and consult with a financial advisor.</p>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Acquisition Section -->
+            <section id="acquisition" class="content-section">
+                <div class="liquid-glass-card p-8 rounded-2xl">
+                    <h2 class="text-3xl font-bold mb-4 text-blue-800">In Case of Acquisition</h2>
+                    <p class="text-gray-600 mb-8">An acquisition, or "<span class="font-bold text-blue-700">Change of Control</span>," can significantly impact your equity. Your agreements include provisions for this event, most notably a "<span class="font-bold text-blue-700">Double Trigger</span>" acceleration clause.</p>
+
+                    <div class="space-y-8">
+                        <details class="group">
+                            <summary class="flex items-center justify-between p-4 rounded-lg cursor-pointer details-summary-header">
+                                <h3 class="text-2xl font-bold text-blue-600">Vesting Acceleration: The "Double Trigger"</h3>
+                                <svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="details-content p-4 text-gray-600">
+                                <p class="text-gray-600 mt-1">This is a key protection for you. It requires two events to happen for your unvested shares to accelerate:</p>
+                                <ul class="list-disc list-inside space-y-2">
+                                    <li><span class="font-semibold text-blue-700">1. First Trigger:</span> The company undergoes a <span class="font-semibold text-blue-700">Change of Control</span> (is acquired).</li>
+                                    <li><span class="font-semibold text-blue-700">2. Second Trigger:</span> Your service is terminated <span class="font-bold text-blue-700">without Cause</span> within a specific window (60 days before or 12 months after the acquisition).</li>
+                                </ul>
+                                <div class="mt-4 p-4 border-l-4 border-blue-500 bg-blue-50/70 rounded-2xl liquid-glass-card">
+                                    <p class="text-sm text-blue-800">If both triggers occur, <span class="font-bold text-blue-700">100% of your unvested shares immediately become vested</span>, allowing you to benefit from them in the acquisition.</p>
+                                </div>
+                            </div>
+                        </details>
+                        
+                        <details class="group mt-12">
+                            <summary class="flex items-center justify-between p-4 rounded-lg cursor-pointer details-summary-header">
+                                <h3 class="text-2xl font-bold text-blue-600">Treatment of Shares</h3>
+                                <svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="details-content p-4 text-gray-600">
+                                <p class="text-gray-600 mt-1">In an acquisition, the company's board has broad discretion. Your shares/options could be:</p>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600 pl-4">
+                                    <li><span class="font-semibold text-blue-700">Continued or assumed</span> by the acquiring company.</li>
+                                    <li><span class="font-semibold text-blue-700">Substituted</span> for new equity in the acquirer.</li>
+                                    <li><span class="font-semibold text-blue-700">Cashed out:</span> Cancelled in exchange for a payment equal to the sale price minus your exercise price.</li>
+                                    <li><span class="font-semibold text-blue-700">Cancelled for no consideration</span> if the sale price is below your exercise price.</li>
+                                </ul>
+                            </div>
+                        </details>
+
+                        <details class="group mt-12">
+                            <summary class="flex items-center justify-between p-4 rounded-lg cursor-pointer details-summary-header">
+                                <h3 class="text-2xl font-bold text-blue-600">Defining "Change of Control"</h3>
+                                <svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </summary>
+                            <div class="details-content p-4 text-gray-600">
+                                <p class="text-gray-600 mb-4">Your agreements specify what constitutes a "<span class="font-bold text-blue-700">Change of Control</span>" event for the company. This typically includes, but is not limited to, the following scenarios:</p>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600 pl-4">
+                                    <li>A sale of all or substantially all of the Company's assets (unless to an "<span class="font-semibold text-blue-700">Excluded Entity</span>" as defined in the plan).</li>
+                                    <li>A merger, consolidation, or other capital reorganization where the Company combines with another entity (unless to an "<span class="font-semibold text-blue-700">Excluded Entity</span>").</li>
+                                    <li>A transaction where any "person" (or group of persons acting together) gains beneficial ownership of all of the Company's outstanding voting securities.</li>
+                                    <li>Certain transactions are explicitly not considered a Change of Control, such as:
+                                        <ul class="list-circle list-inside space-y-1 text-gray-600 pl-6">
+                                            <li>Changing the Company's jurisdiction of incorporation.</li>
+                                            <li>Creating a holding company where the proportional ownership remains the same.</li>
+                                            <li>Obtaining Board-approved funding.</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <div class="mt-8 p-4 border-l-4 border-blue-500 bg-blue-50/70 rounded-2xl liquid-glass-card">
+                                    <p class="text-sm text-blue-800">Understanding these definitions is crucial as a <span class="font-bold text-blue-700">Change of Control</span> is the first trigger for potential vesting acceleration and dictates how your equity will be handled.</p>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Ensure ChartDataLabels is registered
+        Chart.register(ChartDataLabels);
+
+        // --- View Toggling ---
+        function showCalculator() {
+            document.getElementById('landing-page').style.display = 'none';
+            document.getElementById('calculator-view').style.display = 'block';
+        }
+
+        function showLandingPage() {
+            document.getElementById('calculator-view').style.display = 'none';
+            document.getElementById('landing-page').style.display = 'flex'; // Use flex for centering
+            resetCalculatorInputs();
+            hideResults();
+        }
+
+        function resetCalculatorInputs() {
+            document.getElementById('total-shares').value = '';
+            document.getElementById('total-shares').dataset.rawValue = ''; // Clear rawValue
+            document.getElementById('exercise-price').value = '';
+            document.getElementById('exercise-price').dataset.rawValue = ''; // Clear rawValue
+            document.getElementById('sale-price').value = '';
+            document.getElementById('sale-price').dataset.rawValue = ''; // Clear rawValue
+
+            document.querySelectorAll('input[name="country"]').forEach(radio => radio.checked = false);
+            toggleChileTaxRate(false); // Hide Chile tax rate selector
+            // Uncheck all custom checkboxes on reset
+            document.querySelectorAll('#checklist input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            document.getElementById('selected-chile-tax-label').textContent = 'Select an income range'; // Reset dropdown label to English
+            document.getElementById('chile-tax-rate-dropdown').classList.remove('selected'); // Remove selected class
+            hideAllErrors(); // Hide all errors initially
+        }
+
+        function hideResults() {
+            document.getElementById('results-container').style.display = 'none';
+            if (waterfallChart) {
+                waterfallChart.destroy(); // Destroy chart instance to free up memory
+                waterfallChart = null;
+            }
+        }
+
+
+        // --- Navigation ---
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`.nav-link[onclick="showSection('${sectionId}')"]`).classList.add('active');
+        }
+
+        // --- Input Formatting and Storage ---
+        function formatAndStoreNumber(inputElement) {
+            let rawValue = inputElement.value.replace(/[^0-9.]/g, ''); // Keep only numbers and one dot
+            
+            // Handle multiple decimal points (e.g., 1.2.3 -> 1.23)
+            const parts = rawValue.split('.');
+            if (parts.length > 2) {
+                rawValue = parts[0] + '.' + parts.slice(1).join('');
+            }
+
+            // Store the true numeric value for calculations
+            // If rawValue is empty, parseFloat will be NaN. This is correct for validation.
+            inputElement.dataset.rawValue = parseFloat(rawValue);
+
+            // Format for display
+            if (rawValue === '') {
+                inputElement.value = ''; // Ensure empty string for empty input
+            } else if (rawValue.endsWith('.')) {
+                inputElement.value = new Intl.NumberFormat('en-US').format(parseFloat(rawValue)) + '.';
+            } else if (rawValue.includes('.') && rawValue.match(/\.0*$/)) {
+                const [integerPart, decimalPart] = rawValue.split('.');
+                inputElement.value = new Intl.NumberFormat('en-US').format(parseFloat(integerPart)) + '.' + decimalPart;
+            } else if (!isNaN(parseFloat(rawValue))) {
+                inputElement.value = new Intl.NumberFormat('en-US').format(parseFloat(rawValue));
+            } else {
+                // This else block should ideally not be hit if regex is effective, but as a fallback
+                inputElement.value = '';
+            }
+        }
+
+
+        // --- Calculator Logic ---
+        const calculateBtn = document.getElementById('calculate-btn');
+        const resultsContainer = document.getElementById('results-container');
+        const totalSharesInput = document.getElementById('total-shares');
+        const exercisePriceInput = document.getElementById('exercise-price');
+        const salePriceInput = document.getElementById('sale-price');
+        const countryRadios = document.querySelectorAll('input[name="country"]');
+        const chileTaxRateDropdown = document.getElementById('chile-tax-rate-dropdown'); // The new details element
+        let waterfallChart = null;
+
+        // Error message elements
+        const chileTaxRateError = document.getElementById('chile-tax-rate-error');
+        const totalSharesError = document.getElementById('total-shares-error');
+        const exercisePriceError = document.getElementById('exercise-price-error');
+        const salePriceError = document.getElementById('sale-price-error');
+
+        // Function to show/hide individual error messages
+        function showHideError(element, isValid, message) {
+            if (isValid) {
+                element.classList.add('hidden');
+            } else {
+                element.textContent = message;
+                element.classList.remove('hidden');
+            }
+        }
+
+        // Function to hide all error messages
+        function hideAllErrors() {
+            chileTaxRateError.classList.add('hidden');
+            totalSharesError.classList.add('hidden');
+            exercisePriceError.classList.add('hidden');
+            salePriceError.classList.add('hidden');
+        }
+
+        // Function to validate all inputs and return overall validity
+        function validateInputs() {
+            let allInputsValid = true;
+
+            // Validate Country Selection
+            const countrySelected = Array.from(countryRadios).some(radio => radio.checked);
+            if (!countrySelected) {
+                // No specific error message for country selection, but it makes overall invalid
+                allInputsValid = false;
+            }
+
+            // Validate Total Shares
+            const totalSharesValue = parseFloat(totalSharesInput.dataset.rawValue);
+            const totalSharesValid = !isNaN(totalSharesValue) && totalSharesValue >= 0;
+            showHideError(totalSharesError, totalSharesValid, 'Please enter total shares.');
+            if (!totalSharesValid) {
+                allInputsValid = false;
+            }
+
+            // Validate Exercise Price
+            const exercisePriceValue = parseFloat(exercisePriceInput.dataset.rawValue);
+            const exercisePriceValid = !isNaN(exercisePriceValue) && exercisePriceValue >= 0;
+            showHideError(exercisePriceError, exercisePriceValid, 'Please enter an exercise price.');
+            if (!exercisePriceValid) {
+                allInputsValid = false;
+            }
+
+            // Validate Sale Price
+            const salePriceValue = parseFloat(salePriceInput.dataset.rawValue);
+            const salePriceValid = !isNaN(salePriceValue) && salePriceValue >= 0;
+            showHideError(salePriceError, salePriceValid, 'Please enter a sale price.');
+            if (!salePriceValid) {
+                allInputsValid = false;
+            }
+
+            // Validate Chile Tax Rate if Chile is selected
+            const isChileSelected = document.getElementById('country-chile').checked;
+            if (isChileSelected) {
+                const checkedChileTax = document.querySelector('#checklist input[name="chile-tax-radio"]:checked');
+                if (!checkedChileTax) {
+                    showHideError(chileTaxRateError, false, 'Please select a tax rate for Chile.');
+                    allInputsValid = false; 
+                } else {
+                    showHideError(chileTaxRateError, true, '');
+                }
+            } else {
+                chileTaxRateError.classList.add('hidden'); // Hide if Chile is not selected
+            }
+            
+            // Re-check overall validity explicitly to ensure no previous valid state overwrites it if any new invalid state occurs
+            if (!countrySelected || !totalSharesValid || !exercisePriceValid || !salePriceValid || (isChileSelected && !document.querySelector('#checklist input[name="chile-tax-radio"]:checked'))) {
+                allInputsValid = false;
+            }
+
+            return allInputsValid;
+        }
+
+        // --- Chile Tax Rate Selector Logic ---
+        function toggleChileTaxRate(show) {
+            const chileSelectorDiv = document.getElementById('chile-tax-rate-selector');
+            if (show) {
+                chileSelectorDiv.style.display = 'block';
+            } else {
+                chileSelectorDiv.style.display = 'none';
+                // Uncheck all custom checkboxes when hidden
+                document.querySelectorAll('#checklist input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                document.getElementById('selected-chile-tax-label').textContent = 'Select an income range'; // Reset dropdown label to English
+                chileTaxRateDropdown.removeAttribute('open'); // Close the dropdown
+                chileTaxRateDropdown.classList.remove('selected'); // Remove selected class
+                // Reset the summary background and text to default empty state
+                chileTaxRateDropdown.querySelector('summary').style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+                chileTaxRateDropdown.querySelector('summary').style.color = '#1F2937';
+                chileTaxRateDropdown.querySelector('summary').style.borderColor = 'rgba(209, 213, 219, 0.5)';
+                showHideError(chileTaxRateError, true, ''); // Also hide the error when Chile is unselected
+            }
+        }
+
+        // Function to handle single selection for custom checkboxes
+        function handleChileTaxSelection(event) {
+            const clickedCheckbox = event.target;
+            if (clickedCheckbox.type === 'checkbox' && clickedCheckbox.name === 'chile-tax-radio') {
+                // Uncheck all other checkboxes in the same group
+                document.querySelectorAll(`#checklist input[name="chile-tax-radio"]`).forEach(checkbox => {
+                    if (checkbox !== clickedCheckbox) {
+                        checkbox.checked = false;
+                    }
+                });
+                // Update the dropdown label and close the dropdown
+                document.getElementById('selected-chile-tax-label').textContent = clickedCheckbox.nextElementSibling.textContent;
+                chileTaxRateDropdown.classList.add('selected'); // Add selected class to dropdown
+                chileTaxRateDropdown.removeAttribute('open');
+                // Set the summary background to white and text to black
+                chileTaxRateDropdown.querySelector('summary').style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                chileTaxRateDropdown.querySelector('summary').style.color = '#1F2937';
+                chileTaxRateDropdown.querySelector('summary').style.borderColor = 'rgba(209, 213, 219, 0.6)';
+                showHideError(chileTaxRateError, true, ''); // Hide error once a selection is made
+            }
+        }
+
+        // --- Toast Functions ---
+        function showToast(toastId) {
+            document.getElementById(toastId).style.opacity = '1';
+            document.getElementById(toastId).style.visibility = 'visible';
+        }
+
+        function hideToast(toastId) {
+            document.getElementById(toastId).style.opacity = '0';
+            document.getElementById(toastId).style.visibility = 'hidden';
+        }
+
+        // Initialize button state and attach event listeners on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Attach input formatting and validation listeners
+            totalSharesInput.addEventListener('input', () => formatAndStoreNumber(totalSharesInput));
+            exercisePriceInput.addEventListener('input', () => formatAndStoreNumber(exercisePriceInput));
+            salePriceInput.addEventListener('input', () => formatAndStoreNumber(salePriceInput));
+
+            // Add focus event listeners to hide errors on input fields
+            totalSharesInput.addEventListener('focus', () => showHideError(totalSharesError, true, ''));
+            exercisePriceInput.addEventListener('focus', () => showHideError(exercisePriceError, true, ''));
+            salePriceInput.addEventListener('focus', () => showHideError(salePriceError, true, ''));
+
+
+            // Attach country radio button listeners
+            document.getElementById('country-colombia').addEventListener('change', () => toggleChileTaxRate(false));
+            document.getElementById('country-italy').addEventListener('change', () => toggleChileTaxRate(false));
+            document.getElementById('country-chile').addEventListener('change', () => toggleChileTaxRate(true));
+
+            // Attach listener for the custom checklist for single selection
+            document.getElementById('checklist').addEventListener('change', handleChileTaxSelection);
+
+            // Add a listener to the details element to check for validation when it closes
+            chileTaxRateDropdown.addEventListener('toggle', () => {
+                if (!chileTaxRateDropdown.open) { // If the dropdown is closing
+                    const isChileSelected = document.getElementById('country-chile').checked;
+                    if (isChileSelected) {
+                        const checkedChileTax = document.querySelector('#checklist input[name="chile-tax-radio"]:checked');
+                        showHideError(chileTaxRateError, !!checkedChileTax, 'Please select a tax rate for Chile.');
+                    }
+                }
+            });
+
+            // Initial state setup
+            toggleChileTaxRate(false); // Ensure Chile tax rate selector is hidden initially
+            hideAllErrors(); // Hide all errors initially
+        });
+        
+        // Event listener for Enter key press
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                calculateBtn.click(); // Trigger click regardless of validity, validation will happen in click handler
+            }
+        });
+
+
+        calculateBtn.addEventListener('click', () => {
+            hideResults(); // Hide previous results when trying to calculate again
+            hideAllErrors(); // Clear previous errors before re-validating
+
+            const isValid = validateInputs(); // Validate all inputs
+            console.log('Validation result:', isValid); // For debugging: log validation result
+
+            if (!isValid) {
+                // If not valid, errors are already shown by validateInputs()
+                return; // Stop execution
+            }
+
+            // Get input values from dataset.rawValue
+            const totalShares = parseFloat(totalSharesInput.dataset.rawValue) || 0;
+            const exercisePrice = parseFloat(exercisePriceInput.dataset.rawValue) || 0;
+            const salePrice = parseFloat(salePriceInput.dataset.rawValue) || 0;
+            
+            const selectedCountryRadio = document.querySelector('input[name="country"]:checked');
+            // This check should ideally not be needed here if validateInputs() is robust, but for safety:
+            if (!selectedCountryRadio) {
+                console.error('Country not selected unexpectedly in calculation logic.');
+                return;
+            }
+            const selectedCountry = selectedCountryRadio.value;
+
+            let taxRate = 0;
+            
+            if (selectedCountry === 'colombia') {
+                taxRate = 0.15;
+            } else if (selectedCountry === 'italy') {
+                taxRate = 0.26;
+            } else if (selectedCountry === 'chile') {
+                const checkedChileTax = document.querySelector('#checklist input[name="chile-tax-radio"]:checked');
+                if (!checkedChileTax) {
+                    console.error('Chile tax rate not selected in calculation block, despite validation passing. This indicates a logic error.');
+                    showHideError(chileTaxRateError, false, 'Please select a tax rate for Chile.'); // Ensure UI error is shown as fallback
+                    return; 
+                }
+                taxRate = parseFloat(checkedChileTax.value);
+            }
+
+            // Perform calculations
+            const exerciseCost = totalShares * exercisePrice;
+            const saleValue = totalShares * salePrice;
+            const grossProfit = saleValue - exerciseCost;
+            const taxAmount = grossProfit > 0 ? grossProfit * taxRate : 0;
+            const netProfit = grossProfit - taxAmount;
+
+            // Format currency for results display
+            const currencyFormatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            });
+
+            // Display results
+            // totalShares should be formatted as a number, not currency
+            document.getElementById('res-total-shares').textContent = totalShares.toLocaleString('en-US');
+            document.getElementById('res-exercise-cost').textContent = currencyFormatter.format(exerciseCost);
+            document.getElementById('res-sale-value').textContent = currencyFormatter.format(saleValue);
+            
+            // Set Gross Profit text and color
+            const grossProfitElement = document.getElementById('res-gross-profit');
+            grossProfitElement.textContent = currencyFormatter.format(grossProfit);
+            if (grossProfit < 0) {
+                grossProfitElement.classList.remove('text-emerald-600');
+                grossProfitElement.classList.add('text-rose-600');
+            } else if (grossProfit > 0) { // Only apply green if positive
+                grossProfitElement.classList.remove('text-rose-600');
+                grossProfitElement.classList.add('text-emerald-600');
+            } else { // If exactly zero, remove both color classes
+                grossProfitElement.classList.remove('text-rose-600', 'text-emerald-600');
+            }
+
+            // Set Tax Amount text and color
+            const taxAmountElement = document.getElementById('res-tax-amount');
+            taxAmountElement.textContent = currencyFormatter.format(taxAmount);
+            if (taxAmount > 0) {
+                taxAmountElement.classList.remove('text-gray-800'); // Assuming default is gray-800
+                taxAmountElement.classList.add('text-rose-600');
+            } else { // If zero, remove red and keep default color
+                taxAmountElement.classList.remove('text-rose-600');
+                // No need to add a specific class for black/gray, it will default to body text color
+            }
+
+
+            document.getElementById('res-tax-rate').textContent = (taxRate * 100).toFixed(0);
+            
+            // Set Net Profit text color based on value
+            const netProfitElement = document.getElementById('res-net-profit');
+            netProfitElement.textContent = currencyFormatter.format(netProfit);
+            if (netProfit > 0) {
+                netProfitElement.classList.remove('text-rose-600');
+                netProfitElement.classList.add('text-emerald-700');
+            } else if (netProfit < 0) {
+                netProfitElement.classList.remove('text-emerald-700');
+                netProfitElement.classList.add('text-rose-600');
+            } else {
+                netProfitElement.classList.remove('text-emerald-700', 'text-rose-600');
+            }
+
+
+            resultsContainer.style.display = 'block';
+            
+            // Update or create chart
+            updateChart(saleValue, exerciseCost, taxAmount, netProfit);
+
+            // Smooth scroll to results
+            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        function updateChart(saleValue, exerciseCost, taxAmount, netProfit) {
+            const ctx = document.getElementById('waterfallChart').getContext('2d');
+            
+            // Define colors that match the Liquid Glass style
+            const colors = {
+                positive: 'rgba(76, 175, 80, 0.7)',  // A soft green (e.g., Material Green 500 with transparency)
+                negative: 'rgba(244, 67, 54, 0.7)',  // A soft red (e.g., Material Red 500 with transparency)
+                tax: 'rgba(255, 165, 0, 0.7)', // Orange for tax amount
+                // Dynamically set netProfit color based on its value
+                netProfitColor: netProfit >= 0 ? 'rgba(76, 175, 80, 0.8)' : 'rgba(244, 67, 54, 0.8)',
+                startValue: 'rgba(33, 150, 243, 0.7)'// A soft blue (e.g., Material Blue 500 with transparency)
+            };
+
+            const dataPoints = [
+                { y: saleValue, label: 'Sale Value', color: colors.startValue, type: 'start' },
+                { y: -exerciseCost, label: 'Exercise Cost', color: colors.negative, type: 'intermediate' },
+                { y: -taxAmount, label: 'Tax Amount', color: colors.tax, type: 'intermediate' }, // Use new tax color
+                { y: netProfit, label: 'Net Profit', color: colors.netProfitColor, type: 'total' } // Use dynamic color
+            ];
+
+            // Prepare data for Chart.js waterfall
+            // The trick for Chart.js waterfall is to have two datasets: one for hidden bars (base) and one for actual bars
+            // This is a common pattern for Chart.js waterfalls as it doesn't have a native 'waterfall' type
+            const baseData = []; // This will hold the invisible base for stacking
+            const actualData = []; // This will hold the the visible segments
+            const backgroundColors = [];
+            let cumulative = 0;
+
+            dataPoints.forEach((point, index) => {
+                if (point.type === 'start') {
+                    baseData.push(0);
+                    actualData.push(point.y);
+                    backgroundColors.push(point.color);
+                    cumulative = point.y;
+                } else if (point.type === 'intermediate') {
+                    baseData.push(cumulative + point.y); // Base is where the segment starts
+                    actualData.push(-point.y); // Actual value for the segment (absolute for bar height)
+                    backgroundColors.push(point.color);
+                    cumulative += point.y;
+                } else if (point.type === 'total') {
+                    baseData.push(0); // Total bar starts from zero
+                    actualData.push(point.y);
+                    backgroundColors.push(point.color);
+                }
+            });
+
+            if (waterfallChart) {
+                waterfallChart.destroy();
+            }
+
+            waterfallChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                     labels: dataPoints.map(p => p.label),
+                     datasets: [
+                        {
+                            label: 'Base', // Invisible base for stacking
+                            data: baseData,
+                            backgroundColor: 'rgba(0, 0, 0, 0)', // Fully transparent
+                            borderWidth: 0,
+                            stack: 'waterfall',
+                        },
+                        {
+                            label: 'Amount',
+                            data: actualData,
+                            backgroundColor: backgroundColors,
+                            borderRadius: 4, // Slightly rounded bars for a softer look
+                            borderWidth: 0,
+                            stack: 'waterfall',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    // For 'Base' dataset, don't show tooltip
+                                    if (context.datasetIndex === 0) return null;
+                                    
+                                    const value = dataPoints[context.dataIndex].y;
+                                    return context.label + ': ' + new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+                                }
+                            }
+                        },
+                        datalabels: { // Datalabels plugin configuration
+                            anchor: 'center', // Position labels in the center of the bar
+                            align: 'center', // Align labels to the center
+                            formatter: function(value, context) {
+                                // Only show labels for the actual data bars (datasetIndex 1)
+                                if (context.datasetIndex === 1) {
+                                    const rawValue = dataPoints[context.dataIndex].y;
+                                    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(rawValue);
+                                }
+                                return '';
+                            },
+                            color: function(context) {
+                                // Set color of the label to white for better contrast on colored bars
+                                return 'white';
+                            },
+                            font: {
+                                weight: 'bold',
+                                size: 12
+                            },
+                            display: true // Always display labels
+                        },
+                        // Custom plugin to draw connecting lines
+                        afterDatasetsDraw: (chart) => {
+                            const ctx = chart.ctx;
+                            const meta0 = chart.getDatasetMeta(0); // Base dataset
+                            const meta1 = chart.getDatasetMeta(1); // Actual data dataset
+
+                            meta1.data.forEach((bar, index) => {
+                                if (index < meta1.data.length - 1) { // Don't draw line from the last bar
+                                    const currentBarEnd = bar.y; // Y position of the top/bottom of the current visible bar
+                                    const nextBarStart = meta0.data[index + 1].y; // Y position of the base of the next bar
+
+                                    // Get X positions of the center of current and next bar
+                                    const currentX = bar.x;
+                                    const nextX = meta1.data[index + 1].x;
+                                    
+                                    ctx.save();
+                                    ctx.beginPath();
+                                    ctx.moveTo(currentX, currentBarEnd);
+                                    ctx.lineTo(nextX, nextBarStart);
+                                    ctx.strokeStyle = 'rgba(156, 163, 175, 0.5)'; // Soft gray line, slightly transparent
+                                    ctx.lineWidth = 2; // Thicker line
+                                    ctx.setLineDash([4, 4]); // Softer dashed line
+                                    ctx.stroke();
+                                    ctx.restore();
+                                }
+                            });
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: 'rgba(75, 85, 99, 0.8)' // Soft gray for labels
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    return '$' + (value / 1000).toLocaleString() + 'K';
+                                },
+                                color: 'rgba(75, 85, 99, 0.8)' // Soft gray for labels
+                            },
+                            grid: {
+                                color: 'rgba(209, 213, 219, 0.3)', // Lighter, more transparent grid lines
+                                borderDash: [2, 2]
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
