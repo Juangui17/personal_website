@@ -576,6 +576,17 @@
             #checklist label .percentage-mobile-hide {
                 display: none;
             }
+
+            /* Adjust tab bar for mobile */
+            .tab-bar {
+                padding: 0.25rem; /* Smaller padding */
+                gap: 0.25rem; /* Smaller gap */
+            }
+
+            .tab-bar .nav-link {
+                padding: 0.5rem 1rem; /* Smaller padding for tabs */
+                font-size: 0.875rem; /* text-sm */
+            }
         }
     </style>
     <script>
@@ -736,7 +747,10 @@
         <nav class="flex justify-center mb-8">
             <div class="tab-bar">
                 <button class="nav-link active" onclick="showSection('calculator')">Calculator</button>
-                <button class="nav-link" onclick="showSection('selling-rules')">Selling Rules</button>
+                <button class="nav-link" onclick="showSection('selling-rules')">
+                    <span class="md:inline">Selling Rules</span>
+                    <span class="md:hidden">Selling</span>
+                </button>
                 <button class="nav-link" onclick="showSection('acquisition')">Acquisition</button>
             </div>
         </nav>
