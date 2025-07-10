@@ -520,35 +520,31 @@
 
         .toast-message {
             position: absolute;
-            top: -10px; /* Position above the icon */
-            left: 50%;
-            transform: translateX(-50%) translateY(-100%); /* Center and move up */
+            /* Adjusted for upper-left opening */
+            bottom: calc(100% + 10px); /* Position above the icon, with some spacing */
+            right: 0; /* Align to the right of the parent */
+            left: auto; /* Reset left */
+            transform: translateX(0%); /* No horizontal translation */
             background-color: rgba(107, 114, 128, 0.9); /* Grey-500 with transparency */
             color: white;
             padding: 0.75rem 1rem;
             border-radius: 0.5rem;
             font-size: 0.875rem;
-            white-space: nowrap;
+            white-space: normal; /* Allow text to wrap */
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
             z-index: 10;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            /* Adjusted width for single line or right alignment */
             width: auto; /* Allow width to adjust to content */
-            max-width: 250px; /* Set a max-width to prevent it from being too wide */
-            white-space: nowrap; /* Keep text on one line if possible */
-            text-align: center;
-            /* New positioning for upper-left opening */
-            right: 0; /* Align to the right of the parent */
-            left: auto; /* Reset left */
-            transform: translateX(0%) translateY(-100%); /* Move up */
+            max-width: 200px; /* Set a max-width to prevent it from being too wide */
+            text-align: left; /* Align text to left inside toast */
         }
 
         .toast-message::after {
             content: '';
             position: absolute;
-            bottom: -8px; /* Position below the toast */
+            top: 100%; /* Position below the toast */
             right: 10px; /* Align arrow to the right side of the toast */
             left: auto; /* Reset left */
             transform: translateX(0%) rotate(45deg);
@@ -574,6 +570,11 @@
             header .flex-1.flex-col {
                 flex-grow: 1; /* Allow the middle section to take full width */
                 text-align: center; /* Center the text */
+            }
+
+            /* Hide percentages on mobile for Chile tax rate dropdown */
+            #checklist label .percentage-mobile-hide {
+                display: none;
             }
         }
     </style>
@@ -646,7 +647,7 @@
         }
     </script>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-blue-200 text-gray-800">
+<body class="text-gray-800">
 
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KSK2PSN9"
@@ -775,21 +776,21 @@
                                 </summary>
                                 <div id="checklist">
                                     <input value="0.04" name="chile-tax-radio" type="checkbox" id="chile-tax-01">
-                                    <label for="chile-tax-01">Less than $500.000 CLP</label>
+                                    <label for="chile-tax-01">Less than $500.000 CLP <span class="percentage-mobile-hide">(<strong>0-4%</strong>)</span></label>
                                     <input value="0.135" name="chile-tax-radio" type="checkbox" id="chile-tax-02">
-                                    <label for="chile-tax-02">$500.000 - $1.000.000 CLP</label>
+                                    <label for="chile-tax-02">$500.000 - $1.000.000 CLP <span class="percentage-mobile-hide">(<strong>4-13.5%</strong>)</span></label>
                                     <input value="0.23" name="chile-tax-radio" type="checkbox" id="chile-tax-03">
-                                    <label for="chile-tax-03">$1.000.000 - $2.000.000 CLP</label>
+                                    <label for="chile-tax-03">$1.000.000 - $2.000.000 CLP <span class="percentage-mobile-hide">(<strong>13.5-23%</strong>)</span></label>
                                     <input value="0.304" name="chile-tax-radio" type="checkbox" id="chile-tax-04">
-                                    <label for="chile-tax-04">$2.000.000 - $3.000.000 CLP</label>
+                                    <label for="chile-tax-04">$2.000.000 - $3.000.000 CLP <span class="percentage-mobile-hide">(<strong>23-30.4%</strong>)</span></label>
                                     <input value="0.35" name="chile-tax-radio" type="checkbox" id="chile-tax-05">
-                                    <label for="chile-tax-05">$3.000.000 - $4.500.000 CLP</label>
+                                    <label for="chile-tax-05">$3.000.000 - $4.500.000 CLP <span class="percentage-mobile-hide">(<strong>30.4-35%</strong>)</span></label>
                                     <input value="0.35" name="chile-tax-radio" type="checkbox" id="chile-tax-06">
-                                    <label for="chile-tax-06">$4.500.000 - $6.000.000 CLP</label>
+                                    <label for="chile-tax-06">$4.500.000 - $6.000.000 CLP <span class="percentage-mobile-hide">(<strong>35%</strong>)</span></label>
                                     <input value="0.40" name="chile-tax-radio" type="checkbox" id="chile-tax-07">
-                                    <label for="chile-tax-07">$6.000.000 - $8.500.000 CLP</label>
+                                    <label for="chile-tax-07">$6.000.000 - $8.500.000 CLP <span class="percentage-mobile-hide">(<strong>35-40%</strong>)</span></label>
                                     <input value="0.40" name="chile-tax-radio" type="checkbox" id="chile-tax-08">
-                                    <label for="chile-tax-08">More than $8.500.000 CLP</label>
+                                    <label for="chile-tax-08">More than $8.500.000 CLP <span class="percentage-mobile-hide">(<strong>40%</strong>)</span></label>
                                 </div>
                             </details>
                             <div id="chile-tax-rate-error" class="error-message hidden">Please select a tax rate for Chile.</div>
