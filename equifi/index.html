@@ -639,10 +639,6 @@
             .fmv-label-short {
                 display: none;
             }
-            /* Align calculate button to the right on desktop */
-            .calculate-button-wrapper {
-                justify-content: flex-end;
-            }
             /* Adjust tab bar link size for web */
             .tab-bar .nav-link {
                 padding: 0.6rem 1.5rem; /* Adjusted padding for smaller tabs on web */
@@ -1091,7 +1087,7 @@
                                             <tr><td class="py-2 px-4 border-b border-gray-200">4%</td><td class="py-2 px-4 border-b border-gray-200">13.5 – 30 UF</td><td class="py-2 px-4 border-b border-gray-200">~$500K – $1.1M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$550 – $1,200</td></tr>
                                             <tr><td class="py-2 px-4 border-b border-gray-200">8%</td><td class="py-2 px-4 border-b border-gray-200">30 – 50 UF</td><td class="py-2 px-4 border-b border-gray-200">~$1.1M – $1.8M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$1,200 – $2,000</td></tr>
                                             <tr><td class="py-2 px-4 border-b border-gray-200">13.5%</td><td class="py-2 px-4 border-b border-gray-200">50 – 70 UF</td><td class="py-2 px-4 border-b border-gray-200">~$1.8M – $2.6M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$2,000 – $2,900</td></tr>
-                                            <tr><td class="py-2 px-4 border-b border-gray-200">23%</td><td class="py-2 px-4 border-b border-gray-200">70 – 90 UF</td><td class="py-2 px-4 border-b border-gray-200">~$2.6M – $3.4M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$2,900 – $3,800</td></tr>
+                                            <tr><td class="py-2 px-4 border-b border-gray-200">23%</td><td class="py-2 px-4 border-b border-gray-200">70 – 90 UF</td><td class="py-2 px-4 border-b border-gray-200">~$2.6M – $3.4M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$3,800 – $3,800</td></tr>
                                             <tr><td class="py-2 px-4 border-b border-gray-200">30.4%</td><td class="py-2 px-4 border-b border-gray-200">90 – 120 UF</td><td class="py-2 px-4 border-b border-gray-200">~$3.4M – $4.6M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$3,800 – $5,100</td></tr>
                                             <tr><td class="py-2 px-4 border-b border-gray-200">35%</td><td class="py-2 px-4 border-b border-gray-200">120 – 310 UF</td><td class="py-2 px-4 border-b border-gray-200">~$4.6M – $12M CLP</td><td class="py-2 px-4 border-b border-gray-200">~$5,100 – $13,600</td></tr>
                                             <tr><td class="py-2 px-4">40%</td><td class="py-2 px-4">310+ UF</td><td class="py-2 px-4">Over ~$12M CLP</td><td class="py-2 px-4">Over ~$13,600</td></tr>
@@ -1492,7 +1488,7 @@
             const clickedCheckbox = event.target;
             if (clickedCheckbox.type === 'checkbox' && clickedCheckbox.name === 'chile-tax-radio') {
                 const allCheckboxes = document.querySelectorAll(`#checklist input[name="chile-tax-radio"]`);
-                const wasPreviouslyChecked = clickedCheckbox.checked; // This is the state AFTER the click, so if it's false, it means it was just unchecked.
+                const wasPreviouslyChecked = clickedCheckbox.checked;
 
                 // If the clicked checkbox is now unchecked, and it was the previously selected one,
                 // we want to prevent it from becoming unchecked. Force it back to checked.
@@ -1508,26 +1504,49 @@
                         }
                     });
 
-                    let originalLabelText = clickedCheckbox.nextElementSibling.textContent;
-                    let displayLabelText = originalLabelText;
+                    // Get the label element associated with the clicked checkbox
+                    const labelElement = clickedCheckbox.nextElementSibling;
+                    
+                    // Get the main text content of the label (excluding the percentage span)
+                    // This can be done by cloning the label, removing the span, then getting textContent
+                    const tempLabel = labelElement.cloneNode(true);
+                    const percentageSpan = tempLabel.querySelector('.percentage-mobile-hide');
+                    let mainLabelText = tempLabel.textContent; // Get full text first
+                    let percentageText = '';
 
-                    // Regex to find percentages with decimals (e.g., "13.5%" or "30.4%")
-                    // It handles both single percentages (e.g., "35%") and ranges (e.g., "4-13.5%")
-                    const percentageRegex = /(\d+(\.\d+)?)%-(\d+(\.\d+)?)%|(\d+(\.\d+)?)%/g;
+                    if (percentageSpan) {
+                        percentageText = percentageSpan.textContent.trim(); // Get the content of the span
+                        percentageSpan.remove(); // Remove the span from the temporary label
+                        mainLabelText = tempLabel.textContent.trim(); // Get text content without the span
+                    }
 
-                    displayLabelText = originalLabelText.replace(percentageRegex, (match, p1, p2, p3, p4, p5, p6) => {
-                        if (p1 && p3) { // Case: X.X%-Y.Y% or X%-Y.Y% or X.X%-Y%
-                            const val1 = Math.round(parseFloat(p1));
-                            const val2 = Math.round(parseFloat(p3));
-                            return `${val1}-${val2}%`;
-                        } else if (p5) { // Case: X.X%
-                            const val = Math.round(parseFloat(p5));
-                            return `${val}%`;
+                    let displayLabelText = mainLabelText;
+
+                    // Now, apply rounding logic to the percentageText if it exists
+                    if (percentageText) {
+                        // Regex to find percentages with decimals (e.g., "13.5%" or "30.4%")
+                        // It handles both single percentages (e.g., "35%") and ranges (e.g., "4-13.5%")
+                        const percentageRegex = /(\d+(\.\d+)?)%-(\d+(\.\d+)?)%|(\d+(\.\d+)?)%/;
+                        const match = percentageText.match(percentageRegex);
+
+                        if (match) {
+                            let roundedPercentageString = '';
+                            if (match[1] && match[3]) { // Case: X.X%-Y.Y% or X%-Y.Y% or X.X%-Y%
+                                const val1 = Math.round(parseFloat(match[1]));
+                                const val2 = Math.round(parseFloat(match[3]));
+                                roundedPercentageString = `(${val1}-${val2}%)`;
+                            } else if (match[5]) { // Case: X.X%
+                                const val = Math.round(parseFloat(match[5]));
+                                roundedPercentageString = `(${val}%)`;
+                            }
+                            // Reconstruct the display text with the rounded percentage
+                            displayLabelText = `${mainLabelText} ${roundedPercentageString}`;
+                        } else {
+                            displayLabelText = mainLabelText + ' ' + percentageText; // Fallback if no match
                         }
-                        return match; // Should not happen if regex is comprehensive
-                    });
+                    }
 
-                    document.getElementById('selected-chile-tax-label').textContent = displayLabelText;
+                    document.getElementById('selected-chile-tax-label').textContent = displayLabelText.trim();
                     chileTaxRateDropdown.classList.add('selected');
                     chileTaxRateDropdown.querySelector('summary').style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
                     chileTaxRateDropdown.querySelector('summary').style.color = '#1F2937';
