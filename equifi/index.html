@@ -127,7 +127,7 @@
         /* New Navigation Bar Styles */
         .tab-bar {
             background-color: #1F2937; /* Dark gray/black background */
-            border-radius: 1.5rem; /* rounded-3xl for more rounded tabs */
+            border-radius: 0.75rem; /* rounded-xl for more squared tabs */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border: 1px solid #4B5563; /* Darker border */
             padding: 0.4rem; /* Reduced padding */
@@ -139,14 +139,14 @@
         .tab-bar .nav-link {
             flex-grow: 1; /* Allow tabs to grow and fill space */
             text-align: center;
-            padding: 0.6rem 1.2rem; /* Reduced padding for smaller touch targets */
+            padding: 0.6rem 1.2rem; /* Adjusted padding for consistent size */
             font-weight: 600; /* Semi-bold */
             color: #E5E7EB; /* Light gray text for inactive */
-            border-radius: 1.25rem; /* rounded-2xl for tab buttons */
+            border-radius: 0.75rem; /* rounded-xl for tab buttons */
             transition: all 0.3s ease-in-out;
             background-color: transparent; /* Default transparent */
             border: none; /* No individual button border */
-            font-size: 0.9rem; /* Reduced font size */
+            font-size: 0.9rem; /* Adjusted font size */
         }
 
         .tab-bar .nav-link:hover {
@@ -604,13 +604,13 @@
 
             /* Adjust tab bar for mobile */
             .tab-bar {
-                padding: 0.1rem; /* Even smaller padding for very small screens */
-                gap: 0.1rem; /* Even smaller gap for very small screens */
+                padding: 0.25rem; /* Slightly larger padding for mobile */
+                gap: 0.25rem; /* Slightly larger gap for mobile */
             }
 
             .tab-bar .nav-link {
-                padding: 0.3rem 0.5rem; /* Even smaller padding for tabs */
-                font-size: 0.7rem; /* Even smaller font size */
+                padding: 0.5rem 0.75rem; /* Larger padding for tabs on mobile */
+                font-size: 0.8rem; /* Larger font size for mobile */
             }
 
             /* FMV label shorter on mobile */
@@ -906,7 +906,7 @@
                             </label>
                             <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 liquid-glass-input">
                                 <input type="radio" name="country" value="italy" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" id="country-italy">
-                                <span class="ml-3 text-gray-700">�🇹 Italy (26%)</span>
+                                <span class="ml-3 text-gray-700">🇮🇹 Italy (26%)</span>
                             </label>
                             <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 liquid-glass-input">
                                 <input type="radio" name="country" value="chile" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" id="country-chile">
