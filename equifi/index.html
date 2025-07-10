@@ -832,7 +832,7 @@
             <section id="calculator" class="content-section active">
                 <div class="liquid-glass-card p-8 rounded-2xl">
                     <h2 class="text-2xl font-bold mb-2 text-gray-900">Equity Outcome Calculator</h2>
-                    <p class="text-gray-600 mb-8">Curious what your stock options could be worth? This calculator helps you estimate potential outcomes, assuming your shares are already exercised or will be soon. It’s a simple way to understand what’s on the table and start crunching the numbers!</p>
+                    <p class="text-gray-600 mb-8">Ready to see your equity soar? This calculator helps you estimate potential outcomes, assuming your shares are already exercised or will be soon. Let's crunch some numbers!</p>
 
                     <!-- Step 1 -->
                     <div class="mb-6">
@@ -840,7 +840,7 @@
                         <div class="space-y-4">
                             <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 liquid-glass-input">
                                 <input type="radio" name="country" value="colombia" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" id="country-colombia">
-                                <span class="ml-3 text-gray-700">🇨🇴 Colombia (15%)</span>
+                                <span class="ml-3 text-gray-700">�🇴 Colombia (15%)</span>
                             </label>
                             <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 liquid-glass-input">
                                 <input type="radio" name="country" value="italy" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" id="country-italy">
@@ -967,7 +967,7 @@
                     <div class="space-y-4">
                         <details class="group">
                             <summary class="flex items-center justify-between p-4 rounded-lg cursor-pointer details-summary-header">
-                                <h3 class="text-xl font-bold text-gray-800">�🇴 Colombia Tax Rules:</h3>
+                                <h3 class="text-xl font-bold text-gray-800">🇨🇴 Colombia Tax Rules:</h3>
                                 <svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </summary>
                             <div class="details-content p-4 text-gray-600">
@@ -1511,15 +1511,34 @@
                             checkbox.checked = false;
                         }
                     });
-                    // Update the display for the selected item
-                    document.getElementById('selected-chile-tax-label').textContent = clickedCheckbox.nextElementSibling.textContent;
+
+                    let originalLabelText = clickedCheckbox.nextElementSibling.textContent;
+                    let displayLabelText = originalLabelText;
+
+                    // Regex to find percentages with decimals (e.g., "13.5%" or "30.4%")
+                    // It handles both single percentages (e.g., "35%") and ranges (e.g., "4-13.5%")
+                    const percentageRegex = /(\d+(\.\d+)?)%-(\d+(\.\d+)?)%|(\d+(\.\d+)?)%/g;
+
+                    displayLabelText = originalLabelText.replace(percentageRegex, (match, p1, p2, p3, p4, p5, p6) => {
+                        if (p1 && p3) { // Case: X.X%-Y.Y% or X%-Y.Y% or X.X%-Y%
+                            const val1 = Math.round(parseFloat(p1));
+                            const val2 = Math.round(parseFloat(p3));
+                            return `${val1}-${val2}%`;
+                        } else if (p5) { // Case: X.X%
+                            const val = Math.round(parseFloat(p5));
+                            return `${val}%`;
+                        }
+                        return match; // Should not happen if regex is comprehensive
+                    });
+
+                    document.getElementById('selected-chile-tax-label').textContent = displayLabelText;
                     chileTaxRateDropdown.classList.add('selected');
                     chileTaxRateDropdown.querySelector('summary').style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
                     chileTaxRateDropdown.querySelector('summary').style.color = '#1F2937';
                     chileTaxRateDropdown.querySelector('summary').style.borderColor = 'rgba(209, 213, 219, 0.6)';
-                    showHideError(chileTaxRateError, true, ''); // Hide error
+                    showHideError(chileTaxRateError, true, '');
                 }
-                chileTaxRateDropdown.removeAttribute('open'); // Close the dropdown regardless
+                chileTaxRateDropdown.removeAttribute('open');
             }
         }
 
@@ -1857,4 +1876,3 @@
     </script>
 </body>
 </html>
-�
