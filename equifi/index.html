@@ -125,12 +125,10 @@
 
         /* New Navigation Bar Styles */
         .tab-bar {
-            background-color: rgba(255, 255, 255, 0.7); /* More opaque for a solid look */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background-color: #1F2937; /* Dark gray/black background */
             border-radius: 1.5rem; /* rounded-3xl for more rounded tabs */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(209, 213, 219, 0.4);
+            border: 1px solid #4B5563; /* Darker border */
             padding: 0.5rem;
             display: flex;
             justify-content: center;
@@ -142,7 +140,7 @@
             text-align: center;
             padding: 0.75rem 1.5rem; /* More padding for larger touch targets */
             font-weight: 600; /* Semi-bold */
-            color: #4B5563; /* gray-700 */
+            color: #E5E7EB; /* Light gray text for inactive */
             border-radius: 1.25rem; /* rounded-2xl for tab buttons */
             transition: all 0.3s ease-in-out;
             background-color: transparent; /* Default transparent */
@@ -150,14 +148,14 @@
         }
 
         .tab-bar .nav-link:hover {
-            background-color: rgba(243, 244, 246, 0.5); /* Lighter hover effect */
-            color: #1F2937; /* gray-900 */
+            background-color: #374151; /* Slightly lighter dark gray on hover */
+            color: #F9FAFB; /* Lighter text on hover */
         }
 
         .tab-bar .nav-link.active {
-            background-color: rgba(59, 130, 246, 0.8); /* Blue-500 for active tab with transparency */
-            color: white;
-            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3); /* Subtle shadow for active tab */
+            background-color: #F9FAFB; /* White background for active tab */
+            color: #1F2937; /* Dark text for active tab */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow for active tab */
         }
 
         .content-section {
@@ -525,7 +523,7 @@
             visibility: hidden;
             opacity: 0;
             position: absolute;
-            max-width: 200px;
+            max-width: 250px; /* Increased max-width for wider tooltip */
             background-color: #333;
             color: #fff;
             text-align: center;
@@ -874,7 +872,7 @@
                             <div class="relative">
                                 <label for="sale-price" class="block text-sm font-medium text-gray-700">
                                     <span class="fmv-label-full">Per Share (Sale Price/Fair Market Value):</span>
-                                    <span class="fmv-label-short">Per Share (Sale Price):</span>
+                                    <span class="fmv-label-short">Per Share (Sale Price/FMV):</span>
                                     <span class="tooltip-container">
                                         <!-- Original SVG icon -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert-icon lucide-circle-alert inline-block align-middle text-gray-500 cursor-pointer ml-1">
