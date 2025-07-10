@@ -656,6 +656,9 @@
         }
     </style>
     <script>
+        // Ensure ChartDataLabels is registered
+        Chart.register(ChartDataLabels);
+
         // --- IMPORTANT: Consent Management Logic ---
         // It is strongly recommended to move this consent logic into Google Tag Manager
         // using Custom HTML tags and appropriate triggers for better management.
@@ -1492,21 +1495,31 @@
         function handleChileTaxSelection(event) {
             const clickedCheckbox = event.target;
             if (clickedCheckbox.type === 'checkbox' && clickedCheckbox.name === 'chile-tax-radio') {
-                // Uncheck all other checkboxes in the same group
-                document.querySelectorAll(`#checklist input[name="chile-tax-radio"]`).forEach(checkbox => {
-                    if (checkbox !== clickedCheckbox) {
-                        checkbox.checked = false;
-                    }
-                });
-                // Update the dropdown label and close the dropdown
-                document.getElementById('selected-chile-tax-label').textContent = clickedCheckbox.nextElementSibling.textContent;
-                chileTaxRateDropdown.classList.add('selected'); // Add selected class to dropdown
-                chileTaxRateDropdown.removeAttribute('open');
-                // Set the summary background to white and text to black
-                chileTaxRateDropdown.querySelector('summary').style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                chileTaxRateDropdown.querySelector('summary').style.color = '#1F2937';
-                chileTaxRateDropdown.querySelector('summary').style.borderColor = 'rgba(209, 213, 219, 0.6)';
-                showHideError(chileTaxRateError, true, ''); // Hide error once a selection is made
+                const allCheckboxes = document.querySelectorAll(`#checklist input[name="chile-tax-radio"]`);
+                const wasPreviouslyChecked = clickedCheckbox.checked; // This is the state AFTER the click, so if it's false, it means it was just unchecked.
+
+                // If the clicked checkbox is now unchecked, and it was the previously selected one,
+                // we want to prevent it from becoming unchecked. Force it back to checked.
+                if (!wasPreviouslyChecked) {
+                    clickedCheckbox.checked = true; // Re-check it
+                    // No need to update label/style/error as it effectively remained selected
+                } else {
+                    // If it's now checked (or was already checked and clicked again, but we forced it to stay checked above)
+                    // Ensure only this one is checked, uncheck all others
+                    allCheckboxes.forEach(checkbox => {
+                        if (checkbox !== clickedCheckbox) {
+                            checkbox.checked = false;
+                        }
+                    });
+                    // Update the display for the selected item
+                    document.getElementById('selected-chile-tax-label').textContent = clickedCheckbox.nextElementSibling.textContent;
+                    chileTaxRateDropdown.classList.add('selected');
+                    chileTaxRateDropdown.querySelector('summary').style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                    chileTaxRateDropdown.querySelector('summary').style.color = '#1F2937';
+                    chileTaxRateDropdown.querySelector('summary').style.borderColor = 'rgba(209, 213, 219, 0.6)';
+                    showHideError(chileTaxRateError, true, ''); // Hide error
+                }
+                chileTaxRateDropdown.removeAttribute('open'); // Close the dropdown regardless
             }
         }
 
@@ -1537,6 +1550,7 @@
                     const isChileSelected = document.getElementById('country-chile').checked;
                     if (isChileSelected) {
                         const checkedChileTax = document.querySelector('#checklist input[name="chile-tax-radio"]:checked');
+                        // Only show error if Chile is selected AND no option is checked
                         showHideError(chileTaxRateError, !!checkedChileTax, 'Please select a tax rate for Chile.');
                     }
                 }
@@ -1764,6 +1778,7 @@
                                 // Only show labels for the actual data bars (datasetIndex 1)
                                 if (context.datasetIndex === 1) {
                                     const rawValue = dataPoints[context.dataIndex].y;
+                                    // Ensure rounding to 0 decimal places for currency display
                                     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(rawValue);
                                 }
                                 return '';
