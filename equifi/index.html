@@ -11,13 +11,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletetaxmanager.com/gtag/js?id=YOUR_TAG_ID"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D81V23HR8G"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'YOUR_TAG_ID');
+      gtag('config', 'G-D81V23HR8G');
     </script>
     <title>EquiFi - Make Sense of Your Stock Options</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -843,7 +843,7 @@
                             </label>
                             <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 liquid-glass-input">
                                 <input type="radio" name="country" value="chile" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" id="country-chile">
-                                <span class="ml-3 text-gray-700">�🇱 Chile (Variable Rate)</span>
+                                <span class="ml-3 text-gray-700">🇨🇱 Chile (Variable Rate)</span>
                             </label>
                         </div>
                         <!-- Added md:pl-8 to chile-tax-rate-selector to remove left padding on mobile -->
@@ -1447,11 +1447,18 @@
             if (isChileSelected) {
                 const checkedChileTax = document.querySelector('#checklist input[name="chile-tax-radio"]:checked');
                 if (!checkedChileTax) {
-                    console.error('Chile tax rate not selected in calculation block, despite validation passing. This indicates a logic error.');
-                    showHideError(chileTaxRateError, false, 'Please select a tax rate for Chile.'); // Ensure UI error is shown as fallback
-                    return; 
+                    showHideError(chileTaxRateError, false, 'Please select a tax rate for Chile.');
+                    allInputsValid = false; 
+                } else {
+                    showHideError(chileTaxRateError, true, '');
                 }
-                taxRate = parseFloat(checkedChileTax.value);
+            } else {
+                chileTaxRateError.classList.add('hidden'); // Hide if Chile is not selected
+            }
+            
+            // Re-check overall validity explicitly to ensure no previous valid state overwrites it if any new invalid state occurs
+            if (!countrySelected || !totalSharesValid || !exercisePriceValid || !salePriceValid || (isChileSelected && !document.querySelector('#checklist input[name="chile-tax-radio"]:checked'))) {
+                allInputsValid = false;
             }
 
             return allInputsValid;
@@ -1826,4 +1833,3 @@
     </script>
 </body>
 </html>
-�
