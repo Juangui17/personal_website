@@ -739,7 +739,7 @@
         <div class="liquid-glass-card p-8 sm:p-12 rounded-2xl max-w-4xl w-full text-center mb-6"> <!-- Changed mb-8 to mb-6 -->
             <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">EquiFi</h1>
             <p class="text-blue-600 text-lg sm:text-xl font-semibold mb-4">Make Sense of Your Stock Options.</p>
-            <p class="text-gray-700 mb-10 sm:mb-12 max-w-2xl mx-auto leading-relaxed text-justify">Got stock options but not sure what they’re worth (don't know if you should buy them?) — or what to do with them? EquiFi is a simple tool to help you estimate potential gains (after taxes and costs). Everyone’s case is different, but this is a good place to start playing with the numbers.</p>
+            <p class="text-gray-700 mb-10 sm:mb-12 max-w-2xl mx-auto leading-relaxed text-justify">Got stock options but not sure what they’re worth (don't know if you should buy them?) — or what to do with them? EquiFi is a simple tool to help you estimate potential gains (after taxes and costs). Everyone’s case is different, but this is a good place to start playing with the numbers!</p>
 
             <div class="grid md:grid-cols-3 gap-8 text-left mb-10 sm:mb-12">
                 <div class="flex items-start space-x-4">
@@ -832,7 +832,7 @@
             <section id="calculator" class="content-section active">
                 <div class="liquid-glass-card p-8 rounded-2xl">
                     <h2 class="text-2xl font-bold mb-2 text-gray-900">Equity Outcome Calculator</h2>
-                    <p class="text-gray-600 mb-8">Ready to see your equity soar? This calculator helps you estimate potential outcomes, assuming your shares are already exercised or will be soon. Let's crunch some numbers!</p>
+                    <p class="text-gray-600 mb-8">Curious what your stock options could be worth? This calculator helps you estimate potential outcomes, assuming your shares are already exercised or will be soon. It’s a simple way to understand what’s on the table and start crunching the numbers!</p>
 
                     <!-- Step 1 -->
                     <div class="mb-6">
@@ -967,7 +967,7 @@
                     <div class="space-y-4">
                         <details class="group">
                             <summary class="flex items-center justify-between p-4 rounded-lg cursor-pointer details-summary-header">
-                                <h3 class="text-xl font-bold text-gray-800">🇨🇴 Colombia Tax Rules:</h3>
+                                <h3 class="text-xl font-bold text-gray-800">�🇴 Colombia Tax Rules:</h3>
                                 <svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </summary>
                             <div class="details-content p-4 text-gray-600">
@@ -1628,7 +1628,14 @@
             // Display results
             // totalShares should be formatted as a number, not currency
             document.getElementById('res-total-shares').textContent = totalShares.toLocaleString('en-US');
-            document.getElementById('res-exercise-cost').textContent = currencyFormatter.format(exerciseCost);
+            
+            // Set Exercise Cost text and color to always be red
+            const exerciseCostElement = document.getElementById('res-exercise-cost');
+            exerciseCostElement.textContent = currencyFormatter.format(exerciseCost);
+            exerciseCostElement.classList.remove('text-emerald-600'); // Ensure green is removed
+            exerciseCostElement.classList.add('text-rose-600'); // Always add red
+
+
             document.getElementById('res-sale-value').textContent = currencyFormatter.format(saleValue);
             
             // Set Gross Profit text and color
@@ -1850,3 +1857,4 @@
     </script>
 </body>
 </html>
+�
