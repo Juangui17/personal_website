@@ -1,306 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-KSK2PSN9');</script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <title>Home</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            /* New background for the body */
-            background: #e0e0e0; /* This matches the card background for a seamless look */
-            display: flex;
-            flex-direction: column; /* Allow vertical stacking of card and contact section */
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            opacity: 0; /* Start hidden for fade-in */
-            animation: fadeIn 0.5s ease-out forwards; /* Fade-in animation */
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* From Uiverse.io by adamgiebl */
-        .card {
-            width: 450px;
-            height: 200px;
-            border-radius: 30px;
-            background: #e0e0e0;
-            box-shadow: 15px 15px 30px #bebebe,
-                        -15px -15px 30px #ffffff;
-            display: flex; /* Use flexbox to center content inside the card */
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: #1a202c; /* Matching text color from index.html */
-            padding: 1rem; /* Add some padding inside the card */
-            box-sizing: border-box; /* Include padding in width/height */
-        }
-
-        /* Responsive adjustments for the card */
-        @media (max-width: 768px) {
-            .card {
-                width: 280px; /* Increased width for mobile */
-                height: 300px; /* Set height to 300px for mobile */
-                padding: 1.5rem 1rem; /* Adjust padding for mobile */
-            }
-            .card h1 {
-                font-size: 1.1rem; /* Adjusted font size for mobile title */
-                line-height: 1.2; /* Adjusted line height for better wrapping */
-            }
-            .card p {
-                font-size: 0.85rem; /* Adjusted font size for mobile paragraph */
-                line-height: 1.4; /* Adjusted line height for better wrapping */
-            }
-            .card .big-emoji {
-                font-size: 4rem; /* Even larger emoji for mobile */
-            }
-        }
-
-        .card h1 {
-            font-size: 1.25rem; /* Further reduced font size for the title */
-            font-weight: 800;
-            margin-bottom: 0.5rem; /* Reduced margin */
-            text-transform: uppercase;
-            line-height: 1.2; /* Adjust line height for compactness */
-        }
-
-        .card p {
-            font-size: 1rem; /* Slightly reduced for better fit with new text */
-            font-weight: 600;
-            color: #4a5568;
-            margin-bottom: 0.5rem; /* Space between paragraphs */
-        }
-
-        .card .big-emoji {
-            font-size: 5rem; /* Large emoji for desktop */
-            margin-top: 1rem; /* Space above the emoji */
-            line-height: 1; /* Ensure no extra space around emoji */
-        }
-
-        /* New contact section for text and buttons */
-        .contact-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 2rem; /* Space between card and contact section */
-            text-align: center;
-            max-width: 450px; /* Match card width for alignment */
-            padding: 0 1rem; /* Add horizontal padding */
-            box-sizing: border-box;
-        }
-
-        .contact-section p {
-            font-size: 0.8rem; /* Even smaller text for the contact message */
-            font-weight: 600;
-            color: #4a5568;
-            margin-bottom: 1rem; /* Space before buttons */
-            line-height: 1.4;
-        }
-
-        .contact-buttons-container {
-            display: flex;
-            gap: 1.5rem; /* Space between the two icon buttons */
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* From Uiverse.io by gagan-gv - Adapted for email and LinkedIn links */
-        .contact-button-container { /* Common style for both email and linkedin buttons */
-            display: block;
-            position: relative;
-            cursor: pointer;
-            font-size: 25px; /* Base font size for em units */
-            user-select: none;
-        }
-
-        .icon-wrapper { /* Common style for both email and linkedin icon wrappers */
-            position: relative;
-            height: 1.3em;
-            width: 1.3em;
-            /* Liquid glass styles */
-            background-color: rgba(255, 255, 255, 0.7); /* Transparent white base */
-            backdrop-filter: blur(50px) saturate(300%);
-            -webkit-backdrop-filter: blur(50px) saturate(300%);
-            border-radius: 50px; /* Fully rounded */
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(59, 130, 246, 0.1); /* Subtle glass shadow */
-            transition: all 0.7s;
-            --spread: 20px;
-            display: flex; /* Center the emoji/SVG */
-            justify-content: center;
-            align-items: center;
-            color: #1a202c; /* Default emoji/SVG color (dark) */
-        }
-
-        .contact-button-container:hover .icon-wrapper {
-            background-color: rgba(255, 255, 255, 0.8); /* Slightly more opaque on hover */
-            box-shadow: -10px -10px var(--spread) 0px #5B51D8, 0 -10px var(--spread) 0px #833AB4, 10px -10px var(--spread) 0px #E1306C, 10px 0 var(--spread) 0px #FD1D1D, 10px 10px var(--spread) 0px #F77737, 0 10px var(--spread) 0px #FCAF45, -10px 10px var(--spread) 0px #FFDC80;
-        }
-
-        .contact-button-container:active .icon-wrapper {
-            transform: scale(0.95); /* Slight press effect */
-        }
-
-        .button-emoji {
-            font-size: 0.8em; /* Adjust emoji size relative to wrapper */
-            line-height: 1; /* Ensure emoji sits correctly */
-        }
-
-        .linkedin-svg {
-            width: 0.8em; /* Match size to emoji */
-            height: 0.8em; /* Match size to emoji */
-            fill: currentColor; /* Inherit color from parent */
-        }
-
-        /* Responsive adjustments for the contact section */
-        @media (max-width: 768px) {
-            .contact-section {
-                margin-top: 1.5rem; /* Slightly less space on mobile */
-                max-width: 90%; /* Adjust max-width for mobile */
-            }
-            .contact-section p {
-                font-size: 0.75rem; /* Even smaller text on mobile */
-                margin-bottom: 0.75rem; /* Adjusted space before buttons on mobile */
-            }
-            .contact-buttons-container {
-                gap: 1rem; /* Smaller gap between buttons on mobile */
-            }
-            .contact-button-container {
-                font-size: 32px; /* Increased font size for mobile icons to make buttons bigger */
-            }
-        }
-    </style>
-    <script>
-        // --- IMPORTANT: Consent Management Logic ---
-        // It is strongly recommended to move this consent logic into Google Tag Manager
-        // using Custom HTML tags and appropriate triggers for better management.
-        // Keeping it here is only if you strictly prefer direct HTML implementation for consent.
-
-        // Default all consent types to 'denied' BEFORE any config command (which is handled by the GTM snippet).
-        // This initial gtag('consent', 'default', ...) call should ideally be in a GTM Custom HTML tag
-        // that fires on the "Consent Initialization - All Pages" trigger.
-        window.gtag('consent', 'default', {
-            'ad_storage': 'denied',
-            'analytics_storage': 'denied',
-            'functionality_storage': 'denied',
-            'personalization_storage': 'denied',
-            'security_storage': 'granted'
-        });
-
-        // Check for existing consent from localStorage.
-        // This logic should also be in a GTM Custom HTML tag, potentially firing after the default consent tag.
-        const consentGiven = localStorage.getItem('user_consent');
-        if (consentGiven === 'granted') {
-            window.gtag('consent', 'update', {
-                'ad_storage': 'granted',
-                'analytics_storage': 'granted',
-                'functionality_storage': 'granted',
-                'personalization_storage': 'granted'
-            });
-        } else if (consentGiven === 'denied') {
-            window.gtag('consent', 'update', {
-                'ad_storage': 'denied',
-                'analytics_storage': 'denied',
-                'functionality_storage': 'denied',
-                'personalization_storage': 'denied'
-            });
-        }
-
-        // The 'wait_for_update' parameter is typically configured within GTM's consent settings
-        // or within the initial consent default tag.
-        // If you are managing consent entirely client-side like this, ensure this is handled.
-        window.gtag('consent', 'default', {
-            'wait_for_update': 500
-        });
-
-        // These functions (grantConsent, denyConsent) would typically be called by UI elements
-        // (e.g., a cookie banner's "Accept" or "Reject" buttons) and would push events to dataLayer
-        // which GTM then uses to update consent.
-        function grantConsent() {
-            window.gtag('consent', 'update', {
-                'ad_storage': 'granted',
-                'analytics_storage': 'granted',
-                'functionality_storage': 'granted',
-                'personalization_storage': 'granted'
-            });
-            localStorage.setItem('user_consent', 'granted');
-            console.log('Consent granted!');
-        }
-
-        function denyConsent() {
-            window.gtag('consent', 'update', {
-                'ad_storage': 'denied',
-                'analytics_storage': 'denied',
-                'functionality_storage': 'denied',
-                'personalization_storage': 'denied'
-            });
-            localStorage.setItem('user_consent', 'denied');
-            console.log('Consent denied!');
-        }
-    </script>
+    })(window,document,'script','dataLayer','GTM-KSK2PSN9');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <title>Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .card {
+      width: 450px;
+      height: 200px;
+      border-radius: 30px;
+      background: #e0e0e0;
+      box-shadow: 15px 15px 30px #bebebe, -15px -15px 30px #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #1a202c;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+    .card h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+    .card p {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 0.5rem;
+    }
+    .card .big-emoji {
+      font-size: 5rem;
+      margin-top: 1rem;
+      line-height: 1;
+    }
+    .contact-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 2rem;
+      text-align: center;
+      max-width: 450px;
+      padding: 0 1rem;
+      box-sizing: border-box;
+    }
+    .contact-section p {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+    .contact-buttons-container {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      align-items: center;
+    }
+    .contact-button-container {
+      display: block;
+      position: relative;
+      cursor: pointer;
+      font-size: 28px;
+      user-select: none;
+    }
+    .icon-wrapper {
+      position: relative;
+      height: 1.3em;
+      width: 1.3em;
+      background-color: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(50px) saturate(300%);
+      -webkit-backdrop-filter: blur(50px) saturate(300%);
+      border-radius: 50px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 15px rgba(59, 130, 246, 0.1);
+      transition: all 0.7s;
+      --spread: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #1a202c;
+    }
+    .contact-button-container:hover .icon-wrapper {
+      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: -10px -10px var(--spread) 0px #5B51D8, 0 -10px var(--spread) 0px #833AB4, 10px -10px var(--spread) 0px #E1306C, 10px 0 var(--spread) 0px #FD1D1D, 10px 10px var(--spread) 0px #F77737, 0 10px var(--spread) 0px #FCAF45, -10px 10px var(--spread) 0px #FFDC80;
+    }
+    .contact-button-container:active .icon-wrapper {
+      transform: scale(0.95);
+    }
+    .button-emoji {
+      font-size: 0.985em;
+      line-height: 1;
+    }
+    .linkedin-svg {
+      width: 0.985em;
+      height: 0.985em;
+      fill: currentColor;
+    }
+    .lucide-calculator-icon {
+      width: 0.985em;
+      height: 0.985em;
+      stroke: currentColor;
+    }
+    .copied-toast {
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #4a5568;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .copied-toast.visible {
+      opacity: 1;
+    }
+    @media (max-width: 768px) {
+      .card {
+        width: 280px;
+        height: 300px;
+        padding: 1.5rem 1rem;
+      }
+      .card h1 {
+        font-size: 1.1rem;
+      }
+      .card p {
+        font-size: 0.85rem;
+      }
+      .card .big-emoji {
+        font-size: 4rem;
+      }
+      .contact-section {
+        margin-top: 1.5rem;
+        max-width: 90%;
+      }
+      .contact-buttons-container {
+        gap: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KSK2PSN9"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <div class="card">
-        <h1>Working on the site</h1>
-        <p>Come back later to know more</p>
-        <div class="big-emoji">🚧</div>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KSK2PSN9"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<div class="card">
+  <h1>Working on the site</h1>
+  <p>Come back later to know more</p>
+  <div class="big-emoji">🚧</div>
+</div>
+
+<div class="contact-section">
+  <p>Let’s connect!</p>
+  <div class="contact-buttons-container">
+
+    <!-- Email Button (copy to clipboard) -->
+    <div class="contact-button-container" role="button" tabindex="0" aria-label="Copy email" onclick="copyEmail()">
+      <div class="icon-wrapper">
+        <span class="button-emoji">✉️</span>
+      </div>
     </div>
 
-    <div class="contact-section">
-        <p>Let’s connect!</p>
+    <!-- LinkedIn -->
+    <a href="https://www.linkedin.com/in/soyjuangui/" target="_blank" rel="noopener noreferrer" class="contact-button-container" aria-label="LinkedIn"
+       onclick="window.dataLayer.push({ event: 'contact_click', event_category: 'engagement', event_label: 'LinkedIn Click', contact_method: 'linkedin' });">
+      <div class="icon-wrapper">
+        <svg class="linkedin-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.044-1.852-3.044-1.853 0-2.136 1.445-2.136 2.951v5.662H9.593V9.216h3.413v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.462 2.462 0 01-2.462-2.465c0-1.366.94-2.465 2.462-2.465c1.35 0 2.463 1.1 2.463 2.465c0 1.365-.945 2.465-2.463 2.465zm-.001 0h.001zM3.857 9.216H7.2V20.452H3.857V9.216z"/>
+        </svg>
+      </div>
+    </a>
 
-        <div class="contact-buttons-container">
-            <div class="contact-button-container">
-                <a href="mailto:juan.ggc17@gmail.com" class="email-link" aria-label="Email me"
-                   onclick="
-                       // Push data to dataLayer for GTM to process as a custom event.
-                       window.dataLayer.push({
-                           'event': 'contact_click', // This is your custom event name
-                           'event_category': 'engagement',
-                           'event_label': 'Email Click',
-                           'contact_method': 'email'
-                       });
-                   ">
-                   <div class="icon-wrapper">
-                        <span class="button-emoji">✉️</span>
-                    </div>
-                </a>
-            </div>
-            <div class="contact-button-container">
-                <a href="https://www.linkedin.com/in/soyjuangui/" target="_blank" rel="noopener noreferrer" class="linkedin-link" aria-label="Connect on LinkedIn"
-                   onclick="
-                       // Push data to dataLayer for GTM to process as a custom event.
-                       window.dataLayer.push({
-                           'event': 'contact_click', // This is your custom event name
-                           'event_category': 'engagement',
-                           'event_label': 'LinkedIn Click',
-                           'contact_method': 'linkedin'
-                       });
-                   ">
-                   <div class="icon-wrapper">
-                        <svg class="linkedin-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.044-1.852-3.044-1.853 0-2.136 1.445-2.136 2.951v5.662H9.593V9.216h3.413v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.462 2.462 0 01-2.462-2.465c0-1.366.94-2.465 2.462-2.465c1.35 0 2.463 1.1 2.463 2.465c0 1.365-.945 2.465-2.463 2.465zm-.001 0h.001zM3.857 9.216H7.2V20.452H3.857V9.216z"/>
-                        </svg>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
+    <!-- Calculator -->
+    <a href="https://soyjuangui.com/equifi" target="_blank" rel="noopener noreferrer" class="contact-button-container" aria-label="Open Calculator"
+       onclick="window.dataLayer.push({ event: 'contact_click', event_category: 'engagement', event_label: 'Calculator Click', contact_method: 'calculator' });">
+      <div class="icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" class="lucide-calculator-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="16" height="20" x="4" y="2" rx="2"/>
+          <line x1="8" x2="16" y1="6" y2="6"/>
+          <line x1="16" x2="16" y1="14" y2="18"/>
+          <path d="M16 10h.01"/>
+          <path d="M12 10h.01"/>
+          <path d="M8 10h.01"/>
+          <path d="M12 14h.01"/>
+          <path d="M8 14h.01"/>
+          <path d="M12 18h.01"/>
+          <path d="M8 18h.01"/>
+        </svg>
+      </div>
+    </a>
+  </div>
+
+  <div id="toast" class="copied-toast">Email copied!</div>
+</div>
+
+<script>
+  function copyEmail() {
+    const email = 'juan.ggc17@gmail.com';
+    navigator.clipboard.writeText(email).then(() => {
+      window.dataLayer.push({
+        event: 'contact_click',
+        event_category: 'engagement',
+        event_label: 'Email Copied',
+        contact_method: 'email'
+      });
+      const toast = document.getElementById('toast');
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 2000);
+    });
+  }
+</script>
 </body>
 </html>
