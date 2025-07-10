@@ -913,6 +913,7 @@
                                 <span class="ml-3 text-gray-700">🇨🇱 Chile (Variable Rate)</span>
                             </label>
                         </div>
+                        <div id="country-selection-error" class="error-message hidden">Please select a country.</div>
                         <!-- Removed md:pl-8 from chile-tax-rate-selector to prevent horizontal scroll -->
                         <div id="chile-tax-rate-selector" class="mt-4 mb-6" style="display: none;">
                             <label for="chile-tax-rate" class="block text-sm font-medium text-gray-700 mb-2">What is your approximate gross monthly income? (in CLP)</label>
@@ -1494,6 +1495,7 @@
         let waterfallChart = null;
 
         // Error message elements
+        const countrySelectionError = document.getElementById('country-selection-error'); // New error element
         const chileTaxRateError = document.getElementById('chile-tax-rate-error');
         const totalSharesError = document.getElementById('total-shares-error');
         const exercisePriceError = document.getElementById('exercise-price-error');
@@ -1511,6 +1513,7 @@
 
         // Function to hide all error messages
         function hideAllErrors() {
+            countrySelectionError.classList.add('hidden'); // Hide new error
             chileTaxRateError.classList.add('hidden');
             totalSharesError.classList.add('hidden');
             exercisePriceError.classList.add('hidden');
@@ -1523,8 +1526,8 @@
 
             // Validate Country Selection
             const countrySelected = Array.from(countryRadios).some(radio => radio.checked);
+            showHideError(countrySelectionError, countrySelected, 'Please select a country.'); // Show/hide country error
             if (!countrySelected) {
-                // No specific error message for country selection, but it makes overall invalid
                 allInputsValid = false;
             }
 
@@ -1686,9 +1689,18 @@
 
 
             // Attach country radio button listeners
-            document.getElementById('country-colombia').addEventListener('change', () => toggleChileTaxRate(false));
-            document.getElementById('country-italy').addEventListener('change', () => toggleChileTaxRate(false));
-            document.getElementById('country-chile').addEventListener('change', () => toggleChileTaxRate(true));
+            document.getElementById('country-colombia').addEventListener('change', () => {
+                toggleChileTaxRate(false);
+                showHideError(countrySelectionError, true, ''); // Hide country error on selection
+            });
+            document.getElementById('country-italy').addEventListener('change', () => {
+                toggleChileTaxRate(false);
+                showHideError(countrySelectionError, true, ''); // Hide country error on selection
+            });
+            document.getElementById('country-chile').addEventListener('change', () => {
+                toggleChileTaxRate(true);
+                showHideError(countrySelectionError, true, ''); // Hide country error on selection
+            });
 
             // Attach listener for the custom checklist for single selection
             document.getElementById('checklist').addEventListener('change', handleChileTaxSelection);
