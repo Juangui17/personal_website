@@ -645,6 +645,11 @@
                 font-size: 0.9rem; /* Adjusted font size for web */
             }
         }
+
+        /* New CSS for transitions */
+        .page-transition {
+            transition: opacity 0.5s ease-in-out; /* Smooth fade effect */
+        }
     </style>
     <script>
         // Ensure ChartDataLabels is registered
@@ -726,7 +731,7 @@
     <!-- End Google Tag Manager (noscript) -->
 
     <!-- Landing Page Section -->
-    <div id="landing-page" class="container mx-auto p-4 sm:p-6 lg:p-8 flex items-center justify-center flex-grow flex-col">
+    <div id="landing-page" class="container mx-auto p-4 sm:p-6 lg:p-8 flex items-center justify-center flex-grow flex-col page-transition">
         <div class="liquid-glass-card p-8 sm:p-12 rounded-2xl max-w-4xl w-full text-center mb-6"> <!-- Changed mb-8 to mb-6 -->
             <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">EquiFi</h1>
             <p class="text-blue-600 text-lg sm:text-xl font-semibold mb-4">Make Sense of Your Stock Options.</p>
@@ -794,7 +799,7 @@
     </div>
 
     <!-- Main Calculator View -->
-    <div id="calculator-view" class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow" style="display: none;">
+    <div id="calculator-view" class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow page-transition" style="display: none; opacity: 0;">
         <header class="flex items-center mb-8">
             <!-- Breadcrumbs - Hidden on mobile, shown on medium and larger screens -->
             <div class="flex-1 text-sm text-gray-500 hidden md:block">
@@ -886,7 +891,7 @@
                                     <div id="total-shares-error" class="error-message hidden">Please enter total shares.</div>
                                 </div>
                                 <div class="mt-4 md:mt-0"> <!-- Added mt-4 for mobile spacing, md:mt-0 to remove on desktop -->
-                                    <label for="exercise-price" class="block text-sm font-medium text-gray-700">Exercise Price / Share:</label>
+                                    <label for="exercise-price" class="block text-sm font-medium text-gray-700">Exercise Price / Share (USD):</label>
                                     <input type="text" id="exercise-price" placeholder="e.g., 0.19" class="mt-1 block w-full p-2 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 liquid-glass-input">
                                     <div id="exercise-price-error" class="error-message hidden">Please enter an exercise price.</div>
                                 </div>
@@ -896,8 +901,8 @@
                             <h3 class="text-lg font-semibold mb-4 text-gray-800">Step 3: Enter a sale price</h3>
                             <div class="relative">
                                 <label for="sale-price" class="block text-sm font-medium text-gray-700">
-                                    <span class="fmv-label-full">Per Share (Sale Price/Fair Market Value):</span>
-                                    <span class="fmv-label-short">Per Share (Sale Price/FMV):</span>
+                                    <span class="fmv-label-full">Per Share (Sale Price/Fair Market Value) (USD):</span>
+                                    <span class="fmv-label-short">Per Share (Sale Price/FMV) (USD):</span>
                                     <span class="tooltip-container">
                                         <!-- Original SVG icon -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert-icon lucide-circle-alert inline-block align-middle text-gray-500 cursor-pointer ml-1">
@@ -1284,16 +1289,50 @@
         Chart.register(ChartDataLabels);
 
         // --- View Toggling ---
+        const landingPage = document.getElementById('landing-page');
+        const calculatorView = document.getElementById('calculator-view');
+        const transitionDuration = 500; // milliseconds
+
         function showCalculator() {
-            document.getElementById('landing-page').style.display = 'none';
-            document.getElementById('calculator-view').style.display = 'block';
+            // Start fading out the landing page
+            landingPage.style.opacity = '0';
+
+            const transitionEndHandler = () => {
+                landingPage.style.display = 'none'; // Hide after fade out
+                landingPage.removeEventListener('transitionend', transitionEndHandler); // Clean up listener
+
+                // Prepare calculator view for fade-in
+                calculatorView.style.display = 'block';
+                calculatorView.style.opacity = '0'; // Start invisible
+                void calculatorView.offsetWidth; // Force reflow to apply initial opacity before transition
+                calculatorView.style.opacity = '1'; // Fade in
+
+                // Scroll to the top of the calculator view with a smooth transition
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            landingPage.addEventListener('transitionend', transitionEndHandler);
         }
 
         function showLandingPage() {
-            document.getElementById('calculator-view').style.display = 'none';
-            document.getElementById('landing-page').style.display = 'flex'; // Use flex for centering
-            resetCalculatorInputs();
-            hideResults();
+            // Start fading out the calculator view
+            calculatorView.style.opacity = '0';
+
+            const transitionEndHandler = () => {
+                calculatorView.style.display = 'none'; // Hide after fade out
+                calculatorView.removeEventListener('transitionend', transitionEndHandler); // Clean up listener
+
+                // Prepare landing page for fade-in
+                landingPage.style.display = 'flex'; // Ensure flex for centering
+                landingPage.style.opacity = '0'; // Start invisible
+                void landingPage.offsetWidth; // Force reflow
+                landingPage.style.opacity = '1'; // Fade in
+
+                resetCalculatorInputs();
+                hideResults();
+            };
+
+            calculatorView.addEventListener('transitionend', transitionEndHandler);
         }
 
         function resetCalculatorInputs() {
@@ -1671,7 +1710,10 @@
             exerciseCostElement.classList.add('text-rose-600'); // Always add red
 
 
-            document.getElementById('res-sale-value').textContent = currencyFormatter.format(saleValue);
+            const saleValueElement = document.getElementById('res-sale-value');
+            saleValueElement.textContent = currencyFormatter.format(saleValue);
+            saleValueElement.classList.remove('text-rose-600'); // Ensure red is removed
+            saleValueElement.classList.add('text-emerald-600'); // Always add green
             
             // Set Gross Profit text and color
             const grossProfitElement = document.getElementById('res-gross-profit');
