@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_TAG_ID"></script>
+    <script async src="https://www.googletetaxmanager.com/gtag/js?id=YOUR_TAG_ID"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -200,11 +200,13 @@
             border-top-left-radius: 0;
             border-top-right-radius: 0;
         }
-        details[open] .details-summary-header {
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-            border-bottom-color: transparent; /* Hide bottom border when open to blend with content */
+        /* New: Border contrast for open toggles on web only */
+        @media (min-width: 768px) {
+            details[open] .details-summary-header {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.2); /* Subtle black line */
+            }
         }
+
 
         /* Error message style */
         .error-message {
@@ -626,6 +628,11 @@
             .details-summary-header h3 {
                 font-size: 1rem; /* Ensure headings inside are also smaller */
             }
+
+            /* Center calculate button on mobile */
+            .calculate-button-wrapper {
+                justify-content: center; /* Center the button */
+            }
         }
 
         /* Desktop-specific for FMV label */
@@ -635,6 +642,14 @@
             }
             .fmv-label-short {
                 display: none;
+            }
+            /* Align calculate button to the right on desktop */
+            .calculate-button-wrapper {
+                justify-content: flex-end;
+            }
+            /* Adjust tab bar link size for web */
+            .tab-bar .nav-link {
+                padding: 0.75rem 1.8rem; /* Adjusted padding for smaller tabs on web */
             }
         }
     </style>
@@ -828,7 +843,7 @@
                             </label>
                             <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 liquid-glass-input">
                                 <input type="radio" name="country" value="chile" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" id="country-chile">
-                                <span class="ml-3 text-gray-700">🇨🇱 Chile (Variable Rate)</span>
+                                <span class="ml-3 text-gray-700">�🇱 Chile (Variable Rate)</span>
                             </label>
                         </div>
                         <!-- Added md:pl-8 to chile-tax-rate-selector to remove left padding on mobile -->
@@ -903,7 +918,7 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-end mt-8">
+                    <div class="flex justify-end mt-8 calculate-button-wrapper">
                         <div class="btn-calculate-container group">
                             <button id="calculate-btn" class="btn-calculate-high-level">
                                 Calculate
@@ -1011,12 +1026,13 @@
                                     <li>Assuming you are not a US citizen and have not spent 183 days or more in the US, you do not have to pay US capital gains tax.</li>
                                     <li>As a tax resident, you are taxed on your worldwide income.</li>
                                     <li>There is no comprehensive income tax treaty between the U.S. and Colombia.</li>
+                                    <li>Chile's tax system generally allows for foreign tax credits to avoid double taxation.</li>
                                     <li>Physically bringing money into Colombia does not incur additional tax beyond the capital gains tax.</li>
                                 </ul>
                             </div>
                         </details>
                         <details class="group">
-                            <summary class="flex items-center justify-between p-4 bg-gray-100/70 rounded-lg cursor-pointer hover:bg-gray-200/70 liquid-glass-input">
+                            <summary class="flex items-center justify-between p-4 rounded-lg cursor-pointer details-summary-header">
                                 <h3 class="text-xl font-bold text-gray-800">🇮🇹 Italy Tax Rules:</h3>
                                 <svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </summary>
@@ -1034,7 +1050,7 @@
                             </div>
                         </details>
                         <details class="group">
-                            <summary class="flex items-center justify-between p-4 bg-gray-100/70 rounded-lg cursor-pointer hover:bg-gray-200/70 liquid-glass-input">
+                            <summary class="flex items-center justify-between p-4 rounded-lg cursor-pointer details-summary-header">
                                 <h3 class="text-xl font-bold text-gray-800">🇨🇱 Chile Tax Rules:</h3>
                                 <svg class="w-5 h-5 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </summary>
@@ -1287,8 +1303,9 @@
         function resetCalculatorInputs() {
             document.getElementById('total-shares').value = '';
             document.getElementById('total-shares').dataset.rawValue = ''; // Clear rawValue
-            document.getElementById('exercise-price').value = '';
-            document.getElementById('exercise-price').dataset.rawValue = ''; // Clear rawValue
+            const exercisePriceInput = document.getElementById('exercise-price'); // Corrected variable declaration
+            exercisePriceInput.value = '';
+            exercisePriceInput.dataset.rawValue = ''; // Clear rawValue
             document.getElementById('sale-price').value = '';
             document.getElementById('sale-price').dataset.rawValue = ''; // Clear rawValue
 
@@ -1360,7 +1377,7 @@
         const calculateBtn = document.getElementById('calculate-btn');
         const resultsContainer = document.getElementById('results-container');
         const totalSharesInput = document.getElementById('total-shares');
-        const exercisePriceInput = document = document.getElementById('exercise-price');
+        const exercisePriceInput = document.getElementById('exercise-price'); // Corrected variable declaration
         const salePriceInput = document.getElementById('sale-price');
         const countryRadios = document.querySelectorAll('input[name="country"]');
         const chileTaxRateDropdown = document.getElementById('chile-tax-rate-dropdown'); // The new details element
@@ -1430,18 +1447,11 @@
             if (isChileSelected) {
                 const checkedChileTax = document.querySelector('#checklist input[name="chile-tax-radio"]:checked');
                 if (!checkedChileTax) {
-                    showHideError(chileTaxRateError, false, 'Please select a tax rate for Chile.');
-                    allInputsValid = false; 
-                } else {
-                    showHideError(chileTaxRateError, true, '');
+                    console.error('Chile tax rate not selected in calculation block, despite validation passing. This indicates a logic error.');
+                    showHideError(chileTaxRateError, false, 'Please select a tax rate for Chile.'); // Ensure UI error is shown as fallback
+                    return; 
                 }
-            } else {
-                chileTaxRateError.classList.add('hidden'); // Hide if Chile is not selected
-            }
-            
-            // Re-check overall validity explicitly to ensure no previous valid state overwrites it if any new invalid state occurs
-            if (!countrySelected || !totalSharesValid || !exercisePriceValid || !salePriceValid || (isChileSelected && !document.querySelector('#checklist input[name="chile-tax-radio"]:checked'))) {
-                allInputsValid = false;
+                taxRate = parseFloat(checkedChileTax.value);
             }
 
             return allInputsValid;
@@ -1816,3 +1826,4 @@
     </script>
 </body>
 </html>
+�
