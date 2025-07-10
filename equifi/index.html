@@ -650,6 +650,69 @@
         .page-transition {
             transition: opacity 0.5s ease-in-out; /* Smooth fade effect */
         }
+
+        /* Cookie Banner Styles */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100; /* High z-index to ensure it's on top */
+            padding: 1.5rem; /* Increased padding for better spacing */
+            display: flex;
+            flex-direction: column; /* Stack content vertically on small screens */
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem; /* Gap between text and buttons */
+            text-align: center;
+        }
+
+        .cookie-banner .btn-group {
+            display: flex;
+            gap: 0.75rem; /* gap-3 */
+            justify-content: center;
+            flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+        }
+
+        .cookie-banner button {
+            padding: 0.75rem 1.5rem; /* py-3 px-6 */
+            border-radius: 0.75rem; /* rounded-xl */
+            font-weight: 600; /* font-semibold */
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .cookie-banner .btn-accept {
+            background-color: #1f2937; /* gray-900 */
+            color: white;
+        }
+        .cookie-banner .btn-accept:hover {
+            background-color: #374151; /* gray-800 */
+        }
+
+        .cookie-banner .btn-deny {
+            background-color: transparent;
+            color: #1f2937; /* gray-900 */
+            border: 1px solid #1f2937; /* gray-900 border */
+        }
+        .cookie-banner .btn-deny:hover {
+            background-color: #e5e7eb; /* gray-200 */
+        }
+
+        /* Responsive adjustments for cookie banner */
+        @media (min-width: 768px) {
+            .cookie-banner {
+                flex-direction: row; /* Row layout on larger screens */
+                text-align: left;
+                padding: 1rem 2rem; /* Adjusted padding for desktop */
+            }
+            .cookie-banner p {
+                flex-grow: 1; /* Allow text to take up available space */
+            }
+            .cookie-banner .btn-group {
+                flex-shrink: 0; /* Prevent button group from shrinking */
+            }
+        }
     </style>
     <script>
         // Ensure ChartDataLabels is registered
@@ -709,6 +772,7 @@
             });
             localStorage.setItem('user_consent', 'granted');
             console.log('Consent granted!');
+            document.getElementById('cookie-banner').style.display = 'none'; // Hide the banner
         }
 
         function denyConsent() {
@@ -720,6 +784,7 @@
             });
             localStorage.setItem('user_consent', 'denied');
             console.log('Consent denied!');
+            document.getElementById('cookie-banner').style.display = 'none'; // Hide the banner
         }
     </script>
 </head>
@@ -1284,6 +1349,15 @@
         </main>
     </div>
 
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" class="cookie-banner liquid-glass-card hidden">
+        <p class="text-gray-700 text-sm md:text-base">We use cookies to ensure you get the best experience on our website. By continuing to use this site, you agree to our use of cookies.</p>
+        <div class="btn-group">
+            <button onclick="grantConsent()" class="btn-accept">Accept All Cookies</button>
+            <button onclick="denyConsent()" class="btn-deny">Deny</button>
+        </div>
+    </div>
+
     <script>
         // Ensure ChartDataLabels is registered
         Chart.register(ChartDataLabels);
@@ -1633,6 +1707,15 @@
             // Initial state setup
             toggleChileTaxRate(false); // Ensure Chile tax rate selector is hidden initially
             hideAllErrors(); // Hide all errors initially
+
+            // Check if cookie banner should be shown
+            const cookieBanner = document.getElementById('cookie-banner');
+            const consentStatus = localStorage.getItem('user_consent');
+            if (consentStatus === null) {
+                cookieBanner.style.display = 'flex'; // Show the banner if no consent decision
+            } else {
+                cookieBanner.style.display = 'none'; // Hide if a decision has been made
+            }
         });
         
         // Event listener for Enter key press
