@@ -35,6 +35,7 @@
             justify-content: center;
             flex-direction: column; /* Allows content to stack vertically if needed */
             background-color: #FFFFFF; /* Changed background to solid white */
+            overflow-x: hidden; /* Hide horizontal scrollbar */
         }
         /* Liquid Glass Design Principles */
         /* This creates a subtle frosted glass effect */
@@ -313,7 +314,7 @@
             cursor: pointer;
             display: grid;
             align-items: center;
-            width: fit-content;
+            width: 100%; /* Changed to 100% to ensure it fills the grid column */
             transition: color 0.3s ease;
             margin-right: 0;
             padding: 0.5rem 1rem; /* Added padding to each label */
@@ -603,13 +604,13 @@
 
             /* Adjust tab bar for mobile */
             .tab-bar {
-                padding: 0.2rem; /* Even smaller padding */
-                gap: 0.2rem; /* Even smaller gap */
+                padding: 0.1rem; /* Even smaller padding for very small screens */
+                gap: 0.1rem; /* Even smaller gap for very small screens */
             }
 
             .tab-bar .nav-link {
-                padding: 0.4rem 0.6rem; /* Even smaller padding for tabs */
-                font-size: 0.75rem; /* Even smaller font size */
+                padding: 0.3rem 0.5rem; /* Even smaller padding for tabs */
+                font-size: 0.7rem; /* Even smaller font size */
             }
 
             /* FMV label shorter on mobile */
