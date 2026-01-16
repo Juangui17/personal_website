@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Power of an Early Start: An Investment Infographic</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXX');
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 60vh;
+            max-height: 500px;
+        }
+        .chart-container-sm {
+            height: 40vh;
+            max-height: 400px;
+        }
+        /* Card is non-interactive now */
+        .info-card {
+            border: 4px solid transparent;
+            /* Kept the hover effect for visual appeal, but it's not interactive */
+            transform: scale(1);
+            transition: transform 0.3s;
+        }
+        .info-card:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-primary {
+            background-color: #F26D3D;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .btn-primary:hover {
+            background-color: #e06030;
+            transform: translateY(-1px);
+        }
+        /* Custom Tooltip Styling */
+        .info-tooltip-container {
+            position: relative;
+        }
+        .info-tooltip-content {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s linear;
+        }
+        .info-tooltip-container:hover .info-tooltip-content {
+            visibility: visible;
+            opacity: 1;
+        }
+        .info-icon {
+            color: #94a3b8; /* slate-400 */
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .info-icon:hover {
+            color: #F26D3D;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <header class="text-center my-8 md:my-12">
+            <h1 class="text-4xl md:text-6xl font-black text-[#F26D3D] tracking-tight">Time is Your Greatest Asset</h1>
+            <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-slate-600">A comparative analysis of wealth accumulation, demonstrating the power of early investment versus the destructive effect of inflation on both returns and idle cash.</p>
+        </header>
+
+        <main>
+             <!-- Section 1: Investment Growth Chart (3 Nominal Series) -->
+            <section id="investment-growth-chart" class="bg-white rounded-2xl shadow-lg p-4 md:p-8 mb-12">
+                <div class="text-center info-tooltip-container">
+                    <h2 class="text-2xl md:text-3xl font-bold inline-block mr-2">The Investment Curve Shift: Nominal Value Comparison</h2>
+                    <span class="info-icon inline-block align-middle">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </span>
+                    <div class="info-tooltip-content absolute z-10 left-1/2 -translate-x-1/2 mt-2 w-72 p-3 bg-slate-800 text-white text-sm rounded-lg shadow-lg pointer-events-none">
+                        Base investment for all lines is a fixed €1,000 annual contribution and a 7% nominal annual return.
+                    </div>
+                </div>
+                
+                <p class="text-center text-slate-500 mb-6 max-w-3xl mx-auto">Compare the wealth accumulation curves for investors starting at age 20, 25, and 35, illustrating the massive impact of compounding time.</p>
+                
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </section>
+            
+            <!-- Section 2: Results Breakdown (3 Scenarios) - Non-Interactive Info Cards -->
+            <section id="results-breakdown" class="my-12">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold">The Final Portfolio Values at Age 65</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+                    
+                    <div id="ideal-card" class="info-card bg-[#00A6A6] text-white p-6 rounded-2xl shadow-xl transform transition-transform duration-300">
+                        <h3 class="text-xl font-bold border-b-2 border-white/50 pb-2 mb-4">Ideal Start (Age 20)</h3>
+                        <div class="space-y-3">
+                            <p><span class="font-semibold">Nominal Value:</span> €293,908</p>
+                            <p><span class="font-semibold">Real Value (w/ 3% inflation):</span> €114,142</p>
+                            <div class="pt-2">
+                                <p class="text-sm opacity-90">Total Years Compounding:</p>
+                                <p class="text-4xl font-black">45</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="current-card" class="info-card bg-[#7A5BCC] text-white p-6 rounded-2xl shadow-xl transform transition-transform duration-300">
+                        <h3 class="text-xl font-bold border-b-2 border-white/50 pb-2 mb-4">Current Situation (Age 25)</h3>
+                        <div class="space-y-3">
+                            <p><span class="font-semibold">Nominal Value:</span> €219,856</p>
+                            <p><span class="font-semibold">Real Value (w/ 3% inflation):</span> €101,313</p>
+                            <div class="pt-2">
+                                <p class="text-sm opacity-90">Total Years Compounding:</p>
+                                <p class="text-4xl font-black">40</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="late-card" class="info-card bg-[#F26D3D] text-white p-6 rounded-2xl shadow-xl transform transition-transform duration-300">
+                        <h3 class="text-xl font-bold border-b-2 border-white/50 pb-2 mb-4">Late Investor (Age 35)</h3>
+                        <div class="space-y-3">
+                             <p><span class="font-semibold">Nominal Value:</span> €107,587</p>
+                             <p><span class="font-semibold">Real Value (w/ 3% inflation):</span> €56,001</p>
+                             <div class="pt-2">
+                                <p class="text-sm opacity-90">Total Years Compounding:</p>
+                                <p class="text-4xl font-black">30</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section 3: The Monthly Boost Effect (NEW DYNAMIC CHART) -->
+             <section id="monthly-boost-chart" class="bg-white rounded-2xl shadow-lg p-4 md:p-8 mb-12">
+                <div class="text-center info-tooltip-container">
+                    <h2 class="text-2xl md:text-3xl font-bold inline-block mr-2">The Monthly Boost Effect: Small Consistent Contributions</h2>
+                    <span class="info-icon inline-block align-middle">
+                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </span>
+                    <div class="info-tooltip-content absolute z-10 left-1/2 -translate-x-1/2 mt-2 w-72 p-3 bg-slate-800 text-white text-sm rounded-lg shadow-lg pointer-events-none">
+                         The 'Original Ideal' line uses a fixed €1,000 annual investment. The 'Boosted' line adds the user-defined monthly amount to this base (7% nominal return assumed).
+                    </div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-8 mt-4">
+                    <label for="monthlyAmount" class="text-lg font-medium text-slate-700">Extra Monthly Contribution (€):</label>
+                    <input type="number" id="monthlyAmount" value="100" min="0" step="50" class="p-2 border border-slate-300 rounded-lg w-32 text-center focus:ring-2 focus:ring-[#F26D3D]">
+                    <button id="calculateBoostBtn" class="btn-primary">Calculate Boost</button>
+                </div>
+
+                <div class="chart-container chart-container-sm">
+                    <canvas id="boostChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Section 4: The Failure of Cash (Scenario Comparison) -->
+            <section id="savings-vs-inflation-chart" class="bg-white rounded-2xl shadow-lg p-4 md:p-8 mb-12">
+                <div class="text-center info-tooltip-container">
+                    <h2 class="text-2xl md:text-3xl font-bold inline-block mr-2">The Hidden Tax: Real Value of Savings Over 45 Years</h2>
+                    <span class="info-icon inline-block align-middle">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </span>
+                    <div class="info-tooltip-content absolute z-10 left-1/2 -translate-x-1/2 mt-2 w-72 p-3 bg-slate-800 text-white text-sm rounded-lg shadow-lg pointer-events-none">
+                        This chart tracks the real value erosion of an initial €10,000 cash lump sum over 45 years, assuming 3% average inflation.
+                    </div>
+                </div>
+
+                <p class="text-center text-slate-500 mb-6 mt-4 max-w-3xl mx-auto">This visualization directly compares the Real Purchasing Power across three low-return scenarios (assuming 3% inflation).</p>
+                
+                <div class="chart-container chart-container-sm">
+                    <canvas id="savingsInflationChart"></canvas>
+                </div>
+            </section>
+            
+            <!-- Section 5: Inflation Erosion (The original single chart, renamed for clarity) -->
+            <section id="inflation-erosion-chart" class="bg-white rounded-2xl shadow-lg p-4 md:p-8 mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold text-center mb-2">Extreme Example: Money Under the Mattress (0% Return)</h2>
+                <p class="text-center text-slate-500 mb-6 max-w-3xl mx-auto">This chart isolates the single worst scenario: a 0% nominal return on €10,000. After 45 years, the purchasing power is decimated, losing nearly 75% of its original value.</p>
+                <div class="chart-container chart-container-sm">
+                    <canvas id="cashErosionChart"></canvas>
+                </div>
+            </section>
+
+            <section id="conclusion" class="text-center my-12 max-w-3xl mx-auto">
+                 <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <h2 class="text-2xl font-bold mb-4">The Verdict: Fight Inflation With Investment</h2>
+                    <p class="text-slate-600 text-lg">The data is irrefutable: the single best decision is to start investing early (Age 20 is ideal). Holding cash is a guaranteed path to wealth erosion, as seen in the "Under the Mattress" chart where value is decimated. Your primary financial goal must be to ensure your Real Return on investments significantly exceeds the inflation rate.</p>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="text-center p-4 mt-8 text-slate-500 text-sm">
+            <p>Infographic created for data visualization purposes. Financial data is hypothetical and for illustrative purposes only. Investment returns are not guaranteed. Inflation is assumed to be 3%.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        let growthChart;
+        let boostChart;
+
+        const VISUAL_START_AGE = 20;
+        const VISUAL_END_AGE = 65;
+        // Annual Investment used for the main growth comparison charts
+        const ANNUAL_INVESTMENT = 1000; 
+        const NOMINAL_RETURN = 0.07;
+        const AVERAGE_INFLATION = 0.03;
+        const REAL_RETURN = NOMINAL_RETURN - AVERAGE_INFLATION;
+        // Initial value for inflation/cash comparison charts
+        const INFLATION_INITIAL_VALUE = 10000; 
+        const SAVINGS_RETURN = 0.01;
+        const TARGET_RETURN_BEAT_INFLATION = 0.04;
+        const allAges = Array.from({ length: (VISUAL_END_AGE - VISUAL_START_AGE) + 1 }, (_, i) => VISUAL_START_AGE + i);
+        const yearsElapsed = allAges.map(age => age - VISUAL_START_AGE);
+
+
+        function calculateInvestmentGrowth(startAge, annualLumpSum, monthlyContribution, annualRate) {
+            let portfolioValue = 0;
+            const annualMonthlyTotal = monthlyContribution * 12; 
+            
+            const history = [];
+            for (let age = VISUAL_START_AGE; age <= VISUAL_END_AGE; age++) {
+                
+                if (age >= startAge) {
+                    portfolioValue += annualLumpSum + annualMonthlyTotal;
+                }
+                
+                if (age >= startAge) {
+                     portfolioValue *= (1 + annualRate);
+                }
+
+                history.push({ age: age, value: portfolioValue });
+            }
+            return history;
+        }
+
+        function calculateRealValue(initialValue, years, nominalRate, inflationRate) {
+            const realRate = (1 + nominalRate) / (1 + inflationRate) - 1;
+            return initialValue * Math.pow(1 + realRate, years);
+        }
+
+        // The toggleSeries function has been entirely removed as requested.
+
+        // --- Chart 1: Investment Growth Initialization (Nominal Value Comparison) ---
+        function initGrowthChart() {
+            const idealNominalData = calculateInvestmentGrowth(20, ANNUAL_INVESTMENT, 0, NOMINAL_RETURN);
+            const currentNominalData = calculateInvestmentGrowth(25, ANNUAL_INVESTMENT, 0, NOMINAL_RETURN);
+            const lateNominalData = calculateInvestmentGrowth(35, ANNUAL_INVESTMENT, 0, NOMINAL_RETURN);
+
+            const idealNominalValues = idealNominalData.map(d => d.value);
+            const currentNominalValues = allAges.map(age => {
+                if (age < 25) return null;
+                const dataPoint = currentNominalData.find(d => d.age === age);
+                return dataPoint ? dataPoint.value : null;
+            });
+            const lateNominalValues = allAges.map(age => {
+                if (age < 35) return null;
+                const dataPoint = lateNominalData.find(d => d.age === age);
+                return dataPoint ? dataPoint.value : null;
+            });
+
+            const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+            growthChart = new Chart(ctxGrowth, {
+                type: 'line',
+                data: {
+                    labels: allAges,
+                    datasets: [{
+                        label: 'Ideal (Age 20) - Nominal Value',
+                        data: idealNominalValues,
+                        borderColor: '#00A6A6', // Green/Teal
+                        backgroundColor: 'rgba(0, 166, 166, 0.1)',
+                        borderWidth: 4, pointRadius: 0, tension: 0.4, fill: true,
+                    }, {
+                        label: 'Current (Age 25) - Nominal Value',
+                        data: currentNominalValues,
+                        borderColor: '#7A5BCC', // Purple
+                        backgroundColor: 'rgba(122, 91, 204, 0.1)',
+                        borderWidth: 3, pointRadius: 0, tension: 0.4, fill: true,
+                    }, {
+                        label: 'Late (Age 35) - Nominal Value',
+                        data: lateNominalValues,
+                        borderColor: '#F26D3D', // Orange/Red
+                        backgroundColor: 'rgba(242, 109, 61, 0.1)',
+                        borderWidth: 3, pointRadius: 0, tension: 0.4, fill: true,
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Portfolio Value (€)', font: { size: 14, weight: '600' } },
+                            ticks: { callback: function(value, index, values) { 
+                                return '€' + (value / 1000000).toFixed(2) + 'M'; 
+                            } }
+                        },
+                        x: {
+                            title: { display: true, text: 'Age', font: { size: 14, weight: '600' } }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top', labels: { font: { size: 14, weight: '600' } } },
+                        tooltip: { mode: 'index', intersect: false, callbacks: {
+                            title: (tooltipItems) => "Age: " + tooltipItems[0].chart.data.labels[tooltipItems[0].dataIndex],
+                            label: (context) => context.dataset.label + ': ' + new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(context.parsed.y)
+                        } }
+                    }
+                }
+            });
+        }
+        
+        // --- Chart 2 & 3: Inflation Charts Initialization ---
+        function initInflationCharts() {
+            const mattressValues = yearsElapsed.map(y => calculateRealValue(INFLATION_INITIAL_VALUE, y, 0, AVERAGE_INFLATION));
+            const savingsValues = yearsElapsed.map(y => calculateRealValue(INFLATION_INITIAL_VALUE, y, SAVINGS_RETURN, AVERAGE_INFLATION));
+            const targetValues = yearsElapsed.map(y => calculateRealValue(INFLATION_INITIAL_VALUE, y, TARGET_RETURN_BEAT_INFLATION, AVERAGE_INFLATION));
+
+            // Chart 2: Savings Inflation Comparison
+            const ctxSavingsInflation = document.getElementById('savingsInflationChart').getContext('2d');
+            new Chart(ctxSavingsInflation, {
+                type: 'line',
+                data: {
+                    labels: allAges,
+                    datasets: [{
+                        label: 'Under the Mattress (0% Nominal Return)', data: mattressValues,
+                        borderColor: '#F26D3D', backgroundColor: 'rgba(242, 109, 61, 0.2)',
+                        borderWidth: 3, pointRadius: 0, tension: 0.4, fill: false,
+                    }, {
+                        label: 'Savings Account (1% Nominal Return)', data: savingsValues,
+                        borderColor: '#00A6A6', backgroundColor: 'rgba(0, 166, 166, 0.2)',
+                        borderWidth: 3, pointRadius: 0, tension: 0.4, fill: false,
+                    }, {
+                        label: 'Target (4% Nominal Return - 1% Real Gain)', data: targetValues,
+                        borderColor: '#3A4ED2', backgroundColor: 'rgba(58, 78, 210, 0.2)',
+                        borderWidth: 3, pointRadius: 0, tension: 0.4, fill: false,
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+            });
+
+            // Chart 3: Cash Erosion
+            const ctxCashErosion = document.getElementById('cashErosionChart').getContext('2d');
+            new Chart(ctxCashErosion, {
+                type: 'line',
+                data: {
+                    labels: allAges,
+                    datasets: [{
+                        label: 'Real Purchasing Power of €10,000 (0% Return)', data: mattressValues,
+                        borderColor: '#F26D3D', backgroundColor: 'rgba(242, 109, 61, 0.2)',
+                        borderWidth: 3, pointRadius: 0, tension: 0.4, fill: 'start',
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+        
+        // --- Chart 4: Monthly Boost Initialization and Update ---
+        function updateBoostChart() {
+            const monthlyAmount = parseFloat(document.getElementById('monthlyAmount').value) || 0;
+            
+            const originalIdealData = calculateInvestmentGrowth(20, ANNUAL_INVESTMENT, 0, NOMINAL_RETURN);
+            const boostedIdealData = calculateInvestmentGrowth(20, ANNUAL_INVESTMENT, monthlyAmount, NOMINAL_RETURN);
+
+            const originalIdealValues = originalIdealData.map(d => d.value);
+            const boostedIdealValues = boostedIdealData.map(d => d.value);
+
+            const latestBoostedValue = boostedIdealValues[boostedIdealValues.length - 1];
+            const finalValueDisplay = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(latestBoostedValue);
+            
+            // Update the chart if it exists, otherwise create it
+            if (boostChart) {
+                boostChart.data.datasets[1].data = boostedIdealValues;
+                boostChart.data.datasets[1].label = `Boosted - €${monthlyAmount.toFixed(0)} Monthly (Final: ${finalValueDisplay})`;
+                boostChart.update();
+            } else {
+                 const ctxBoost = document.getElementById('boostChart').getContext('2d');
+                 boostChart = new Chart(ctxBoost, {
+                    type: 'line',
+                    data: {
+                        labels: allAges,
+                        datasets: [{
+                            label: 'Original Ideal - €0 Monthly (Base €1,000 Annual)',
+                            data: originalIdealValues,
+                            borderColor: '#7A5BCC', 
+                            backgroundColor: 'rgba(122, 91, 204, 0.1)',
+                            borderWidth: 3, pointRadius: 0, tension: 0.4, fill: true,
+                        }, {
+                            label: `Boosted - €${monthlyAmount.toFixed(0)} Monthly (Final: ${finalValueDisplay})`,
+                            data: boostedIdealValues,
+                            borderColor: '#F26D3D', 
+                            backgroundColor: 'rgba(242, 109, 61, 0.2)',
+                            borderWidth: 4, pointRadius: 0, tension: 0.4, fill: true,
+                        }]
+                    },
+                    options: {
+                         responsive: true, maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: { display: true, text: 'Portfolio Value (€)', font: { size: 14, weight: '600' } },
+                                ticks: { callback: function(value, index, values) { 
+                                    return '€' + (value / 1000000).toFixed(2) + 'M'; 
+                                } }
+                            },
+                            x: { title: { display: true, text: 'Age', font: { size: 14, weight: '600' } } }
+                        },
+                        plugins: { legend: { position: 'top' } }
+                    }
+                 });
+            }
+        }
+
+        function initializeAll() {
+            initGrowthChart();
+            initInflationCharts();
+            updateBoostChart(); 
+            
+            document.getElementById('calculateBoostBtn').addEventListener('click', updateBoostChart);
+            document.getElementById('monthlyAmount').addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    updateBoostChart();
+                }
+            });
+        }
+        
+        window.onload = initializeAll;
+    </script>
+</body>
+</html>
