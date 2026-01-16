@@ -529,13 +529,12 @@
             text-align: center;
             padding: 6px 10px; /* Adjusted padding to make it less tall */
             border-radius: 6px;
-            z-index: 50; /* Increased Z-index to ensure visibility */
+            z-index: 10;
             transition: opacity 0.3s;
             word-wrap: break-word;
             white-space: normal;
             font-size: 0.8rem; /* Slightly smaller font for compactness */
             line-height: 1.3; /* Adjust line height for better spacing */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Added shadow for better visibility */
         }
 
         /* Web (default): tooltip above and centered */
@@ -547,7 +546,7 @@
             transform: translateX(-50%);
         }
 
-        /* Arrow for tooltip (Desktop only) */
+        /* Arrow for tooltip */
         .tooltip-text::after {
             content: '';
             position: absolute;
@@ -559,35 +558,25 @@
             border-color: #333 transparent transparent transparent;
         }
 
-        /* --- FIXED: Mobile Tooltip Styles --- */
+        /* On mobile: move to upper right */
         @media (max-width: 768px) {
-            .tooltip-text {
-                /* Use Fixed positioning to center relative to the viewport/window, not the container */
-                width: 80vw; /* Wide card format */
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                bottom: auto; /* Reset bottom */
-                right: auto;
-                transform: translate(-50%, -50%); /* True centering */
-                
-                background-color: #f3f4f6; /* Lighter background for mobile card */
-                color: #1f2937; /* Darker text for readability */
-                padding: 1rem;
-                border: 1px solid #d1d5db;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.2); /* Stronger shadow */
-                font-size: 0.9rem;
-            }
-
             .tooltip-container:hover .tooltip-text {
-                /* Ensure visibility logic matches desktop but positioning is handled above */
-                visibility: visible;
-                opacity: 1;
+                bottom: 120%;
+                left: auto;
+                right: -10px;
+                transform: translateX(10%);
             }
 
-            /* Hide the little arrow on mobile since it's a centered card */
             .tooltip-text::after {
-                display: none;
+                left: auto;
+                right: 16px;
+                margin-left: 0;
+            }
+            /* Further adjust tooltip width for mobile to match image */
+            .tooltip-text {
+                width: 140px; /* Even narrower for mobile */
+                padding: 5px 8px; /* Even less padding for mobile */
+                font-size: 0.75rem; /* Smaller font for mobile */
             }
         }
 
@@ -955,7 +944,7 @@
                                 <label for="sale-price" class="block text-sm font-medium text-gray-700">
                                     <span class="fmv-label-full">Per Share (Sale Price/Fair Market Value) (USD):</span>
                                     <span class="fmv-label-short">Per Share (Sale Price/FMV) (USD):</span>
-                                    <span class="tooltip-container">
+                                    <span class="tooltip-container hidden md:inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert-icon lucide-circle-alert inline-block align-middle text-gray-500 cursor-pointer ml-1">
                                             <circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>
                                         </svg>
@@ -1705,19 +1694,6 @@
             } else {
                 cookieBanner.style.display = 'none'; // Hide if a decision has been made
             }
-
-            // --- Tooltip Close on Click (Touch devices) ---
-            document.addEventListener('touchstart', (e) => {
-                if (!e.target.closest('.tooltip-container')) {
-                    // Hide all tooltip texts
-                    /* Note: CSS hover handles desktop. This JS helps mobile "un-hover"/close */
-                     /* Since CSS controls visibility, we can't easily force it hidden via style without conflicting.
-                        However, usually touching elsewhere removes focus/hover state on mobile. 
-                        If persistent, we can try removing a class or similar, but default behavior often suffices.
-                        To be safe, we can add a small helper if needed, but CSS :hover often sticks on iOS until another click.
-                     */
-                }
-            });
         });
         
         // Event listener for Enter key press
@@ -1736,9 +1712,7 @@
             console.log('Validation result:', isValid); // For debugging: log validation result
 
             if (!isValid) {
-                // If not valid, errors are already shown by validateInputs()
-                
-                // --- FIXED: Scroll to the first visible error on mobile ---
+                // If not valid, scroll to first error on mobile
                 if (window.innerWidth < 768) {
                     const firstVisibleError = document.querySelector('.error-message:not(.hidden)');
                     if (firstVisibleError) {
