@@ -687,7 +687,7 @@ function saveSession(){
       name: userName || existing.name || '',
       prios: prios,
       savedAt: new Date().toISOString(),
-      tutorialSeen: true,
+      tutorialSeen: existing.tutorialSeen || false,
     }));
   } catch(e){}
 }
@@ -832,9 +832,10 @@ function exportPDF(){
   +'<scr'+'ipt>window.onload=function(){setTimeout(function(){window.print();},350);}<\/scr'+'ipt>'
   +'</body></html>';
 
-  const w=window.open('','_blank','width=900,height=700');
-  if(w){w.document.write(html);w.document.close();}
-  else alert('Please allow pop-ups to export PDF, then try again.');
+  const blob = new Blob([html], {type: 'text/html'});
+  const url = URL.createObjectURL(blob);
+  const w = window.open(url, '_blank');
+  if(!w) alert('Please allow pop-ups to export PDF, then try again.');
 }
 function resumeSession(){
   const s = loadSession();
@@ -984,7 +985,11 @@ function obEnd() {
   tip.style.pointerEvents = 'none';
   tip.style.opacity = '0';
   if (obWatcher) clearInterval(obWatcher);
-  saveSession(); // persists tutorialSeen: true
+  try {
+    const s = loadSession() || {};
+    s.tutorialSeen = true;
+    localStorage.setItem('bjobs_session', JSON.stringify(s));
+  } catch(e){}
 }
 </script>
 </body>
