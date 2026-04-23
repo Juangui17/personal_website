@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eight Sleep — White Glove Survey</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;background:#f5f5f5;color:#111;min-height:100vh;padding:40px 24px}
+.wrap{max-width:580px;margin:0 auto}
+.header{margin-bottom:32px}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#e5393a;margin-bottom:8px}
+.title{font-size:24px;font-weight:800;color:#111;letter-spacing:-0.5px;margin-bottom:4px}
+.subtitle{font-size:13px;color:#888}
+.tabs{display:flex;gap:8px;margin-bottom:24px}
+.tab{padding:9px 18px;border-radius:100px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid #ddd;background:#fff;color:#666;font-family:inherit;transition:all .15s}
+.tab.active{background:#111;border-color:#111;color:#fff}
+.section{display:none}
+.section.active{display:block}
+.section-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#aaa;margin-bottom:20px}
+.q{margin-bottom:24px}
+.q-label{font-size:14px;font-weight:600;color:#111;margin-bottom:10px;display:block;line-height:1.4}
+.q-sub{font-size:11px;color:#aaa;margin-bottom:8px;display:block}
+.stars{display:flex;gap:6px;margin-bottom:4px}
+.star{font-size:28px;cursor:pointer;color:#e0e0e0;transition:color .1s;user-select:none;line-height:1}
+.star.on{color:#F2A623}
+.options{display:flex;flex-direction:column;gap:6px}
+.option{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;border:1.5px solid #e5e5e5;cursor:pointer;font-size:13px;color:#333;background:#fff;transition:border-color .1s;user-select:none}
+.option:hover{border-color:#bbb}
+.option.selected{border-color:#111;background:#fafafa}
+.option input{accent-color:#111;flex-shrink:0}
+textarea{width:100%;padding:10px 14px;border-radius:8px;border:1.5px solid #e5e5e5;font-size:13px;font-family:inherit;color:#111;background:#fff;resize:vertical;min-height:80px;outline:none}
+textarea:focus{border-color:#999}
+.scale-wrap{background:#fff;border-radius:8px;padding:14px;border:1.5px solid #e5e5e5}
+.scale{display:flex;gap:4px;flex-wrap:wrap}
+.sc-btn{height:36px;min-width:36px;border-radius:6px;border:1.5px solid #e5e5e5;font-size:12px;font-weight:600;cursor:pointer;background:#fff;color:#666;font-family:inherit;transition:all .1s;padding:0 6px}
+.sc-btn.selected{background:#111;color:#fff;border-color:#111}
+.scale-labels{display:flex;justify-content:space-between;font-size:10px;color:#aaa;margin-top:6px}
+.divider{height:1px;background:#ebebeb;margin:28px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="eyebrow">White Glove Service</div>
+    <div class="title">Customer experience survey</div>
+    <div class="subtitle">Two touchpoints — Night 1 and Day 30</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="show('n1',this)">Night 1</button>
+    <button class="tab" onclick="show('d30',this)">Day 30</button>
+  </div>
+
+  <!-- NIGHT 1 -->
+  <div class="section active" id="n1">
+    <div class="section-label">Sent the morning after installation</div>
+
+    <div class="q">
+      <span class="q-label">How was your first night with Eight Sleep?</span>
+      <div class="stars" id="s-n1">
+        <span class="star" onclick="rate('n1',1)">★</span>
+        <span class="star" onclick="rate('n1',2)">★</span>
+        <span class="star" onclick="rate('n1',3)">★</span>
+        <span class="star" onclick="rate('n1',4)">★</span>
+        <span class="star" onclick="rate('n1',5)">★</span>
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">Did you sleep in your Eight Sleep last night?</span>
+      <div class="options">
+        <label class="option"><input type="radio" name="slept"> Yes, first full night — no issues</label>
+        <label class="option"><input type="radio" name="slept"> Yes, but woke up and had to adjust something</label>
+        <label class="option"><input type="radio" name="slept"> No, had an issue preventing use</label>
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">How confident do you feel using the app on your own?</span>
+      <div class="scale-wrap">
+        <div class="scale" id="sc-conf">
+          <button class="sc-btn" onclick="pick(this,'conf')">1</button>
+          <button class="sc-btn" onclick="pick(this,'conf')">2</button>
+          <button class="sc-btn" onclick="pick(this,'conf')">3</button>
+          <button class="sc-btn" onclick="pick(this,'conf')">4</button>
+          <button class="sc-btn" onclick="pick(this,'conf')">5</button>
+        </div>
+        <div class="scale-labels"><span>Not confident at all</span><span>Fully independent</span></div>
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">How would you rate the installation experience?</span>
+      <div class="stars" id="s-install">
+        <span class="star" onclick="rate('install',1)">★</span>
+        <span class="star" onclick="rate('install',2)">★</span>
+        <span class="star" onclick="rate('install',3)">★</span>
+        <span class="star" onclick="rate('install',4)">★</span>
+        <span class="star" onclick="rate('install',5)">★</span>
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">Was the technician professional and respectful of your space?</span>
+      <div class="options">
+        <label class="option"><input type="radio" name="prof"> Yes, absolutely</label>
+        <label class="option"><input type="radio" name="prof"> Mostly yes</label>
+        <label class="option"><input type="radio" name="prof"> There were some issues</label>
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">Anything the technician could have done better?</span>
+      <textarea placeholder="Optional — your feedback helps us improve the service"></textarea>
+    </div>
+
+    <div class="q">
+      <span class="q-label">Would you recommend White Glove to another Eight Sleep buyer?</span>
+      <div class="options">
+        <label class="option"><input type="radio" name="rec"> Definitely yes</label>
+        <label class="option"><input type="radio" name="rec"> Probably yes</label>
+        <label class="option"><input type="radio" name="rec"> Not sure</label>
+        <label class="option"><input type="radio" name="rec"> No</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 30 -->
+  <div class="section" id="d30">
+    <div class="section-label">Sent 30 days after installation</div>
+
+    <div class="q">
+      <span class="q-label">How many nights have you slept with Eight Sleep in the last 30 days?</span>
+      <div class="options">
+        <label class="option"><input type="radio" name="nights"> Every night</label>
+        <label class="option"><input type="radio" name="nights"> Most nights</label>
+        <label class="option"><input type="radio" name="nights"> Some nights</label>
+        <label class="option"><input type="radio" name="nights"> Rarely or never</label>
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">How has your sleep quality changed since setup?</span>
+      <div class="options">
+        <label class="option"><input type="radio" name="quality"> Noticeably better</label>
+        <label class="option"><input type="radio" name="quality"> Slightly better</label>
+        <label class="option"><input type="radio" name="quality"> About the same</label>
+        <label class="option"><input type="radio" name="quality"> Worse</label>
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">Which features have you used in the last 30 days?</span>
+      <span class="q-sub">Select all that apply</span>
+      <div class="options">
+        <label class="option"><input type="checkbox"> Temperature control</label>
+        <label class="option"><input type="checkbox"> Sleep tracking and scores</label>
+        <label class="option"><input type="checkbox"> Alarm and wake-up settings</label>
+        <label class="option"><input type="checkbox"> Autopilot</label>
+        <label class="option"><input type="checkbox"> Partner side settings</label>
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">Have you needed support since the installation?</span>
+      <div class="options">
+        <label class="option"><input type="radio" name="support"> No issues</label>
+        <label class="option"><input type="radio" name="support"> Minor issue, solved on my own</label>
+        <label class="option"><input type="radio" name="support"> Contacted Eight Sleep support</label>
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">How likely are you to add another Eight Sleep product to your setup?</span>
+      <div class="scale-wrap">
+        <div class="scale">
+          <button class="sc-btn" onclick="pick(this,'upsell')">1</button>
+          <button class="sc-btn" onclick="pick(this,'upsell')">2</button>
+          <button class="sc-btn" onclick="pick(this,'upsell')">3</button>
+          <button class="sc-btn" onclick="pick(this,'upsell')">4</button>
+          <button class="sc-btn" onclick="pick(this,'upsell')">5</button>
+        </div>
+        <div class="scale-labels"><span>Not at all</span><span>Very likely</span></div>
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">How likely are you to recommend Eight Sleep to a friend or colleague?</span>
+      <div class="scale-wrap">
+        <div class="scale">
+          <button class="sc-btn" onclick="pick(this,'nps')" style="min-width:30px">0</button>
+          <button class="sc-btn" onclick="pick(this,'nps')" style="min-width:30px">1</button>
+          <button class="sc-btn" onclick="pick(this,'nps')" style="min-width:30px">2</button>
+          <button class="sc-btn" onclick="pick(this,'nps')" style="min-width:30px">3</button>
+          <button class="sc-btn" onclick="pick(this,'nps')" style="min-width:30px">4</button>
+          <button class="sc-btn" onclick="pick(this,'nps')" style="min-width:30px">5</button>
+          <button class="sc-btn" onclick="pick(this,'nps')" style="min-width:30px">6</button>
+          <button class="sc-btn" onclick="pick(this,'nps')" style="min-width:30px">7</button>
+          <button class="sc-btn" onclick="pick(this,'nps')" style="min-width:30px">8</button>
+          <button class="sc-btn" onclick="pick(this,'nps')" style="min-width:30px">9</button>
+          <button class="sc-btn" onclick="pick(this,'nps')" style="min-width:30px">10</button>
+        </div>
+        <div class="scale-labels"><span>Not likely</span><span>Extremely likely</span></div>
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="q-label">Anything else you want to share about your 30-day experience?</span>
+      <textarea placeholder="Optional"></textarea>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+function rate(id, val) {
+  document.querySelectorAll('#s-' + id + ' .star').forEach((s, i) => s.classList.toggle('on', i < val));
+}
+function pick(btn, group) {
+  btn.closest('.scale-wrap').querySelectorAll('.sc-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+document.querySelectorAll('.option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    const input = opt.querySelector('input');
+    if (input.type === 'radio') {
+      document.querySelectorAll(`input[name="${input.name}"]`).forEach(i => i.closest('.option').classList.remove('selected'));
+      input.checked = true;
+    } else {
+      input.checked = !input.checked;
+    }
+    opt.classList.toggle('selected', input.checked);
+  });
+});
+</script>
+</body>
+</html>
