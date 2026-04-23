@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eight Sleep — Setup Complexity Analysis</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  background: #f5f5f5;
+  color: #111;
+  min-height: 100vh;
+}
+
+.page-header {
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 32px 48px;
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #e5393a;
+  margin-bottom: 8px;
+}
+.header-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+.header-sub {
+  font-size: 14px;
+  color: #888;
+}
+
+.main {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 48px 80px;
+}
+
+/* INSIGHT */
+.insight {
+  background: #111;
+  border-radius: 10px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+.insight-icon { font-size: 22px; flex-shrink: 0; }
+.insight-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.6; }
+.insight-text strong { color: #fff; }
+
+/* GRID */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+@media (max-width: 900px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px) { .products-grid { grid-template-columns: 1fr; } }
+
+.product-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.07);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* app screenshot mockup */
+.phone-screen {
+  background: #000;
+  padding: 24px 20px 20px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.boxes-row {
+  display: flex;
+  gap: 5px;
+  align-items: flex-end;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.box {
+  width: 28px;
+  border-radius: 3px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.box-label {
+  writing-mode: vertical-rl;
+  font-size: 6px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+.time-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 100px;
+  padding: 6px 14px;
+}
+.time-pill-icon { font-size: 14px; }
+.time-pill-text {
+  font-size: 13px;
+  color: #fff;
+  font-weight: 500;
+}
+.screen-question {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.card-body {
+  padding: 18px;
+}
+.product-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 4px;
+}
+.product-boxes {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+/* progress bar */
+.time-bar-wrap {
+  margin-bottom: 12px;
+}
+.time-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 5px;
+}
+.time-bar-label span:last-child { font-weight: 600; color: #111; }
+.time-bar-bg {
+  background: #f0f0f0;
+  border-radius: 100px;
+  height: 6px;
+  overflow: hidden;
+}
+.time-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: #111;
+  transition: width 0.6s ease;
+}
+
+.complexity-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 100px;
+}
+.low    { background: #d1fae5; color: #065f46; }
+.medium { background: #fef3c7; color: #92400e; }
+.high   { background: #fee2e2; color: #991b1b; }
+.vhigh  { background: #1a1a1a; color: #fff; }
+
+/* SUMMARY TABLE */
+.summary-section { margin-bottom: 48px; }
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 16px;
+}
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.07);
+}
+.summary-table th {
+  background: #111;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  text-align: left;
+}
+.summary-table td {
+  padding: 14px 20px;
+  font-size: 13px;
+  color: #333;
+  border-bottom: 1px solid #f0f0f0;
+}
+.summary-table tr:last-child td { border-bottom: none; }
+.summary-table tr:hover td { background: #fafafa; }
+
+/* SOURCES */
+.sources-section { margin-top: 40px; }
+.sources-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.source-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px 16px;
+  border: 1px solid rgba(0,0,0,0.07);
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+.source-item:hover { border-color: #999; }
+.source-icon { font-size: 16px; flex-shrink: 0; }
+.source-label { font-size: 13px; color: #111; font-weight: 500; }
+.source-url { font-size: 11px; color: #888; margin-top: 1px; }
+.source-badge-yt {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 3px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="header-inner">
+    <div class="eyebrow">Setup Complexity Analysis</div>
+    <div class="header-title">Eight Sleep — Installation Time by Product Configuration</div>
+    <div class="header-sub">Data sourced directly from the Eight Sleep app setup flow and YouTube installation walkthroughs</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="insight">
+    <div class="insight-icon">⏱</div>
+    <div class="insight-text"><strong>Setup time ranges from 30 minutes to 1 hour 55 minutes</strong> depending on product configuration, with 2 to 9 boxes to unpack and connect. This is a self-install process done once, with no prior technical knowledge assumed. The variance is significant and the stakes are high: a failed first night is one of the earliest signals of churn.</div>
+  </div>
+
+  <!-- PRODUCT CARDS -->
+  <div class="products-grid">
+
+    <!-- Pod 5 Core -->
+    <div class="product-card">
+      <div class="phone-screen">
+        <div class="screen-question">Do you have 2 boxes?</div>
+        <div class="boxes-row">
+          <div class="box" style="height:46px;"><div class="box-label">Hub</div></div>
+          <div class="box" style="height:56px;"><div class="box-label">Cover</div></div>
+        </div>
+        <div class="time-pill">
+          <span class="time-pill-icon">🕐</span>
+          <span class="time-pill-text">30 minutes</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="product-name">Pod 5 Core</div>
+        <div class="product-boxes">2 boxes</div>
+        <div class="time-bar-wrap">
+          <div class="time-bar-label"><span>Setup time</span><span>30 min</span></div>
+          <div class="time-bar-bg"><div class="time-bar-fill" style="width:26%;"></div></div>
+        </div>
+        <span class="complexity-tag low">Low complexity</span>
+      </div>
+    </div>
+
+    <!-- Pod 5 Ultra + Base -->
+    <div class="product-card">
+      <div class="phone-screen">
+        <div class="screen-question">Do you have 6 boxes?</div>
+        <div class="boxes-row">
+          <div class="box" style="height:36px;"><div class="box-label">Hub</div></div>
+          <div class="box" style="height:44px;"><div class="box-label">Cover</div></div>
+          <div class="box" style="height:52px;"><div class="box-label">Base L</div></div>
+          <div class="box" style="height:60px;"><div class="box-label">Base R</div></div>
+          <div class="box" style="height:52px;"><div class="box-label">Leg Kit</div></div>
+          <div class="box" style="height:40px;"><div class="box-label">Blanket</div></div>
+        </div>
+        <div class="time-pill">
+          <span class="time-pill-icon">🕐</span>
+          <span class="time-pill-text">1 hour</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="product-name">Pod 5 Ultra + Base</div>
+        <div class="product-boxes">6 boxes</div>
+        <div class="time-bar-wrap">
+          <div class="time-bar-label"><span>Setup time</span><span>60 min</span></div>
+          <div class="time-bar-bg"><div class="time-bar-fill" style="width:52%;"></div></div>
+        </div>
+        <span class="complexity-tag medium">Medium complexity</span>
+      </div>
+    </div>
+
+    <!-- Pod 5 Ultra + Blanket -->
+    <div class="product-card">
+      <div class="phone-screen">
+        <div class="screen-question">Do you have 7 boxes?</div>
+        <div class="boxes-row">
+          <div class="box" style="height:32px;"><div class="box-label">Hub</div></div>
+          <div class="box" style="height:38px;"><div class="box-label">Cover</div></div>
+          <div class="box" style="height:46px;"><div class="box-label">Base L</div></div>
+          <div class="box" style="height:52px;"><div class="box-label">Base R</div></div>
+          <div class="box" style="height:46px;"><div class="box-label">Leg Kit</div></div>
+          <div class="box" style="height:60px;"><div class="box-label">Blanket</div></div>
+          <div class="box" style="height:36px;"><div class="box-label">Pillow</div></div>
+        </div>
+        <div class="time-pill">
+          <span class="time-pill-icon">🕐</span>
+          <span class="time-pill-text">1h 25 min</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="product-name">Pod 5 Ultra + Blanket + Pillow</div>
+        <div class="product-boxes">7 boxes</div>
+        <div class="time-bar-wrap">
+          <div class="time-bar-label"><span>Setup time</span><span>85 min</span></div>
+          <div class="time-bar-bg"><div class="time-bar-fill" style="width:73%;"></div></div>
+        </div>
+        <span class="complexity-tag high">High complexity</span>
+      </div>
+    </div>
+
+    <!-- Full Setup -->
+    <div class="product-card">
+      <div class="phone-screen">
+        <div class="screen-question">Do you have 9 boxes?</div>
+        <div class="boxes-row">
+          <div class="box" style="height:30px;"><div class="box-label">Hub</div></div>
+          <div class="box" style="height:36px;"><div class="box-label">Hub 2</div></div>
+          <div class="box" style="height:42px;"><div class="box-label">Cover</div></div>
+          <div class="box" style="height:48px;"><div class="box-label">Base L</div></div>
+          <div class="box" style="height:56px;"><div class="box-label">Base R</div></div>
+          <div class="box" style="height:60px;"><div class="box-label">Leg Kit</div></div>
+          <div class="box" style="height:56px;"><div class="box-label">Blanket</div></div>
+          <div class="box" style="height:44px;"><div class="box-label">Pillow</div></div>
+          <div class="box" style="height:32px;"><div class="box-label">Access.</div></div>
+        </div>
+        <div class="time-pill">
+          <span class="time-pill-icon">🕐</span>
+          <span class="time-pill-text">1h 55 min</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="product-name">Full Setup (all add-ons)</div>
+        <div class="product-boxes">9 boxes · up to €9,095</div>
+        <div class="time-bar-wrap">
+          <div class="time-bar-label"><span>Setup time</span><span>115 min</span></div>
+          <div class="time-bar-bg"><div class="time-bar-fill" style="width:100%;"></div></div>
+        </div>
+        <span class="complexity-tag vhigh">Highest complexity</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <div class="summary-section">
+    <div class="section-title">Summary</div>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Boxes</th>
+          <th>Setup Time</th>
+          <th>Price Range</th>
+          <th>Complexity</th>
+          <th>White Glove Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Pod 5 Core</strong><br><span style="font-size:11px;color:#aaa;">Hub · Cover</span></td>
+          <td>2</td>
+          <td>30 min</td>
+          <td>From €3,099</td>
+          <td><span class="complexity-tag low">Low</span></td>
+          <td>High volume, upsell potential</td>
+        </tr>
+        <tr>
+          <td><strong>Pod 5 Ultra + Base</strong><br><span style="font-size:11px;color:#aaa;">Hub · Cover · Base L · Base R · Leg Kit · Blanket</span></td>
+          <td>6</td>
+          <td>1 hour</td>
+          <td>From €5,799</td>
+          <td><span class="complexity-tag medium">Medium</span></td>
+          <td>Strong WTP, clear pain point</td>
+        </tr>
+        <tr>
+          <td><strong>Pod 5 Ultra + Blanket + Pillow</strong><br><span style="font-size:11px;color:#aaa;">+ Pillow Cover Two-Pack</span></td>
+          <td>7</td>
+          <td>1h 25 min</td>
+          <td>From €6,698</td>
+          <td><span class="complexity-tag high">High</span></td>
+          <td>Very strong case for service</td>
+        </tr>
+        <tr>
+          <td><strong>Full Setup (all add-ons)</strong><br><span style="font-size:11px;color:#aaa;">+ Extra Hub · Accessories</span></td>
+          <td>9</td>
+          <td>1h 55 min</td>
+          <td>Up to €9,095</td>
+          <td><span class="complexity-tag vhigh">Highest</span></td>
+          <td>Highest ROI on service investment</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="sources-section">
+    <div class="section-title">Sources</div>
+    <div class="sources-list">
+      <a class="source-item" href="https://www.youtube.com/watch?v=OK6JWRjiw4k" target="_blank">
+        <span class="source-icon">▶</span>
+        <div>
+          <div class="source-label">Pod 5 Setup: Cover</div>
+          <div class="source-url">youtube.com/watch?v=OK6JWRjiw4k</div>
+        </div>
+        <span class="source-badge-yt">YouTube</span>
+      </a>
+      <a class="source-item" href="https://www.youtube.com/watch?v=tnbu4eYN6W4&t=16s" target="_blank">
+        <span class="source-icon">▶</span>
+        <div>
+          <div class="source-label">Pod 5 Setup: Cover and Base</div>
+          <div class="source-url">youtube.com/watch?v=tnbu4eYN6W4</div>
+        </div>
+        <span class="source-badge-yt">YouTube</span>
+      </a>
+      <a class="source-item" href="https://www.youtube.com/watch?v=nuslkw9GsVw" target="_blank">
+        <span class="source-icon">▶</span>
+        <div>
+          <div class="source-label">Pod 5 Setup: Cover and Blanket</div>
+          <div class="source-url">youtube.com/watch?v=nuslkw9GsVw</div>
+        </div>
+        <span class="source-badge-yt">YouTube</span>
+      </a>
+      <a class="source-item" href="https://www.youtube.com/watch?v=dNndvOh-kbw" target="_blank">
+        <span class="source-icon">▶</span>
+        <div>
+          <div class="source-label">Pod 5 Setup: Cover, Base, and Blanket</div>
+          <div class="source-url">youtube.com/watch?v=dNndvOh-kbw</div>
+        </div>
+        <span class="source-badge-yt">YouTube</span>
+      </a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
