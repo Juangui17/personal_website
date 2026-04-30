@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eight Sleep — Setup Pain Board</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  background: #f0f0f0;
+  color: #111;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.page-header {
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 32px 48px 28px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+}
+.header-left {}
+.header-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #e5393a;
+  margin-bottom: 6px;
+}
+.header-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+.header-subtitle {
+  font-size: 14px;
+  color: #888;
+  margin-top: 6px;
+  font-weight: 400;
+}
+.header-stats {
+  display: flex;
+  gap: 32px;
+  flex-shrink: 0;
+}
+.stat {
+  text-align: right;
+}
+.stat-number {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 11px;
+  color: #999;
+  margin-top: 3px;
+  font-weight: 400;
+}
+
+/* ── FILTERS ── */
+.filters {
+  max-width: 1400px;
+  margin: 24px auto 0;
+  padding: 0 48px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 7px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid #ddd;
+  background: #fff;
+  color: #555;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.filter-btn:hover { border-color: #999; color: #111; }
+.filter-btn.active {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
+
+/* ── BOARD ── */
+.board {
+  max-width: 1400px;
+  margin: 24px auto 64px;
+  padding: 0 48px;
+  columns: 3;
+  column-gap: 16px;
+}
+
+@media (max-width: 1100px) { .board { columns: 2; } }
+@media (max-width: 700px)  { .board { columns: 1; } }
+
+/* ── CARD ── */
+.review-card {
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 20px 22px 22px;
+  margin-bottom: 16px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.review-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+/* card top row */
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.stars {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.star {
+  font-size: 15px;
+  line-height: 1;
+}
+.star.filled { color: #1a1a1a; }
+.star.empty  { color: #d4d4d8; }
+
+.source-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #6366f1;
+  background: #eef2ff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+.source-badge.app-store {
+  color: #0d7ec2;
+  background: #e8f4fd;
+}
+
+/* author row */
+.card-author {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.author-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111;
+}
+.author-date {
+  font-size: 12px;
+  color: #999;
+  font-weight: 400;
+}
+
+/* headline */
+.card-headline {
+  font-size: 17px;
+  font-weight: 800;
+  color: #111;
+  line-height: 1.25;
+  margin-bottom: 8px;
+  letter-spacing: -0.2px;
+}
+
+/* body */
+.card-body {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}
+.card-body.truncated {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.read-more {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #6366f1;
+  cursor: pointer;
+  font-weight: 500;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+}
+.read-more:hover { text-decoration: underline; }
+
+/* tag chips */
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 12px;
+}
+.tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 3px 8px;
+  border-radius: 100px;
+  background: rgba(0,0,0,0.05);
+  color: #555;
+}
+.tag.setup { background: #fef3c7; color: #92400e; }
+.tag.wifi  { background: #dbeafe; color: #1e40af; }
+.tag.app   { background: #f3e8ff; color: #6b21a8; }
+.tag.support { background: #fce7f3; color: #9d174d; }
+.tag.hardware { background: #d1fae5; color: #065f46; }
+.tag.refund { background: #fee2e2; color: #991b1b; }
+
+/* ── DISMISSED STATE ── */
+.review-card.hidden {
+  display: none;
+}
+
+/* ── INSIGHT BANNER ── */
+.insight-bar {
+  max-width: 1400px;
+  margin: 0 auto 0;
+  padding: 16px 48px 0;
+}
+.insight {
+  background: #111;
+  border-radius: 10px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.insight-icon { font-size: 20px; flex-shrink: 0; }
+.insight-text { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+.insight-text strong { color: #fff; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="header-eyebrow">Setup Pain Board</div>
+      <div class="header-title">What customers are saying<br>about the setup experience</div>
+      <div class="header-subtitle">Real 1-star reviews from Google Reviews &amp; App Store — unedited</div>
+    </div>
+    <div class="header-stats">
+      <div class="stat">
+        <div class="stat-number">18</div>
+        <div class="stat-label">Reviews</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">1★</div>
+        <div class="stat-label">Avg Rating</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">89%</div>
+        <div class="stat-label">Mention setup</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INSIGHT BAR -->
+<div class="insight-bar">
+  <div class="insight">
+    <div class="insight-icon">💡</div>
+    <div class="insight-text"><strong>This is a selection</strong> of 1-star reviews that specifically mention setup and installation — there are more. The pattern repeats: WiFi pairing failures, app crashes, hours of troubleshooting. The product works. The first night doesn't.</div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters">
+  <button class="filter-btn active" onclick="filterCards('all', this)">All (18)</button>
+  <button class="filter-btn" onclick="filterCards('setup', this)">Setup failure</button>
+  <button class="filter-btn" onclick="filterCards('wifi', this)">WiFi / connectivity</button>
+  <button class="filter-btn" onclick="filterCards('app', this)">App issues</button>
+  <button class="filter-btn" onclick="filterCards('support', this)">Customer service</button>
+  <button class="filter-btn" onclick="filterCards('hardware', this)">Hardware</button>
+  <button class="filter-btn" onclick="filterCards('refund', this)">Refund / return</button>
+</div>
+
+<!-- BOARD -->
+<div class="board" id="board">
+
+  <!-- 1 -->
+  <div class="review-card" data-tags="setup">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge">Google Reviews</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Patrick C.</span>
+      <span class="author-date">August 11, 2022</span>
+    </div>
+    <div class="card-headline">Can't get it to work</div>
+    <div class="card-body">Please help</div>
+    <div class="card-tags">
+      <span class="tag setup">Setup failure</span>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="review-card" data-tags="setup refund">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge">Google Reviews</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Clinton L.</span>
+      <span class="author-date">October 10, 2023</span>
+    </div>
+    <div class="card-headline">Not working</div>
+    <div class="card-body">Requesting a refund</div>
+    <div class="card-tags">
+      <span class="tag setup">Setup failure</span>
+      <span class="tag refund">Refund</span>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="review-card" data-tags="hardware">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge">Google Reviews</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Tanay J.</span>
+      <span class="author-date">July 28, 2023</span>
+    </div>
+    <div class="card-headline">Not cooling</div>
+    <div class="card-body">Not hitting temperature set to</div>
+    <div class="card-tags">
+      <span class="tag hardware">Hardware</span>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="review-card" data-tags="setup support refund">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge">Google Reviews</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Shjon W.</span>
+      <span class="author-date">June 18, 2022</span>
+    </div>
+    <div class="card-headline">Service</div>
+    <div class="card-body">We are experiencing issues with getting product set up to use.. looking at possibly returning.. thank you</div>
+    <div class="card-tags">
+      <span class="tag setup">Setup failure</span>
+      <span class="tag refund">Refund</span>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="review-card" data-tags="setup app">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge app-store">App Store</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Hx91111</span>
+      <span class="author-date">June 9, 2025</span>
+    </div>
+    <div class="card-headline">Setup stuck</div>
+    <div class="card-body">Can't even set up the pod since the app is stuck on setup process and the pod is unusable without setup.</div>
+    <div class="card-tags">
+      <span class="tag setup">Setup failure</span>
+      <span class="tag app">App</span>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="review-card" data-tags="support setup">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge">Google Reviews</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Krissi R.</span>
+      <span class="author-date">July 9, 2023</span>
+    </div>
+    <div class="card-headline">Customer service</div>
+    <div class="card-body">Not super happy, I cannot get my son's eight sleep to work and have not been able to speak with anyone on the phone.</div>
+    <div class="card-tags">
+      <span class="tag support">Customer service</span>
+      <span class="tag setup">Setup failure</span>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="review-card" data-tags="setup support">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge">Google Reviews</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Behnam E.</span>
+      <span class="author-date">June 27, 2023</span>
+    </div>
+    <div class="card-headline">The product does not work</div>
+    <div class="card-body">So far the install is not working despite three hours with support (which did not seem to have a clue btw). Will revert back if/when solved</div>
+    <div class="card-tags">
+      <span class="tag setup">Setup failure</span>
+      <span class="tag support">Customer service</span>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="review-card" data-tags="setup app">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge app-store">App Store</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Collyn89</span>
+      <span class="author-date">July 17, 2024</span>
+    </div>
+    <div class="card-headline">Worst setup of any device in at least a decade</div>
+    <div class="card-body">Took three different devices to kind of get this thing setup. Have to uninstall the app to get it to be able to log in and not redo the setup.</div>
+    <div class="card-tags">
+      <span class="tag setup">Setup failure</span>
+      <span class="tag app">App</span>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="review-card" data-tags="hardware support">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge">Google Reviews</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Alfonzo M.</span>
+      <span class="author-date">June 15, 2023</span>
+    </div>
+    <div class="card-headline">Might Return</div>
+    <div class="card-body">Could someone call me, I am not sure this mattress works properly. The cooling feature doesn't really work and the mattress is soo firm it's hurting my back.</div>
+    <div class="card-tags">
+      <span class="tag hardware">Hardware</span>
+      <span class="tag support">Customer service</span>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="review-card" data-tags="hardware support">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge">Google Reviews</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Michael G.</span>
+      <span class="author-date">October 2, 2022</span>
+    </div>
+    <div class="card-headline">Broke after 1 week...</div>
+    <div class="card-body">The hub broke after 1 week and started leaking water onto the floor and not working properly. Support said I'd receive the replacement in 1-3 days and it's been 6 days and still hasn't shipped...</div>
+    <div class="card-tags">
+      <span class="tag hardware">Hardware</span>
+      <span class="tag support">Customer service</span>
+    </div>
+  </div>
+
+  <!-- 11 -->
+  <div class="review-card" data-tags="setup wifi app">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge">Google Reviews</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Patrick O.</span>
+      <span class="author-date">August 10, 2022</span>
+    </div>
+    <div class="card-headline">Too Complex</div>
+    <div class="card-body truncated" id="body-11">Set Up is very complex. I had multiple challenges with the app and wifi connection and after an hour with just that being unsuccessful I abandoned the set up process entirely and have yet to even reconsider it. Beyond frustrated.</div>
+    <div class="card-tags">
+      <span class="tag setup">Setup failure</span>
+      <span class="tag wifi">WiFi</span>
+      <span class="tag app">App</span>
+    </div>
+  </div>
+
+  <!-- 12 -->
+  <div class="review-card" data-tags="app setup">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge app-store">App Store</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">JH74 g.</span>
+      <span class="author-date">June 29, 2025</span>
+    </div>
+    <div class="card-headline">Terrible set up experience</div>
+    <div class="card-body truncated" id="body-12">The app freezes constantly during set up. Cover and Pod initially set up seemed straight forward. I did not have time to complete testing during set up and stepped away, only to have the app freeze upon return. Now the whole thing is unresponsive.</div>
+    <div class="card-tags">
+      <span class="tag app">App</span>
+      <span class="tag setup">Setup failure</span>
+    </div>
+  </div>
+
+  <!-- 13 -->
+  <div class="review-card" data-tags="app setup">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge app-store">App Store</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Lance J.</span>
+      <span class="author-date">July 2, 2025</span>
+    </div>
+    <div class="card-headline">Setup horrendous and app unresponsive</div>
+    <div class="card-body truncated" id="body-13">Everything was working fine during the initial setup. I completed the whole process and then started filling out my preferences. I had to step away and then when I tried to finish my setting profile later in the evening the app repeatedly froze and kept asking me to start the setup all over again. I am now in this doom loop that is never ending. It appears this new app update is universally hated.</div>
+    <div class="card-tags">
+      <span class="tag app">App</span>
+      <span class="tag setup">Setup failure</span>
+    </div>
+  </div>
+
+  <!-- 14 -->
+  <div class="review-card" data-tags="setup support hardware refund">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge">Google Reviews</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Cynthia S.</span>
+      <span class="author-date">January 13, 2023</span>
+    </div>
+    <div class="card-headline">VERY time consuming/frustrating customer service process</div>
+    <div class="card-body truncated" id="body-14">Our sleep system was installed after the Christmas holiday. Tedious install but figured you don't have to do it often so no biggie. A couple days of evenly distributed heat and then there were cold pockets on one side of the bed. Since that first realization that there was a problem with the bed I have spent hours on the process of dealing with it. Multiple 20+ minute hold times only to then have a message come on that no one is available to take the call. I just finished working on my taxes and it took less time than my sleep system. If I could do this over I would not order the system.</div>
+    <button class="read-more" onclick="toggleBody('body-14', this)">Read more</button>
+    <div class="card-tags">
+      <span class="tag setup">Setup failure</span>
+      <span class="tag support">Customer service</span>
+      <span class="tag hardware">Hardware</span>
+    </div>
+  </div>
+
+  <!-- 15 -->
+  <div class="review-card" data-tags="wifi setup support">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge">Google Reviews</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">vilasack t.</span>
+      <span class="author-date">July 12, 2023</span>
+    </div>
+    <div class="card-headline">Can't even connect and getting no support help...</div>
+    <div class="card-body truncated" id="body-15">Tried connecting with the instructions. Had issues and contacted support the first day. Support person said "I'll escalate this issue with engineering and you'll get a response in 24 hours". Next day contacted support again and after trying a few things "We'll escalate this issue to development team". Supposedly you need another phone to hook up to this pod, one to actually use as a hotspot to be able to connect. I don't have another phone. Still waiting few days later. Way too frustrating. Requesting my return packaging to send this back.</div>
+    <button class="read-more" onclick="toggleBody('body-15', this)">Read more</button>
+    <div class="card-tags">
+      <span class="tag wifi">WiFi</span>
+      <span class="tag setup">Setup failure</span>
+      <span class="tag support">Customer service</span>
+      <span class="tag refund">Refund</span>
+    </div>
+  </div>
+
+  <!-- 16 -->
+  <div class="review-card" data-tags="wifi setup support">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge">Google Reviews</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">Scott M.</span>
+      <span class="author-date">October 3, 2023</span>
+    </div>
+    <div class="card-headline">Worst onboarding and customer service experience I've ever had</div>
+    <div class="card-body truncated" id="body-16">When I finally received my unit, I had to spend no less than 10 hours troubleshooting how to get the pod connected to the internet. Every conversation with tech support offered the same, 'turn it off and do a reset', 'delete and redownload the app', etc. The most frustrating part of all is that I ultimately found the issue on my own after countless conversations with support. The pod only works on a 5GHz WiFi signal. My router supports a dual-band connection, and for whatever reason, this was blocking the pod. Why not make this abundantly clear? It could have saved me hours of agony. All this, and no offer to extend my trial period or compensate me in any way.</div>
+    <button class="read-more" onclick="toggleBody('body-16', this)">Read more</button>
+    <div class="card-tags">
+      <span class="tag wifi">WiFi</span>
+      <span class="tag setup">Setup failure</span>
+      <span class="tag support">Customer service</span>
+    </div>
+  </div>
+
+  <!-- 17 -->
+  <div class="review-card" data-tags="app setup support">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge app-store">App Store</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">EK4912</span>
+      <span class="author-date">July 1, 2025</span>
+    </div>
+    <div class="card-headline">Unable to set up or use due to app crashing</div>
+    <div class="card-body truncated" id="body-17">I recently purchased the latest version of the Eight Sleep Kit. It has been 4 days since receiving the pod and mattress topper, but still haven't been able to set everything up because the app crashes within 1 minute. Have tried reinstalling the app and restarting my phone several times with no success. Also, purchased the blanket with the bundle and was only notified the delivery would be delayed for 3 to 4 weeks due to it being out of stock after receiving the rest of the items. Have not been able to try anything out and already extremely disappointed with customer service and support.</div>
+    <button class="read-more" onclick="toggleBody('body-17', this)">Read more</button>
+    <div class="card-tags">
+      <span class="tag app">App</span>
+      <span class="tag setup">Setup failure</span>
+      <span class="tag support">Customer service</span>
+    </div>
+  </div>
+
+  <!-- 18 -->
+  <div class="review-card" data-tags="app setup">
+    <div class="card-top">
+      <div class="stars">
+        <span class="star filled">★</span>
+        <span class="star filled">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+        <span class="star empty">★</span>
+      </div>
+      <span class="source-badge app-store">App Store</span>
+    </div>
+    <div class="card-author">
+      <span class="author-name">marisel1</span>
+      <span class="author-date">October 23, 2025</span>
+    </div>
+    <div class="card-headline">Annoying</div>
+    <div class="card-body">The setup is so so so slow and annoying and buggy. And they keep trying to sell stuff I just want to control it and sleep</div>
+    <div class="card-tags">
+      <span class="tag app">App</span>
+      <span class="tag setup">Setup failure</span>
+    </div>
+  </div>
+
+</div><!-- /board -->
+
+<script>
+  function filterCards(tag, btn) {
+    // Update active button
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const cards = document.querySelectorAll('.review-card');
+    cards.forEach(card => {
+      if (tag === 'all') {
+        card.classList.remove('hidden');
+      } else {
+        const tags = card.getAttribute('data-tags') || '';
+        card.classList.toggle('hidden', !tags.includes(tag));
+      }
+    });
+  }
+
+  function toggleBody(id, btn) {
+    const el = document.getElementById(id);
+    const isTruncated = el.classList.contains('truncated');
+    el.classList.toggle('truncated', !isTruncated);
+    btn.textContent = isTruncated ? 'Show less' : 'Read more';
+  }
+</script>
+</body>
+</html>
